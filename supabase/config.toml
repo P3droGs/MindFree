@@ -5,3 +5,7 @@ project_id = "mindfree"
 # e a própria função confere (ver supabase/functions/organizar/index.ts).
 [functions.organizar]
 verify_jwt = false
+
+# A limpeza do mural só apaga o que já venceu (7 dias), então não precisa de login. O Cron chama uma vez por dia.
+[functions.limpar-mural]
+verify_jwt = false

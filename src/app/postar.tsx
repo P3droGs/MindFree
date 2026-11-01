@@ -11,6 +11,8 @@ import { OBS, ObservatoryScreen, Sparkle } from '@/components/observatory';
 import { SocialGate } from '@/components/social-gate';
 import { useNow } from '@/hooks/use-now';
 import { useT } from '@/i18n';
+import { mural } from '@/lib/mural';
+import { SocialError } from '@/lib/social';
 import { formatMinutes } from '@/lib/time';
 import { addDays, dayKey, newId } from '@/state/journal';
 import { useJournal } from '@/state/journal-provider';
@@ -25,7 +27,10 @@ export default function PostRoute() {
   );
 }
 
-/** Postar uma conquista: uma tarefa concluída e uma foto de verdade, da câmera ou da galeria. */
+/**
+ * Postar uma conquista: uma tarefa concluída e uma foto de verdade, da câmera ou da galeria.
+ * O post vai para a nuvem (quem segue você vê por 7 dias) e uma cópia fica no celular, para o Perfil.
+ */
 function PostScreen() {
   const router = useRouter();
   const t = useT();
@@ -72,14 +77,29 @@ function PostScreen() {
   const post = async () => {
     if (!photo || !title) return;
     setPosting(true);
-    const id = newId('post');
-    const photoUri = await keepPhoto(photo, id);
-    changePosts((current) => [
-      { id, taskTitle: title, caption: caption.trim(), photoUri, createdAt: Date.now() },
-      ...current,
-    ]);
-    // Veio do mural: volta para ele (em vez de abrir outro por cima). De outro lugar: o mural toma o lugar desta tela.
-    router.dismissTo('/mural');
+    try {
+      const cloud = await mural.publish(photo, title, caption.trim());
+      const id = newId('post');
+      const photoUri = await keepPhoto(photo, id);
+      changePosts((current) => [
+        {
+          id,
+          taskTitle: cloud.taskTitle,
+          caption: cloud.caption,
+          photoUri,
+          createdAt: Date.parse(cloud.createdAt) || Date.now(),
+          cloudId: cloud.id,
+        },
+        ...current,
+      ]);
+      // Veio do mural: volta para ele (em vez de abrir outro por cima). De outro lugar: o mural toma o lugar desta tela.
+      router.dismissTo('/mural');
+    } catch (error) {
+      // Nada foi postado: a foto, a tarefa e a legenda continuam na tela para tentar de novo.
+      setPosting(false);
+      const tooMany = error instanceof SocialError && error.failure === 'too_many';
+      Alert.alert(t('post.failedTitle'), tooMany ? t('post.tooMany') : t('post.failedBody'));
+    }
   };
 
   return (
@@ -200,7 +220,7 @@ function PostScreen() {
         ]}>
         <Sparkle size={20} color={OBS.ink} />
         <AppText variant="button" style={{ color: OBS.ink }}>
-          {t('post.submit')}
+          {posting ? t('post.sending') : t('post.submit')}
         </AppText>
       </Pressable>
       {!photo ? (

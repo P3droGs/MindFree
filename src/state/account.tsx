@@ -4,6 +4,7 @@ import { AppState } from 'react-native';
 
 import { mergeRemote, toNightRow, toTaskRow, type NightRow, type TaskRow } from '@/lib/cloud-rows';
 import { deleteAllMedia } from '@/lib/files';
+import { mural } from '@/lib/mural';
 import { supabase } from '@/lib/supabase';
 import { useJournal } from '@/state/journal-provider';
 import { changePosts } from '@/state/posts';
@@ -429,6 +430,8 @@ export function AccountProvider({ children }: { children: ReactNode }) {
   const deleteAccount: AccountValue['deleteAccount'] = async () => {
     if (!supabase || !permanent()) return true;
     suspended.current = true;
+    // As fotos do mural moram no Storage, que não some junto com a conta: saem antes.
+    if (account) await mural.removeAllMine(account.id).catch(() => undefined);
     const { error } = await supabase.rpc('delete_my_account');
     if (error) {
       suspended.current = false;

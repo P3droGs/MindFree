@@ -68,6 +68,8 @@ export type SocialFailure =
   | 'code_not_found'
   | 'own_code'
   | 'too_many'
+  | 'photo_missing'
+  | 'not_found'
   | 'network'
   | 'unknown';
 
@@ -113,7 +115,7 @@ function failureOf(error: { message?: string; code?: string } | null): SocialFai
   return 'unknown';
 }
 
-async function call<T>(fn: string, args?: Record<string, unknown>): Promise<T> {
+export async function call<T>(fn: string, args?: Record<string, unknown>): Promise<T> {
   if (!supabase) throw new SocialError('network');
   const { data, error } = await supabase.rpc(fn, args);
   if (error) throw new SocialError(failureOf(error));

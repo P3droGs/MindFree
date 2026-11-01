@@ -11,10 +11,12 @@ export type Post = {
   caption: string;
   photoUri: string;
   createdAt: number;
+  /** O post no servidor. Os posts de antes do Mural na nuvem não têm: ficaram só no celular. */
+  cloudId?: string;
 };
 
 const STORAGE_KEY = 'mindfree.posts.v1';
-/** No mural, cada post fica 7 dias. No perfil, fica para sempre. */
+/** No mural (e no servidor), cada post fica 7 dias. No perfil, fica para sempre, só no celular. */
 export const POST_LIFETIME_MS = 7 * 24 * 60 * 60 * 1000;
 
 export function loadPosts(): Post[] {

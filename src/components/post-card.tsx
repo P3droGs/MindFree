@@ -14,17 +14,26 @@ type PostCardProps = {
   task: string;
   caption?: string;
   photoUri: string;
+  /** Guarda a foto baixada pelo id do post (o link da nuvem muda a cada vez que o mural abre). */
+  cacheKey?: string;
+  /** Uma linha pequena embaixo do horário (ex.: "Só você vê"). */
+  note?: string;
   shines: number;
   shinedBy: string;
   reacted: boolean;
-  onReact: () => void;
+  /** Sem isto (o seu próprio post), os brilhos só aparecem, sem botão. */
+  onReact?: () => void;
   onDelete?: () => void;
+  /** O "⋯" com bloquear e denunciar, nos posts dos outros. */
+  onMore?: () => void;
 };
 
 /** Um post do mural: a tarefa concluída, a foto em arco e os brilhos. */
 export function PostCard(props: PostCardProps) {
   const t = useT();
   const { name, reacted } = props;
+  const total = props.shines + (reacted ? 1 : 0);
+  const shineColor = reacted ? OBS.ink : OBS.goldText;
 
   return (
     <View style={styles.card}>
@@ -41,6 +50,11 @@ export function PostCard(props: PostCardProps) {
           <AppText variant="caption" style={{ color: OBS.faint }}>
             {props.when}
           </AppText>
+          {props.note ? (
+            <AppText variant="caption" style={{ color: OBS.muted }}>
+              {props.note}
+            </AppText>
+          ) : null}
         </View>
         {props.onDelete ? (
           <Pressable accessibilityRole="button" hitSlop={8} onPress={props.onDelete}>
@@ -49,10 +63,20 @@ export function PostCard(props: PostCardProps) {
             </AppText>
           </Pressable>
         ) : null}
+        {props.onMore ? (
+          <Pressable
+            accessibilityRole="button"
+            accessibilityLabel={t('safety.moreLabel', { name })}
+            hitSlop={8}
+            onPress={props.onMore}
+            style={({ pressed }) => [styles.more, { opacity: pressed ? 0.6 : 1 }]}>
+            <Icon name="more" size={20} color={OBS.soft} />
+          </Pressable>
+        ) : null}
       </View>
 
       <View style={styles.photo}>
-        <Image source={{ uri: props.photoUri }} style={StyleSheet.absoluteFill} contentFit="cover" accessibilityIgnoresInvertColors />
+        <Image source={{ uri: props.photoUri, cacheKey: props.cacheKey }} style={StyleSheet.absoluteFill} contentFit="cover" accessibilityIgnoresInvertColors />
         <View style={styles.taskBadge}>
           <View style={styles.check}>
             <Icon name="check" size={12} color={OBS.ink} strokeWidth={3.2} />
@@ -70,21 +94,33 @@ export function PostCard(props: PostCardProps) {
       ) : null}
 
       <View style={styles.footer}>
-        <Pressable
-          accessibilityRole="button"
-          accessibilityState={{ selected: reacted }}
-          accessibilityLabel={reacted ? t('mural.unshineLabel', { name }) : t('mural.shineLabel', { name })}
-          onPress={props.onReact}
-          hitSlop={6}
-          style={({ pressed }) => [
-            styles.shine,
-            { backgroundColor: reacted ? OBS.gold : 'transparent', opacity: pressed ? 0.75 : 1 },
-          ]}>
-          <Sparkle size={15} color={reacted ? OBS.ink : OBS.goldText} />
-          <AppText variant="caption" style={[styles.shineText, { color: reacted ? OBS.ink : OBS.goldText }]}>
-            {String(props.shines + (reacted ? 1 : 0))}
-          </AppText>
-        </Pressable>
+        {props.onReact ? (
+          <Pressable
+            accessibilityRole="button"
+            accessibilityState={{ selected: reacted }}
+            accessibilityLabel={reacted ? t('mural.unshineLabel', { name }) : t('mural.shineLabel', { name })}
+            onPress={props.onReact}
+            hitSlop={6}
+            style={({ pressed }) => [
+              styles.shine,
+              { backgroundColor: reacted ? OBS.gold : 'transparent', opacity: pressed ? 0.75 : 1 },
+            ]}>
+            <Sparkle size={15} color={shineColor} />
+            <AppText variant="caption" style={[styles.shineText, { color: shineColor }]}>
+              {String(total)}
+            </AppText>
+          </Pressable>
+        ) : (
+          <View
+            accessible
+            accessibilityLabel={total === 1 ? t('mural.shinesCountOne') : t('mural.shinesCount', { count: total })}
+            style={styles.shine}>
+            <Sparkle size={15} color={shineColor} />
+            <AppText variant="caption" style={[styles.shineText, { color: shineColor }]}>
+              {String(total)}
+            </AppText>
+          </View>
+        )}
         {props.shinedBy || reacted ? (
           <AppText variant="caption" numberOfLines={1} style={[styles.flex, { color: OBS.faint }]}>
             {reacted
@@ -103,6 +139,7 @@ const styles = StyleSheet.create({
   flex: { flex: 1 },
   card: { gap: 12, padding: 14, borderRadius: 24, backgroundColor: OBS.card, borderWidth: 1, borderColor: OBS.cardBorder },
   header: { flexDirection: 'row', alignItems: 'center', gap: 10 },
+  more: { width: 32, height: 32, alignItems: 'center', justifyContent: 'center', marginRight: -6 },
   avatar: { width: 38, height: 38, borderRadius: 19, alignItems: 'center', justifyContent: 'center' },
   photo: {
     height: 240,

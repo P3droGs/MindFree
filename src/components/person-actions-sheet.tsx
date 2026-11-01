@@ -6,10 +6,14 @@ import { AppText } from '@/components/app-text';
 import { Icon } from '@/components/icon';
 import { OBS, ObsChip } from '@/components/observatory';
 import { useT, type MessageKey } from '@/i18n';
+import { mural } from '@/lib/mural';
 import { displayName, REPORT_REASONS, social, type Person, type ReportReason } from '@/lib/social';
 import { fonts } from '@/theme/typography';
 
 export type PersonAction = 'removed' | 'blocked' | 'reported' | 'failed';
+
+/** Só o que a folha precisa saber da pessoa. */
+export type SheetPerson = Pick<Person, 'userId' | 'handle' | 'name'>;
 
 const REASON_TEXT: Record<ReportReason, MessageKey> = {
   spam: 'safety.reasonSpam',
@@ -21,21 +25,33 @@ const REASON_TEXT: Record<ReportReason, MessageKey> = {
 /**
  * O menu "⋯" de uma pessoa na rede: remover seguidor (se ela segue você), bloquear e denunciar.
  * Bloquear pergunta antes; denunciar pede o motivo e, se quiser, um texto.
+ * Aberta de um post do mural (`postId`), a denúncia guarda qual foi o post.
  */
 export function PersonActionsSheet({
   person,
   canRemove,
+  postId,
   onClose,
   onDone,
 }: {
-  person: Person | null;
+  person: SheetPerson | null;
   canRemove: boolean;
+  postId?: string;
   onClose: () => void;
   onDone: (action: PersonAction) => void;
 }) {
   return (
     <Modal visible={!!person} transparent animationType="slide" statusBarTranslucent onRequestClose={onClose}>
-      {person ? <SheetBody key={person.userId} person={person} canRemove={canRemove} onClose={onClose} onDone={onDone} /> : null}
+      {person ? (
+        <SheetBody
+          key={`${person.userId}:${postId ?? ''}`}
+          person={person}
+          canRemove={canRemove}
+          postId={postId}
+          onClose={onClose}
+          onDone={onDone}
+        />
+      ) : null}
     </Modal>
   );
 }
@@ -43,11 +59,13 @@ export function PersonActionsSheet({
 function SheetBody({
   person,
   canRemove,
+  postId,
   onClose,
   onDone,
 }: {
-  person: Person;
+  person: SheetPerson;
   canRemove: boolean;
+  postId?: string;
   onClose: () => void;
   onDone: (action: PersonAction) => void;
 }) {
@@ -141,7 +159,10 @@ function SheetBody({
               label={busy ? t('auth.working') : t('safety.send')}
               filled
               onPress={() => {
-                if (reason && !busy) void run('reported', () => social.report(person.userId, reason, details));
+                if (!reason || busy) return;
+                void run('reported', () =>
+                  postId ? mural.report(postId, reason, details) : social.report(person.userId, reason, details),
+                );
               }}
             />
           </View>

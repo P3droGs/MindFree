@@ -19,6 +19,24 @@ export async function startDb(migrations) {
       $$ select coalesce(nullif(current_setting('request.jwt.claims', true), ''), '{}')::jsonb $$;
     grant usage on schema auth to anon, authenticated;
     grant usage on schema public to anon, authenticated;
+    create role service_role nologin;
+    -- O Storage, do jeito que as políticas do Supabase o veem: buckets, objects (com RLS) e foldername().
+    create schema storage;
+    create table storage.buckets (
+      id text primary key, name text not null, public boolean default false,
+      file_size_limit bigint, allowed_mime_types text[]
+    );
+    create table storage.objects (
+      id uuid primary key default gen_random_uuid(), bucket_id text references storage.buckets (id),
+      name text, owner_id text default auth.uid()::text, created_at timestamptz default now(),
+      unique (bucket_id, name)
+    );
+    alter table storage.objects enable row level security;
+    create function storage.foldername(name text) returns text[] language sql immutable as
+      $$ select (string_to_array(name, '/'))[1:array_length(string_to_array(name, '/'), 1) - 1] $$;
+    grant usage on schema storage to anon, authenticated, service_role;
+    grant select, insert, delete on storage.objects to anon, authenticated, service_role;
+    grant usage on schema public to service_role;
   `);
   const files = migrations.map((name) => readFileSync(new URL(`../migrations/${name}`, import.meta.url), 'utf8'));
   for (const sql of [...files, ...files]) await db.exec(sql);
