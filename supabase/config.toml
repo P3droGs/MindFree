@@ -1,0 +1,7 @@
+# Configuração do Supabase para o MindFree. O que não está aqui usa o padrão do Supabase.
+project_id = "mindfree"
+
+# A função não exige login: o app manda a chave publicável no cabeçalho "apikey"
+# e a própria função confere (ver supabase/functions/organizar/index.ts).
+[functions.organizar]
+verify_jwt = false

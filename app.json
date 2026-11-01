@@ -1,23 +1,30 @@
 {
   "expo": {
-    "name": "mobile",
-    "slug": "mobile",
+    "name": "MindFree",
+    "slug": "mindfree",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "mobile",
+    "scheme": "mindfree",
     "userInterfaceStyle": "automatic",
     "ios": {
-      "icon": "./assets/expo.icon"
+      "icon": "./assets/expo.icon",
+      "bundleIdentifier": "com.mindfree.app"
     },
     "android": {
+      "package": "com.mindfree.app",
       "adaptiveIcon": {
-        "backgroundColor": "#E6F4FE",
+        "backgroundColor": "#10142E",
         "foregroundImage": "./assets/images/android-icon-foreground.png",
         "backgroundImage": "./assets/images/android-icon-background.png",
         "monochromeImage": "./assets/images/android-icon-monochrome.png"
       },
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+      "blockedPermissions": [
+        "android.permission.SYSTEM_ALERT_WINDOW",
+        "android.permission.READ_EXTERNAL_STORAGE",
+        "android.permission.WRITE_EXTERNAL_STORAGE"
+      ]
     },
     "web": {
       "output": "server",
@@ -28,11 +35,135 @@
       [
         "expo-splash-screen",
         {
-          "backgroundColor": "#208AEF",
+          "backgroundColor": "#10142E",
           "image": "./assets/images/splash-icon.png",
           "imageWidth": 76
         }
-      ]
+      ],
+      "expo-sqlite",
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/images/notification-icon.png",
+          "color": "#B9A6FF"
+        }
+      ],
+      [
+        "expo-widgets",
+        {
+          "widgets": [
+            {
+              "name": "MindFree",
+              "displayName": "MindFree",
+              "description": "Suas tarefas de hoje e, à noite, o atalho para esvaziar a mente.",
+              "ios": {
+                "supportedFamilies": [
+                  "systemSmall",
+                  "systemMedium"
+                ],
+                "initialLayout": "./src/widgets/ios/mindfree-widget.tsx"
+              },
+              "android": null
+            },
+            {
+              "name": "SeuCeu",
+              "displayName": "Seu céu",
+              "description": "As estrelas que você acendeu no mês.",
+              "ios": {
+                "supportedFamilies": [
+                  "systemSmall"
+                ],
+                "initialLayout": "./src/widgets/ios/sky-widget.tsx"
+              },
+              "android": null
+            }
+          ]
+        }
+      ],
+      [
+        "react-native-android-widget",
+        {
+          "fonts": [
+            "./node_modules/@expo-google-fonts/nunito/800ExtraBold/Nunito_800ExtraBold.ttf",
+            "./node_modules/@expo-google-fonts/nunito/600SemiBold/Nunito_600SemiBold.ttf"
+          ],
+          "widgets": [
+            {
+              "name": "MindFree",
+              "label": "Hoje e esta noite",
+              "description": "Suas tarefas de hoje e, à noite, o atalho para esvaziar a mente.",
+              "minWidth": "250dp",
+              "minHeight": "110dp",
+              "targetCellWidth": 4,
+              "targetCellHeight": 2,
+              "resizeMode": "horizontal|vertical",
+              "updatePeriodMillis": 1800000,
+              "previewImage": "./assets/widgets/hoje-e-esta-noite.png"
+            },
+            {
+              "name": "MindFreeAtalho",
+              "label": "Próxima tarefa",
+              "description": "De dia, a próxima tarefa. À noite, o botão para esvaziar a mente.",
+              "minWidth": "110dp",
+              "minHeight": "110dp",
+              "targetCellWidth": 2,
+              "targetCellHeight": 2,
+              "resizeMode": "horizontal|vertical",
+              "updatePeriodMillis": 1800000,
+              "previewImage": "./assets/widgets/proxima-tarefa.png"
+            },
+            {
+              "name": "SeuCeu",
+              "label": "Seu céu",
+              "description": "As estrelas que você acendeu no mês.",
+              "minWidth": "110dp",
+              "minHeight": "110dp",
+              "targetCellWidth": 2,
+              "targetCellHeight": 2,
+              "updatePeriodMillis": 1800000,
+              "previewImage": "./assets/widgets/seu-ceu.png"
+            }
+          ]
+        }
+      ],
+      [
+        "expo-localization",
+        {
+          "supportedLocales": [
+            "pt-BR",
+            "pt-PT",
+            "en",
+            "es",
+            "fr",
+            "de",
+            "it",
+            "ja",
+            "ko",
+            "zh-Hans",
+            "hi",
+            "ar"
+          ]
+        }
+      ],
+      "expo-status-bar",
+      [
+        "expo-audio",
+        {
+          "microphonePermission": "O MindFree usa o microfone para ouvir o que você quer lembrar antes de dormir.",
+          "enableBackgroundPlayback": false
+        }
+      ],
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "O MindFree acessa suas fotos para você postar uma conquista no mural.",
+          "cameraPermission": "O MindFree usa a câmera para você fotografar uma conquista.",
+          "microphonePermission": "O MindFree usa o microfone para ouvir o que você quer lembrar antes de dormir."
+        }
+      ],
+      "expo-asset",
+      "expo-image",
+      "expo-secure-store"
     ],
     "experiments": {
       "typedRoutes": true,
