@@ -293,6 +293,21 @@ export default function SettingsScreen() {
             </AppText>
             <Icon name="chevron-right" size={18} color={theme.textSecondary} strokeWidth={2.4} />
           </Pressable>
+          {signedIn ? (
+            <>
+              <View style={[styles.divider, { backgroundColor: theme.border }]} />
+              <Pressable
+                accessibilityRole="button"
+                onPress={() => router.push('/bloqueados')}
+                style={({ pressed }) => [styles.languageRow, { opacity: pressed ? 0.7 : 1 }]}>
+                <Icon name="eye-off" size={20} color={theme.text} />
+                <AppText variant="bodyStrong" style={styles.languageLabel}>
+                  {t('safety.blockedTitle')}
+                </AppText>
+                <Icon name="chevron-right" size={18} color={theme.textSecondary} strokeWidth={2.4} />
+              </Pressable>
+            </>
+          ) : null}
           <View style={[styles.divider, { backgroundColor: theme.border }]} />
           <LinkButton label={t('settings.deleteAll')} tone="danger" onPress={deleteAll} />
         </Card>

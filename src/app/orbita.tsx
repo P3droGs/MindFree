@@ -7,6 +7,7 @@ import { PlanetAvatar } from '@/components/avatar';
 import { BackButton } from '@/components/buttons';
 import { Icon } from '@/components/icon';
 import { OBS, ObsChip, ObservatoryScreen, useObsToast } from '@/components/observatory';
+import { PersonActionsSheet, type PersonAction } from '@/components/person-actions-sheet';
 import { SocialGate } from '@/components/social-gate';
 import { useNow } from '@/hooks/use-now';
 import { useT } from '@/i18n';
@@ -38,7 +39,24 @@ function OrbitScreen() {
   const [query, setQuery] = useState('');
   const [results, setResults] = useState<Person[] | null>(null);
   const [toast, setToast] = useObsToast();
+  const [acting, setActing] = useState<{ person: Person; canRemove: boolean } | null>(null);
   const searching = query.trim().replace(/^@+/, '').length >= 2;
+
+  // Depois de remover, bloquear ou denunciar: fecha a folha, avisa e atualiza a lista e os números.
+  const afterAction = (action: PersonAction) => {
+    setActing(null);
+    const text: Record<PersonAction, string> = {
+      removed: t('safety.removed'),
+      blocked: t('safety.blocked'),
+      reported: t('safety.reported'),
+      failed: t('social.offline'),
+    };
+    setToast(text[action]);
+    if (action === 'failed') return;
+    if (action === 'blocked') setResults((current) => current?.filter((p) => p.userId !== acting?.person.userId) ?? null);
+    void load();
+    void refresh();
+  };
 
   const load = useCallback(async () => {
     try {
@@ -254,7 +272,7 @@ function OrbitScreen() {
             {t('orbit.results')}
           </AppText>
           {results?.map((person) => (
-            <PersonRow key={person.userId} person={person}>
+            <PersonRow key={person.userId} person={person} onMore={() => setActing({ person, canRemove: person.followsMe })}>
               {followButton(person, person.followsMe)}
             </PersonRow>
           ))}
@@ -268,7 +286,7 @@ function OrbitScreen() {
                 {t('orbit.requests', { n: requests.length })}
               </AppText>
               {requests.map((person) => (
-                <PersonRow key={person.userId} person={person}>
+                <PersonRow key={person.userId} person={person} onMore={() => setActing({ person, canRemove: false })}>
                   <ObsChip label={t('orbit.accept')} filled onPress={() => respond(person, true)} />
                   <ObsChip label={t('orbit.decline')} onPress={() => respond(person, false)} />
                 </PersonRow>
@@ -279,12 +297,12 @@ function OrbitScreen() {
           <View style={styles.list}>
             {tab === 'followers'
               ? followers.map((person) => (
-                  <PersonRow key={person.userId} person={person}>
+                  <PersonRow key={person.userId} person={person} onMore={() => setActing({ person, canRemove: true })}>
                     {followButton(person, true)}
                   </PersonRow>
                 ))
               : following.map((person) => (
-                  <PersonRow key={person.userId} person={person}>
+                  <PersonRow key={person.userId} person={person} onMore={() => setActing({ person, canRemove: person.followsMe })}>
                     {followButton(person, false)}
                   </PersonRow>
                 ))}
@@ -314,6 +332,12 @@ function OrbitScreen() {
           {t('orbit.invite')}
         </AppText>
       </Pressable>
+      <PersonActionsSheet
+        person={acting?.person ?? null}
+        canRemove={!!acting?.canRemove}
+        onClose={() => setActing(null)}
+        onDone={afterAction}
+      />
     </ObservatoryScreen>
   );
 }
@@ -326,7 +350,7 @@ function Empty({ text }: { text: string }) {
   );
 }
 
-function PersonRow({ person, children }: { person: Person; children: ReactNode }) {
+function PersonRow({ person, children, onMore }: { person: Person; children: ReactNode; onMore: () => void }) {
   const t = useT();
   const details = [`@${person.handle}`];
   if (person.starsMonth !== null) {
@@ -347,12 +371,21 @@ function PersonRow({ person, children }: { person: Person; children: ReactNode }
         </AppText>
       </View>
       {children}
+      <Pressable
+        accessibilityRole="button"
+        accessibilityLabel={t('safety.moreLabel', { name: displayName(person) })}
+        hitSlop={6}
+        onPress={onMore}
+        style={styles.more}>
+        <Icon name="more" size={20} color={OBS.muted} strokeWidth={3} />
+      </Pressable>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   flex: { flex: 1 },
+  more: { width: 36, height: 44, alignItems: 'center', justifyContent: 'center', marginRight: -8 },
   bold: { fontFamily: fonts.extraBold },
   top: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
   back: { marginLeft: -10 },

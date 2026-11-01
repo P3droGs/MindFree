@@ -54,6 +54,12 @@ export type Activity = {
 
 export type Orbit = { followers: Person[]; following: Person[]; requests: Person[] };
 
+/** Alguém que você bloqueou (só o @ e o nome, para desbloquear). */
+export type BlockedPerson = { userId: string; handle: string; name: string };
+
+export const REPORT_REASONS = ['spam', 'offensive', 'harassment', 'other'] as const;
+export type ReportReason = (typeof REPORT_REASONS)[number];
+
 export type SocialFailure =
   | 'no_account'
   | 'no_profile'
@@ -133,6 +139,14 @@ export const social = {
   interact: (userId: string, kind: 'shine' | 'poke', day: string, on: boolean) =>
     call<void>('social_interact', { p_target: userId, p_kind: kind, p_day: day, p_on: on }),
   activity: () => call<Activity[]>('social_activity'),
+  /** Some dos dois lados: desfaz o seguir e os brilhos. A pessoa não é avisada. */
+  block: (userId: string) => call<void>('social_block', { p_target: userId }),
+  unblock: (userId: string) => call<void>('social_unblock', { p_target: userId }),
+  blockedList: () => call<BlockedPerson[]>('social_blocked_list'),
+  removeFollower: (userId: string) => call<void>('social_remove_follower', { p_follower: userId }),
+  /** Vai para uma tabela que só o dono do app vê no Supabase. */
+  report: (userId: string, reason: ReportReason, details: string) =>
+    call<void>('social_report', { p_target: userId, p_reason: reason, p_details: details }),
   /** Usa o código de um amigo: os dois passam a se seguir. */
   redeemInvite: async (code: string): Promise<Person> => {
     const result = await call<{ ok: boolean; reason?: SocialFailure; friend?: Person }>('social_use_invite', {

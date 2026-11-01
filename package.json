@@ -55,7 +55,7 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "lint": "expo lint",
-    "test:sql": "node supabase/tests/contas.test.mjs && node supabase/tests/rede.test.mjs"
+    "test:sql": "node supabase/tests/contas.test.mjs && node supabase/tests/rede.test.mjs && node supabase/tests/bloquear.test.mjs"
   },
   "private": true
 }

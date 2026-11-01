@@ -92,6 +92,7 @@ function AppNavigator() {
           <Stack.Screen name="perfil" options={{ animation: 'slide_from_right' }} />
           <Stack.Screen name="orbita" options={{ animation: 'slide_from_right' }} />
           <Stack.Screen name="convidar" options={{ animation: 'slide_from_bottom' }} />
+          <Stack.Screen name="bloqueados" options={{ animation: 'slide_from_right' }} />
           <Stack.Screen name="consentimento" options={{ animation: 'slide_from_bottom' }} />
         </Stack.Protected>
         {/* Abrem de qualquer lugar: a política e entrar ou criar conta (no começo ou depois, em Ajustes).
