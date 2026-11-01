@@ -1,56 +1,98 @@
-# Welcome to your Expo app 👋
+# MindFree
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+**Antes de dormir, fale o que está na sua cabeça. De manhã, está tudo organizado.**
 
-## Get started
+O MindFree é um app para iPhone e Android que ajuda a dormir tranquilo sem medo de esquecer nada. À noite, a pessoa fala por cerca de um minuto tudo o que está ocupando a mente, como "pagar o boleto, ligar pro dentista amanhã às 3, comprar presente da Ana". O app transforma isso em tarefas com dia, horário e lembrete. De manhã, chega um resumo com o dia já organizado.
 
-1. Install dependencies
+O visual é calmo e fácil de entender: escuro e lilás à noite, claro e cor de sol de manhã.
 
-   ```bash
-   npm install
-   ```
+---
 
-2. Start the app
+## O que o app faz
 
-   ```bash
-   npx expo start
-   ```
+### O ritual da noite
+- **Lembrete diário** no horário que a pessoa escolhe, para esvaziar a mente.
+- **Gravar ou escrever:**
+  - a gravação tem meta de 1 minuto e vai até 3;
+  - quem preferir pode escrever, uma coisa por linha.
+- **A IA organiza:** a voz vira texto, e o texto vira tarefas com dia e horário ("amanhã às 15h", "sexta", "hoje à noite").
+- **Sem IA, também funciona:** um organizador no próprio celular entende datas e horários no texto escrito, e as gravações ficam guardadas para organizar depois.
+- **"Anotado!":** a tela final mostra quantas coisas saíram da cabeça, para a pessoa ir dormir.
 
-In the output, you'll find options to open the app in a
+### O dia
+- **Resumo da manhã** com as tarefas do dia, no horário escolhido.
+- **Lembrete de cada tarefa** que tem horário.
+- **Marcar, editar e apagar tarefas** na tela inicial, no calendário ou no widget.
+- **Calendário** mês a mês, com o que foi feito em cada dia.
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+### Seu céu
+- **Uma estrela por noite:** cada noite em que a pessoa esvazia a mente acende uma estrela, e cada tarefa concluída daquela noite a deixa mais brilhante.
+- **Uma constelação por mês:** no fim do mês, as estrelas viram uma constelação com nome e entram para a coleção. O nome vem de uma lista, e a pessoa pode trocar.
+- **Sem culpa:** pulou uma noite? Tudo bem, o céu nunca apaga.
 
-You can start developing by editing the files inside the **src/app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+### Céu dos amigos (opcional, com conta)
+- **Seguir amigos** pelo @, com contas privadas que aprovam os pedidos.
+- **Ver a semana de cada amigo:** só os dias com estrela, nunca o que a pessoa falou nem as tarefas.
+- **Brilho e cutucão:** "brilho" para quem acendeu hoje, "cutucar" para lembrar quem ainda não acendeu.
+- **Convite por código:** quem entra pelo código e quem convidou ganham uma estrela cadente.
+- **Mural de conquistas:** foto e legenda de uma tarefa concluída. Por enquanto, as fotos ficam só no celular.
 
-## Get a fresh project
+### Mais
+- **Widgets** na tela do celular, no iPhone e no Android: as tarefas de hoje, a próxima tarefa e o Seu céu. À noite, o widget vira um atalho para gravar.
+- **Personalização:** qualquer cor de app e de fundo, com ajuste automático de contraste para a leitura continuar confortável.
+- **12 idiomas:** português (Brasil e Portugal), inglês, espanhol, francês, alemão, italiano, japonês, coreano, chinês, hindi e árabe (da direita para a esquerda).
+- **Conta opcional:** sem conta, tudo fica no celular. Com conta de e-mail, as tarefas e os ajustes sincronizam entre aparelhos.
 
-When you're ready, run:
+---
 
-```bash
-npm run reset-project
+## Privacidade
+
+- **A IA pede consentimento antes do primeiro uso.** O app explica o que sai do celular, para quem e para quê, e "Agora não" não trava nada.
+- **As gravações, o texto do que foi falado e as fotos ficam no celular**, mesmo com conta.
+- **Na rede, os amigos veem só os dias com estrela.** O servidor entrega apenas o que a privacidade promete: as tabelas não aceitam leitura direta, e tudo passa por funções que conferem quem pode ver o quê.
+- **As chaves das IAs ficam no servidor**, nunca no app. O uso da IA tem limite por pessoa e por dia.
+- **Apagar todos os dados** (e a conta) é um botão nos Ajustes.
+
+---
+
+## Como é feito
+
+| Parte | Tecnologia |
+| --- | --- |
+| App | [Expo](https://expo.dev) SDK 58, React Native, TypeScript e Expo Router |
+| Dados no celular | expo-sqlite (tarefas e ajustes) e expo-secure-store (sessão) |
+| Avisos | expo-notifications, agendados no próprio celular |
+| Widgets | expo-widgets (iPhone) e react-native-android-widget (Android) |
+| Servidor | [Supabase](https://supabase.com): login, Postgres com RLS e uma Edge Function |
+| IA | OpenAI `gpt-4o-mini-transcribe` (voz para texto) e Claude (organiza em tarefas) |
+
+---
+
+## Organização das pastas
+
+```
+src/
+  app/          telas (Expo Router)
+  components/   botões, cartões, folhas e a barra da parte social
+  state/        ajustes, tarefas e noites, conta e rede
+  lib/          IA, datas, avisos, constelações e chamadas da rede
+  widgets/      widgets do iPhone (ios/) e do Android (android/)
+  i18n/         os 12 idiomas
+  legal/        política de privacidade
+supabase/
+  functions/    a Edge Function "organizar" (Deno)
+  migrations/   o SQL do banco
+  tests/        testes do SQL (PGlite)
 ```
 
-This command will move the starter code to the **example** directory and create a blank **src/app** directory where you can start developing.
+---
 
-### Other setup steps
+## Situação
 
-- To set up ESLint for linting, run `npx expo lint`, or follow our guide on ["Using ESLint and Prettier"](https://docs.expo.dev/guides/using-eslint/)
-- If you'd like to set up unit testing, follow our guide on ["Unit Testing with Jest"](https://docs.expo.dev/develop/unit-testing/)
-- Learn more about the TypeScript setup in this template in our guide on ["Using TypeScript"](https://docs.expo.dev/guides/typescript/)
+O MindFree está em desenvolvimento e ainda não foi publicado nas lojas. Já funcionam o ritual da noite, as tarefas, o Seu céu, os widgets, as contas e a primeira fase da rede.
 
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+Os próximos passos são:
+- denunciar e bloquear na rede;
+- o Mural na nuvem;
+- login com Google e Apple;
+- a publicação no iPhone e no Android.
