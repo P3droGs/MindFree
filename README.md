@@ -36,6 +36,9 @@ O visual é calmo e fácil de entender: escuro e lilás à noite, claro e cor de
 - **Brilho e cutucão:** "brilho" para quem acendeu hoje, "cutucar" para lembrar quem ainda não acendeu.
 - **Convite por código:** quem entra pelo código e quem convidou ganham uma estrela cadente.
 - **Mural de conquistas:** foto e legenda de uma tarefa concluída. Por enquanto, as fotos ficam só no celular.
+- **Segurança na rede:** no "⋯" de cada pessoa dá para remover seguidor, bloquear ou denunciar.
+  - **Bloquear** some dos dois lados: desfaz o seguir, apaga os brilhos e esconde da busca, sem avisar a outra pessoa. Dá para desbloquear em Ajustes.
+  - **Denunciar** guarda o motivo (Spam, Conteúdo ofensivo, Assédio ou Outro) para a equipe do MindFree analisar, sem a outra pessoa saber.
 
 ### Mais
 - **Widgets** na tela do celular, no iPhone e no Android: as tarefas de hoje, a próxima tarefa e o Seu céu. À noite, o widget vira um atalho para gravar.
@@ -51,6 +54,7 @@ O visual é calmo e fácil de entender: escuro e lilás à noite, claro e cor de
 - **As gravações, o texto do que foi falado e as fotos ficam no celular**, mesmo com conta.
 - **Na rede, os amigos veem só os dias com estrela.** O servidor entrega apenas o que a privacidade promete: as tabelas não aceitam leitura direta, e tudo passa por funções que conferem quem pode ver o quê.
 - **As chaves das IAs ficam no servidor**, nunca no app. O uso da IA tem limite por pessoa e por dia.
+- **Bloqueios e denúncias são confidenciais:** quem foi bloqueado ou denunciado não fica sabendo, e as denúncias não aparecem no app para ninguém.
 - **Apagar todos os dados** (e a conta) é um botão nos Ajustes.
 
 ---
@@ -89,10 +93,9 @@ supabase/
 
 ## Situação
 
-O MindFree está em desenvolvimento e ainda não foi publicado nas lojas. Já funcionam o ritual da noite, as tarefas, o Seu céu, os widgets, as contas e a primeira fase da rede.
+O MindFree está em desenvolvimento e ainda não foi publicado nas lojas. Já funcionam o ritual da noite, as tarefas, o Seu céu, os widgets, as contas e a primeira fase da rede, com bloquear, denunciar e remover seguidor.
 
 Os próximos passos são:
-- denunciar e bloquear na rede;
 - o Mural na nuvem;
 - login com Google e Apple;
 - a publicação no iPhone e no Android.
