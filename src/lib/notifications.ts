@@ -206,3 +206,31 @@ export function listenNotificationOpens(open: (path: string) => void): () => voi
   const subscription = N.addNotificationResponseReceivedListener(handle);
   return () => subscription.remove();
 }
+
+// Alarme exato (Android) -------------------------------------------------------------------------
+
+/**
+ * O Android 12+ só entrega um aviso agendado no minuto certo se o app puder usar alarmes exatos
+ * ("Alarmes e lembretes" nos ajustes do sistema). Sem isso, o aviso pode atrasar até 1 hora.
+ * No iPhone (e no Expo Go do Android, sem avisos) não há o que pedir: responde que sim.
+ */
+export async function hasExactAlarms(): Promise<boolean> {
+  const N = notifications();
+  if (!N || Platform.OS !== 'android') return true;
+  try {
+    return (await N.getExactAlarmPermissionsAsync()).granted;
+  } catch {
+    return true;
+  }
+}
+
+/** Abre o ajuste do Android para permitir alarmes exatos e diz, na volta, se a pessoa permitiu. */
+export async function requestExactAlarms(): Promise<boolean> {
+  const N = notifications();
+  if (!N || Platform.OS !== 'android') return true;
+  try {
+    return (await N.requestExactAlarmPermissionsAsync()).granted;
+  } catch {
+    return hasExactAlarms();
+  }
+}

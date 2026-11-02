@@ -21,7 +21,7 @@ O visual é calmo e fácil de entender: escuro e lilás à noite, claro e cor de
 
 ### O dia
 - **Resumo da manhã** com as tarefas do dia, no horário escolhido.
-- **Lembrete de cada tarefa** que tem horário.
+- **Lembrete de cada tarefa** que tem horário, no minuto certo. No Android, o app pede a permissão "Alarmes e lembretes" para o sistema não atrasar os avisos.
 - **Marcar, editar e apagar tarefas** na tela inicial, no calendário ou no widget.
 - **Calendário** mês a mês, com o que foi feito em cada dia.
 

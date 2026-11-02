@@ -9,7 +9,7 @@ import { Icon, type IconName } from '@/components/icon';
 import { ProgressDots } from '@/components/progress-dots';
 import { Screen, Spacer } from '@/components/screen';
 import { TimeStepper } from '@/components/time-stepper';
-import { requestNotificationPermission, scheduleDailyReminders } from '@/lib/notifications';
+import { hasExactAlarms, requestNotificationPermission, scheduleDailyReminders } from '@/lib/notifications';
 import { useT } from '@/i18n';
 import { useSettings } from '@/state/settings';
 import { useAppTheme } from '@/theme/theme-provider';
@@ -25,6 +25,12 @@ export default function ScheduleScreen() {
     try {
       if (await requestNotificationPermission(t)) {
         await scheduleDailyReminders(settings.nightMinutes, settings.morningMinutes, t);
+        // Android 12+: sem "Alarmes e lembretes", os avisos podem atrasar até 1 hora. Pede numa tela curta.
+        if (!(await hasExactAlarms())) {
+          setSaving(false);
+          router.push('/alarmes');
+          return;
+        }
       } else {
         Alert.alert(t('schedule.deniedTitle'), t('schedule.deniedBody'));
       }

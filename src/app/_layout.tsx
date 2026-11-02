@@ -7,6 +7,7 @@ import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
 
 import { I18nProvider } from '@/i18n';
+import { useExactAlarmRefresh } from '@/hooks/use-exact-alarm-refresh';
 import { usePushSync } from '@/hooks/use-push-sync';
 import { configureNotifications } from '@/lib/notifications';
 import { AccountProvider } from '@/state/account';
@@ -50,6 +51,7 @@ function AppNavigator() {
   const theme = useAppTheme();
   useWidgetSync();
   usePushSync();
+  useExactAlarmRefresh();
   const base = theme.dark ? DarkTheme : DefaultTheme;
   const navigationTheme = {
     ...base,
@@ -78,6 +80,7 @@ function AppNavigator() {
         <Stack.Protected guard={!settings.onboarded} redirectTo="/">
           <Stack.Screen name="boas-vindas" />
           <Stack.Screen name="horarios" />
+          <Stack.Screen name="alarmes" />
         </Stack.Protected>
         <Stack.Protected guard={settings.onboarded} redirectTo="/boas-vindas">
           <Stack.Screen name="index" />

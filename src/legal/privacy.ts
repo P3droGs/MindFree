@@ -88,7 +88,7 @@ const pt: Policy = {
     {
       title: 'Permissões do celular',
       paragraphs: [
-        'Microfone: só para gravar quando você toca em gravar. Câmera: só quando você tira uma foto para postar. Notificações: para os lembretes. A galeria abre pelo seletor do próprio sistema, que entrega ao app só a foto que você escolher.',
+        'Microfone: só para gravar quando você toca em gravar. Câmera: só quando você tira uma foto para postar. Notificações: para os lembretes. Alarmes e lembretes (Android): só para cada lembrete chegar no minuto certo. A galeria abre pelo seletor do próprio sistema, que entrega ao app só a foto que você escolher.',
       ],
     },
     {
@@ -180,7 +180,7 @@ const en: Policy = {
     {
       title: 'Phone permissions',
       paragraphs: [
-        'Microphone: only to record when you tap record. Camera: only when you take a photo to post. Notifications: for reminders. The gallery opens through the system’s own picker, which gives the app only the photo you choose.',
+        'Microphone: only to record when you tap record. Camera: only when you take a photo to post. Notifications: for reminders. Alarms & reminders (Android): only so each reminder arrives at the exact minute. The gallery opens through the system’s own picker, which gives the app only the photo you choose.',
       ],
     },
     {

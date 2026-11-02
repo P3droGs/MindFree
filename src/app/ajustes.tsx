@@ -17,7 +17,9 @@ import { aiAllowed } from '@/lib/consent';
 import { deleteAllMedia, deleteLocalFile } from '@/lib/files';
 import {
   cancelDailyReminders,
+  hasExactAlarms,
   hasNotificationPermission,
+  requestExactAlarms,
   requestNotificationPermission,
   scheduleDailyReminders,
 } from '@/lib/notifications';
@@ -52,6 +54,7 @@ export default function SettingsScreen() {
   const { nightMinutes, morningMinutes } = settings;
   const [scrollEnabled, setScrollEnabled] = useState(true);
   const [notificationsOn, setNotificationsOn] = useState<boolean | null>(null);
+  const [exactOn, setExactOn] = useState(true);
   const [languagesOpen, setLanguagesOpen] = useState(false);
 
   useFocusEffect(
@@ -59,6 +62,9 @@ export default function SettingsScreen() {
       hasNotificationPermission()
         .then(setNotificationsOn)
         .catch(() => setNotificationsOn(false));
+      hasExactAlarms()
+        .then(setExactOn)
+        .catch(() => setExactOn(true));
     }, []),
   );
 
@@ -70,6 +76,9 @@ export default function SettingsScreen() {
     }, 800);
     return () => clearTimeout(timeout);
   }, [notificationsOn, nightMinutes, morningMinutes, t]);
+
+  // Na volta do ajuste do Android, o app reagenda tudo como alarme exato (useExactAlarmRefresh).
+  const enableExactAlarms = async () => setExactOn(await requestExactAlarms());
 
   const enableNotifications = async () => {
     const allowed = await requestNotificationPermission(t);
@@ -229,6 +238,15 @@ export default function SettingsScreen() {
                 : t('settings.checking')}
             </AppText>
           )}
+          {notificationsOn && !exactOn ? (
+            <>
+              <View style={[styles.divider, { backgroundColor: theme.border }]} />
+              <AppText variant="small" tone="secondary">
+                {t('exact.settingsOff')}
+              </AppText>
+              <OutlineButton label={t('exact.allow')} icon="bell" onPress={() => void enableExactAlarms()} />
+            </>
+          ) : null}
           {/* Os avisos dos amigos só existem para quem entrou na rede (tem @). */}
           {socialStatus === 'ready' ? (
             <>
