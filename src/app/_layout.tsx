@@ -7,6 +7,7 @@ import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
 
 import { I18nProvider } from '@/i18n';
+import { usePushSync } from '@/hooks/use-push-sync';
 import { configureNotifications } from '@/lib/notifications';
 import { AccountProvider } from '@/state/account';
 import { JournalProvider } from '@/state/journal-provider';
@@ -48,6 +49,7 @@ function AppNavigator() {
   const { settings } = useSettings();
   const theme = useAppTheme();
   useWidgetSync();
+  usePushSync();
   const base = theme.dark ? DarkTheme : DefaultTheme;
   const navigationTheme = {
     ...base,

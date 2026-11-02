@@ -35,6 +35,11 @@ export type Settings = {
   privateAccount: boolean;
   /** O mural fecha do horário da noite até o resumo da manhã. */
   muralSleeps: boolean;
+  /** Avisos dos amigos (push), um por tipo: brilho no céu, cutucão, brilho no Mural e pedido para seguir. */
+  pushShine: boolean;
+  pushPoke: boolean;
+  pushMural: boolean;
+  pushRequests: boolean;
   /** Nome que a pessoa deu a cada constelação do Seu céu ('AAAA-MM' → nome). Sem nome, vale o da lista pronta. */
   constellationNames: Record<string, string>;
   testClock: TestClock;
@@ -61,6 +66,10 @@ export const DEFAULT_SETTINGS: Settings = {
   bio: '',
   privateAccount: true,
   muralSleeps: false,
+  pushShine: true,
+  pushPoke: true,
+  pushMural: true,
+  pushRequests: true,
   constellationNames: {},
   testClock: 'real',
   aiConsent: 'unknown',

@@ -45,3 +45,7 @@ example
 # chaves do servidor (Supabase)
 supabase/.env
 supabase/.temp/
+
+# Firebase (avisos no Android): fica só no computador e no EAS, fora do repositório público.
+google-services.json
+GoogleService-Info.plist

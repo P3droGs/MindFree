@@ -5,6 +5,7 @@ import { AppState } from 'react-native';
 import { mergeRemote, toNightRow, toTaskRow, type NightRow, type TaskRow } from '@/lib/cloud-rows';
 import { deleteAllMedia } from '@/lib/files';
 import { mural } from '@/lib/mural';
+import { forgetThisDevice } from '@/lib/push';
 import { supabase } from '@/lib/supabase';
 import { useJournal } from '@/state/journal-provider';
 import { changePosts } from '@/state/posts';
@@ -44,6 +45,10 @@ const CLOUD_SETTINGS = [
   'language',
   'privateAccount',
   'muralSleeps',
+  'pushShine',
+  'pushPoke',
+  'pushMural',
+  'pushRequests',
   'constellationNames',
 ] as const satisfies readonly (keyof Settings)[];
 
@@ -422,6 +427,8 @@ export function AccountProvider({ children }: { children: ReactNode }) {
         return 'unsynced';
       }
     }
+    // Este celular para de receber os avisos dos amigos desta conta.
+    await forgetThisDevice();
     await supabase.auth.signOut({ scope: 'local' }).catch(() => undefined);
     clearLocal();
     return 'ok';

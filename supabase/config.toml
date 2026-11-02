@@ -9,3 +9,7 @@ verify_jwt = false
 # A limpeza do mural só apaga o que já venceu (7 dias), então não precisa de login. O Cron chama uma vez por dia.
 [functions.limpar-mural]
 verify_jwt = false
+
+# Os avisos da rede só entregam o que já está na fila do banco, então não precisam de login.
+[functions.avisar]
+verify_jwt = false

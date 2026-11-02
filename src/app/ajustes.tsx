@@ -12,7 +12,7 @@ import { LanguageSheet } from '@/components/language-sheet';
 import { Screen } from '@/components/screen';
 import { Segmented } from '@/components/segmented';
 import { TimeStepper } from '@/components/time-stepper';
-import { useI18n } from '@/i18n';
+import { useI18n, type MessageKey } from '@/i18n';
 import { aiAllowed } from '@/lib/consent';
 import { deleteAllMedia, deleteLocalFile } from '@/lib/files';
 import {
@@ -26,9 +26,18 @@ import { formatMinutes } from '@/lib/time';
 import { useAccount, type SyncStatus } from '@/state/account';
 import { useJournal } from '@/state/journal-provider';
 import { changePosts, deletePhoto, usePosts } from '@/state/posts';
-import { useSettings } from '@/state/settings';
+import { useSettings, type Settings } from '@/state/settings';
+import { useSocial } from '@/state/social';
 import { useAppTheme } from '@/theme/theme-provider';
 import { fonts } from '@/theme/typography';
+
+/** Os avisos dos amigos (push), cada um com o seu botão. */
+const PUSH_KINDS: { key: keyof Pick<Settings, 'pushShine' | 'pushPoke' | 'pushMural' | 'pushRequests'>; label: MessageKey }[] = [
+  { key: 'pushShine', label: 'push.shine' },
+  { key: 'pushPoke', label: 'push.poke' },
+  { key: 'pushMural', label: 'push.mural' },
+  { key: 'pushRequests', label: 'push.requests' },
+];
 
 export default function SettingsScreen() {
   const router = useRouter();
@@ -39,6 +48,7 @@ export default function SettingsScreen() {
   const posts = usePosts();
   const aiOn = aiAllowed(settings);
   const { account, signedIn, syncStatus, signOut, deleteAccount } = useAccount();
+  const { status: socialStatus } = useSocial();
   const { nightMinutes, morningMinutes } = settings;
   const [scrollEnabled, setScrollEnabled] = useState(true);
   const [notificationsOn, setNotificationsOn] = useState<boolean | null>(null);
@@ -219,6 +229,32 @@ export default function SettingsScreen() {
                 : t('settings.checking')}
             </AppText>
           )}
+          {/* Os avisos dos amigos só existem para quem entrou na rede (tem @). */}
+          {socialStatus === 'ready' ? (
+            <>
+              <View style={[styles.divider, { backgroundColor: theme.border }]} />
+              <View style={styles.aiText}>
+                <AppText variant="bodyStrong">{t('push.title')}</AppText>
+                <AppText variant="small" tone="secondary">
+                  {t('push.hint', { night: formatMinutes(nightMinutes), morning: formatMinutes(morningMinutes) })}
+                </AppText>
+              </View>
+              {PUSH_KINDS.map(({ key, label }) => (
+                <View key={key} style={styles.aiRow}>
+                  <AppText variant="body" style={styles.aiText}>
+                    {t(label)}
+                  </AppText>
+                  <Switch
+                    value={settings[key]}
+                    onValueChange={(value) => update({ [key]: value })}
+                    accessibilityLabel={t(label)}
+                    trackColor={{ true: theme.accent, false: theme.raised }}
+                    thumbColor="#FFFFFF"
+                  />
+                </View>
+              ))}
+            </>
+          ) : null}
         </Card>
       </Section>
 

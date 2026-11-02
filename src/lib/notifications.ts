@@ -151,3 +151,58 @@ export async function scheduleTaskReminders(tasks: Task[], t: Translate) {
     });
   }
 }
+
+// Avisos da rede (push) --------------------------------------------------------------------------
+
+/** Os dois canais dos avisos dos amigos: com som, e sem som (o servidor usa este no horário de sono). */
+export const FRIENDS_CHANNEL_ID = 'amigos';
+export const FRIENDS_QUIET_CHANNEL_ID = 'amigos-silencio';
+
+async function ensureFriendChannels(N: typeof NotificationsModule, t: Translate) {
+  if (Platform.OS !== 'android') return;
+  await N.setNotificationChannelAsync(FRIENDS_CHANNEL_ID, {
+    name: t('push.channel'),
+    importance: N.AndroidImportance.HIGH,
+  });
+  await N.setNotificationChannelAsync(FRIENDS_QUIET_CHANNEL_ID, {
+    name: t('push.channelQuiet'),
+    importance: N.AndroidImportance.LOW,
+    sound: null,
+    enableVibrate: false,
+  });
+}
+
+/**
+ * O endereço deste celular no Expo Push, para o servidor mandar os avisos dos amigos.
+ * Nulo quando não dá: emulador sem Google, Expo Go no Android, sem permissão ou sem o projeto EAS.
+ */
+export async function pushToken(t: Translate, projectId: string | undefined): Promise<string | null> {
+  const N = notifications();
+  if (!N || !projectId || !(await hasNotificationPermission())) return null;
+  try {
+    await ensureFriendChannels(N, t);
+    return (await N.getExpoPushTokenAsync({ projectId })).data;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Chama `open` com o caminho do app (ex.: "/mural") quando a pessoa toca num aviso dos amigos,
+ * inclusive no que abriu o app fechado. Devolve a função que para de escutar.
+ */
+export function listenNotificationOpens(open: (path: string) => void): () => void {
+  const N = notifications();
+  if (!N) return () => undefined;
+  const handle = (response: NotificationsModule.NotificationResponse | null) => {
+    const url = response?.notification.request.content.data?.url;
+    if (typeof url === 'string' && url.startsWith('/')) open(url);
+  };
+  const last = N.getLastNotificationResponse();
+  if (last) {
+    handle(last);
+    N.clearLastNotificationResponse();
+  }
+  const subscription = N.addNotificationResponseReceivedListener(handle);
+  return () => subscription.remove();
+}
