@@ -13,6 +13,7 @@
     },
     "android": {
       "package": "com.mindfree.app",
+      "allowBackup": false,
       "adaptiveIcon": {
         "backgroundColor": "#10142E",
         "foregroundImage": "./assets/images/android-icon-foreground.png",

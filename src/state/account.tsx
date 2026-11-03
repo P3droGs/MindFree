@@ -429,7 +429,8 @@ export function AccountProvider({ children }: { children: ReactNode }) {
     }
     // Este celular para de receber os avisos dos amigos desta conta.
     await forgetThisDevice();
-    await supabase.auth.signOut({ scope: 'local' }).catch(() => undefined);
+    // Global: a sessão deixa de valer também no servidor (um celular perdido com o app aberto não continua logado).
+    await supabase.auth.signOut({ scope: 'global' }).catch(() => undefined);
     clearLocal();
     return 'ok';
   };
@@ -444,7 +445,7 @@ export function AccountProvider({ children }: { children: ReactNode }) {
       suspended.current = false;
       return false;
     }
-    await supabase.auth.signOut({ scope: 'local' }).catch(() => undefined);
+    await supabase.auth.signOut({ scope: 'global' }).catch(() => undefined);
     saveState(freshState(null));
     return true;
   };

@@ -37,6 +37,15 @@ export async function startDb(migrations) {
     grant usage on schema storage to anon, authenticated, service_role;
     grant select, insert, delete on storage.objects to anon, authenticated, service_role;
     grant usage on schema public to service_role;
+    -- O Vault, do jeito que o SQL o lê: os dois segredos que o servidor de verdade tem.
+    create schema vault;
+    create table vault.decrypted_secrets (name text primary key, decrypted_secret text);
+    insert into vault.decrypted_secrets values ('project_url', 'https://teste.supabase.co'), ('service_role_key', 'chave-de-teste');
+    -- O pg_net, só a assinatura (não há rede nos testes).
+    create schema extensions;
+    create schema net;
+    create function net.http_post(url text, headers jsonb default '{}', body jsonb default '{}') returns bigint language sql as $$ select 1::bigint $$;
+    grant usage on schema net, extensions, vault to anon, authenticated, service_role;
   `);
   const files = migrations.map((name) => readFileSync(new URL(`../migrations/${name}`, import.meta.url), 'utf8'));
   for (const sql of [...files, ...files]) await db.exec(sql);

@@ -207,7 +207,8 @@ Deno.serve(async (request) => {
     const tasks = await organize(transcript, context);
     return json({ transcript, tasks });
   } catch (error) {
-    console.error(error);
+    // Só a mensagem: a resposta inteira de um erro pode trazer um trecho da transcrição da pessoa.
+    console.error(error instanceof Error ? error.message : String(error));
     return json({ error: 'failed' }, 502);
   }
 });

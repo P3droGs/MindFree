@@ -1,7 +1,7 @@
 // Função do Supabase que entrega os avisos da rede (brilho, cutucão, brilho no Mural e pedido para seguir).
 // Ela esvazia a fila push_outbox (preenchida por gatilhos no banco) e manda tudo pelo Expo Push, que entrega
 // no Android (Firebase) e no iPhone (Apple). No horário de sono de quem recebe, o aviso vai sem som.
-// Não precisa de login: só entrega o que já está na fila, então chamar a mais não manda nada a mais.
+// Só o banco a chama (Cron e push_wake), com a chave de serviço lida do Vault: sem ela, responde 401.
 // A chave de serviço é colocada pelo próprio Supabase em toda função (SUPABASE_SERVICE_ROLE_KEY).
 import { createClient } from 'npm:@supabase/supabase-js@2.118.0';
 
@@ -126,6 +126,8 @@ Deno.serve(async (request) => {
   const url = Deno.env.get('SUPABASE_URL');
   const serviceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
   if (!url || !serviceKey) return json({ error: 'config' }, 500);
+  // Só o banco chama (pelo Cron e, nos avisos, na hora): ele manda a chave de serviço, lida do Vault.
+  if (request.headers.get('authorization') !== `Bearer ${serviceKey}`) return json({ error: 'unauthorized' }, 401);
   const supabase = createClient(url, serviceKey, { auth: { persistSession: false, autoRefreshToken: false } });
 
   let sent = 0;

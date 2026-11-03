@@ -8,6 +8,7 @@ const { db, as } = await startDb([
   '20261101120000_bloquear.sql',
   '20261101180000_mural.sql',
   '20261102120000_avisos.sql',
+  '20261104130000_seguranca.sql',
 ]);
 check('migrações aplicam duas vezes sem erro', true);
 
@@ -47,6 +48,7 @@ check('cadastrar celular exige @ (conta de verdade)', (await errorOf(() => as(A,
 await as(A, () => db.query(`select public.push_register('ExponentPushToken[ana-1]', 'android')`));
 check('celular cadastrado', (await rpc(`select count(*)::int as n from public.push_devices where user_id = '${A}'`)).n === 1);
 check('token estranho recusado', (await errorOf(() => as(A, () => db.query(`select public.push_register('x', 'android')`))))?.includes('mindfree:bad_token'));
+check('token comprido fora do formato do Expo recusado', (await errorOf(() => as(A, () => db.query(`select public.push_register('abcdefghijklmnopqrstuvwxyz', 'android')`))))?.includes('mindfree:bad_token'));
 check('ninguém lê os celulares direto', (await errorOf(() => as(A, () => db.query(`select * from public.push_devices`)))) !== null);
 
 // Sem celular, nada vai para a fila.
