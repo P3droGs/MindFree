@@ -35,7 +35,7 @@ export function useExactAlarmRefresh() {
       const current = latest.current;
       if (!current.settings.onboarded || !(await hasNotificationPermission())) return;
       await scheduleDailyReminders(current.settings.nightMinutes, current.settings.morningMinutes, current.t);
-      await scheduleTaskReminders(current.tasks, current.t);
+      await scheduleTaskReminders(current.tasks, current.t, true);
     };
     void check().catch(() => undefined);
     const subscription = AppState.addEventListener('change', (state) => {

@@ -116,20 +116,31 @@ const TASK_PREFIX = 'mindfree-tarefa-';
 /** O iPhone guarda no máximo 64 avisos agendados; sobra espaço para os dois avisos do dia. */
 const MAX_TASK_REMINDERS = 50;
 
+// O que está agendado agora, por tarefa: "horário|título|corpo". Só mexe no que mudou.
+const scheduledTasks = new Map<string, string>();
+
 /**
  * Agenda um aviso no horário de cada tarefa que ainda falta (só as próximas, e só se o
- * celular deixar notificar). Chamar de novo sempre que as tarefas mudam: refaz a lista toda.
+ * celular deixar notificar). Chamar de novo sempre que as tarefas mudam. Marcar uma tarefa como feita
+ * cancela só o aviso dela: os outros ficam como estão (antes, cada toque cancelava e refazia os 50).
+ * `rebuild` refaz tudo: para quando o texto (idioma) ou o tipo de alarme muda.
  */
-export async function scheduleTaskReminders(tasks: Task[], t: Translate) {
+export async function scheduleTaskReminders(tasks: Task[], t: Translate, rebuild = false) {
   const N = notifications();
   if (!N || !(await hasNotificationPermission())) return;
   await ensureChannel(N, t);
-  const scheduled = await N.getAllScheduledNotificationsAsync();
-  await Promise.all(
-    scheduled
-      .filter((notification) => notification.identifier.startsWith(TASK_PREFIX))
-      .map((notification) => N.cancelScheduledNotificationAsync(notification.identifier)),
-  );
+
+  // Na primeira vez (ou ao refazer), descobre o que o sistema tem, para não agendar em dobro nem
+  // deixar aviso de uma tarefa que não existe mais.
+  if (rebuild || scheduledTasks.size === 0) {
+    const scheduled = await N.getAllScheduledNotificationsAsync();
+    scheduledTasks.clear();
+    for (const notification of scheduled) {
+      if (!notification.identifier.startsWith(TASK_PREFIX)) continue;
+      // Sem assinatura conhecida: entra como "desconhecido", e abaixo é refeito.
+      scheduledTasks.set(notification.identifier.slice(TASK_PREFIX.length), '?');
+    }
+  }
 
   const now = Date.now();
   const upcoming = tasks
@@ -143,12 +154,23 @@ export async function scheduleTaskReminders(tasks: Task[], t: Translate) {
     .sort((a, b) => a.date.getTime() - b.date.getTime())
     .slice(0, MAX_TASK_REMINDERS);
 
-  for (const { task, date } of upcoming) {
+  const wanted = new Map(
+    upcoming.map(({ task, date }) => [task.id, { date, signature: `${date.getTime()}|${task.title}|${task.note || t('notif.taskBody')}` }]),
+  );
+  for (const [id] of scheduledTasks) {
+    if (wanted.has(id)) continue;
+    await N.cancelScheduledNotificationAsync(TASK_PREFIX + id).catch(() => undefined);
+    scheduledTasks.delete(id);
+  }
+  for (const [id, { date, signature }] of wanted) {
+    if (scheduledTasks.get(id) === signature) continue;
+    const task = upcoming.find((item) => item.task.id === id)!.task;
     await N.scheduleNotificationAsync({
-      identifier: TASK_PREFIX + task.id,
+      identifier: TASK_PREFIX + id,
       content: { title: task.title, body: task.note || t('notif.taskBody') },
       trigger: { type: N.SchedulableTriggerInputTypes.DATE, date, channelId: CHANNEL_ID },
     });
+    scheduledTasks.set(id, signature);
   }
 }
 

@@ -57,10 +57,14 @@ export function JournalProvider({ children }: { children: ReactNode }) {
     return () => subscription.remove();
   }, []);
 
-  // Lembretes de cada tarefa, no horário dela (com atraso, para não reagendar a cada toque).
+  // Lembretes de cada tarefa, no horário dela (com atraso, para juntar vários toques). Só o que mudou é
+  // reagendado; quando o idioma muda (o `t` troca), o texto de todos muda e a lista é refeita.
+  const lastT = useRef(t);
   useEffect(() => {
+    const rebuild = lastT.current !== t;
+    lastT.current = t;
     const timeout = setTimeout(() => {
-      scheduleTaskReminders(journal.tasks, t).catch(() => undefined);
+      scheduleTaskReminders(journal.tasks, t, rebuild).catch(() => undefined);
     }, 1200);
     return () => clearTimeout(timeout);
   }, [journal.tasks, t]);
