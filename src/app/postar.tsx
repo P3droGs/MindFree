@@ -13,6 +13,7 @@ import { useNow } from '@/hooks/use-now';
 import { useT } from '@/i18n';
 import { deleteLocalFile, deleteTempFile } from '@/lib/files';
 import { mural, shrinkPhoto } from '@/lib/mural';
+import { forget } from '@/lib/remembered';
 import { SocialError } from '@/lib/social';
 import { formatMinutes } from '@/lib/time';
 import { addDays, dayKey, newId } from '@/state/journal';
@@ -89,6 +90,7 @@ function PostScreen() {
     try {
       small = await shrinkPhoto(photo);
       const cloud = await mural.publish(small, title, caption.trim());
+      forget('mural.');
       const id = newId('post');
       // No celular fica a mesma foto reduzida que subiu, e não a original, bem mais pesada.
       const photoUri = await keepPhoto(small, id);

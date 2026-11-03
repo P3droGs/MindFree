@@ -12,6 +12,7 @@ import { SocialGate } from '@/components/social-gate';
 import { useNow } from '@/hooks/use-now';
 import { useT } from '@/i18n';
 import { eveningDay } from '@/lib/capture';
+import { forget, remembered } from '@/lib/remembered';
 import { displayName, initialOf, planetColor, social, type Friend } from '@/lib/social';
 import { addDays, mondayOf, nightOfDay, weekNights } from '@/state/journal';
 import { useJournal } from '@/state/journal-provider';
@@ -58,9 +59,9 @@ function FriendsSkyScreen() {
   const [failed, setFailed] = useState(false);
   const [toast, setToast] = useObsToast();
 
-  const load = useCallback(async () => {
+  const load = useCallback(async (fresh = false) => {
     try {
-      setFriends(await social.friendsWeek(monday, tonight));
+      setFriends(await remembered(`friends.${monday}.${tonight}`, () => social.friendsWeek(monday, tonight), fresh));
       setFailed(false);
     } catch {
       setFailed(true);
@@ -112,6 +113,7 @@ function FriendsSkyScreen() {
     const on = !person.shined;
     setFriend(person.id, { shined: on });
     setToast(on ? t('friends.shineSent', { name: person.name }) : '');
+    forget('friends.');
     social.interact(person.id, 'shine', tonight, on).catch(() => {
       setFriend(person.id, { shined: !on });
       setToast(t('social.offline'));
@@ -122,6 +124,7 @@ function FriendsSkyScreen() {
     if (person.poked) return;
     setFriend(person.id, { poked: true });
     setToast(t('friends.pokeSent', { name: person.name }));
+    forget('friends.');
     social.interact(person.id, 'poke', tonight, true).catch(() => {
       setFriend(person.id, { poked: false });
       setToast(t('social.offline'));
@@ -273,7 +276,7 @@ function FriendsSkyScreen() {
             <AppText variant="small" style={[styles.flex, { color: OBS.soft }]}>
               {t('social.offline')}
             </AppText>
-            <ObsChip label={t('social.retry')} filled onPress={() => void load()} />
+            <ObsChip label={t('social.retry')} filled onPress={() => void load(true)} />
           </View>
         ) : null}
         {friends !== null && friends.length === 0 ? (

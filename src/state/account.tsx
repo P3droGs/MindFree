@@ -6,6 +6,7 @@ import { mergeRemote, toNightRow, toTaskRow, type NightRow, type TaskRow } from 
 import { deleteAllMedia } from '@/lib/files';
 import { mural } from '@/lib/mural';
 import { forgetThisDevice } from '@/lib/push';
+import { forget as forgetRemembered } from '@/lib/remembered';
 import { supabase, supabaseKey, supabaseUrl } from '@/lib/supabase';
 import { useJournal } from '@/state/journal-provider';
 import { changePosts } from '@/state/posts';
@@ -435,6 +436,7 @@ export function AccountProvider({ children }: { children: ReactNode }) {
   /** Limpa deste celular o que é da conta: tarefas, noites, gravações e fotos (os ajustes ficam). */
   const clearLocal = () => {
     suspended.current = true;
+    forgetRemembered();
     if (journalRef.current.tasks.length || journalRef.current.nights.length) skipDiff.current = true;
     deleteAllMedia();
     changePosts(() => []);

@@ -9,6 +9,7 @@ const { db, as } = await startDb([
   '20261101180000_mural.sql',
   '20261102120000_avisos.sql',
   '20261104130000_seguranca.sql',
+  '20261104140000_rede_rapida.sql',
 ]);
 check('migrações aplicam duas vezes sem erro', true);
 
@@ -130,5 +131,16 @@ check('celular que sumiu é esquecido', (await rpc(`select count(*)::int as n fr
 // Apagar a conta leva tudo junto.
 await as(C, () => db.query(`select public.delete_my_account()`));
 check('apagar a conta apaga celulares e preferências', (await rpc(`select (select count(*) from public.push_devices where user_id = '${C}') + (select count(*) from public.push_prefs where user_id = '${C}') as n`)).n == 0);
+
+// Acordar a "avisar": no máximo uma vez a cada 15 s (os eventos do meio entram no mesmo envio).
+await db.exec(`delete from public.push_wake_log;`);
+await db.exec(`select public.push_wake();`);
+const firstWake = (await rpc(`select woke_at from public.push_wake_log`)).woke_at;
+await db.exec(`select public.push_wake(); select public.push_wake();`);
+check('acordar de novo em 15 s não conta', String((await rpc(`select woke_at from public.push_wake_log`)).woke_at) === String(firstWake));
+await db.exec(`update public.push_wake_log set woke_at = now() - interval '16 seconds';`);
+await db.exec(`select public.push_wake();`);
+const sinceWake = (await rpc(`select extract(epoch from now() - woke_at) as s from public.push_wake_log`)).s;
+check('depois de 15 s acorda de novo', Number(sinceWake) < 5);
 
 finish();

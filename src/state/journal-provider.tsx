@@ -19,27 +19,28 @@ const JournalContext = createContext<JournalValue | null>(null);
  * as tarefas e a estrela ficam): é ao abrir o app e ao voltar para ele que esse prazo vence.
  * Devolve também o que estava salvo, para gravar de novo só se a limpeza mudou alguma coisa.
  */
-function readJournal(): { journal: Journal; stored: string } {
+function readJournal(): { journal: Journal; cleaned: boolean } {
   const stored = loadJournal();
   const expired = expiredRecordings(stored);
   for (const night of expired) if (night.audioUri) deleteLocalFile(night.audioUri);
   const journal = expired.length ? forgetRecordings(stored, new Set(expired.map((night) => night.id))) : stored;
-  return { journal, stored: JSON.stringify(stored) };
+  return { journal, cleaned: expired.length > 0 };
 }
 
 export function JournalProvider({ children }: { children: ReactNode }) {
   const t = useT();
   const [first] = useState(readJournal);
   const [journal, setJournal] = useState(first.journal);
-  // O que está gravado no celular agora. Só salva quando o diário fica diferente disso.
-  // (Antes era uma marca de "acabei de ler", que ficava presa quando a releitura não mudava nada,
-  // como no app recém-instalado, e a primeira noite gravada não era salva.)
-  const saved = useRef(first.stored);
+  // O objeto do diário que já está gravado no celular. Só salva quando `journal` é outro objeto: cada
+  // `change()` cria um novo, e a releitura do disco entra já marcada como gravada. Comparar por identidade
+  // custa nada; antes era um JSON.stringify do diário inteiro a cada render.
+  // (Uma marca de "acabei de ler" ficava presa quando a releitura não mudava nada, como no app recém-instalado,
+  // e a primeira noite gravada não era salva; por isso a comparação é com o objeto, não com uma marca.)
+  const saved = useRef<Journal | null>(first.cleaned ? null : first.journal);
 
   useEffect(() => {
-    const json = JSON.stringify(journal);
-    if (json === saved.current) return;
-    saved.current = json;
+    if (journal === saved.current) return;
+    saved.current = journal;
     // Na hora e sem esperar: se o app for para o fundo logo depois, a releitura já encontra isto.
     saveJournalNow(journal);
   }, [journal]);
@@ -49,7 +50,7 @@ export function JournalProvider({ children }: { children: ReactNode }) {
     const subscription = AppState.addEventListener('change', (state) => {
       if (state === 'active') {
         const next = readJournal();
-        saved.current = next.stored;
+        if (!next.cleaned) saved.current = next.journal;
         setJournal(next.journal);
       }
     });

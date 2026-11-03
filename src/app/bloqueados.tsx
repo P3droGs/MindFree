@@ -8,6 +8,7 @@ import { BackButton } from '@/components/buttons';
 import { OBS, ObsChip, ObservatoryScreen, useObsToast } from '@/components/observatory';
 import { SocialGate } from '@/components/social-gate';
 import { useT } from '@/i18n';
+import { forget, remembered } from '@/lib/remembered';
 import { displayName, initialOf, planetColor, social, type BlockedPerson } from '@/lib/social';
 
 export default function BlockedRoute() {
@@ -26,9 +27,9 @@ function BlockedScreen() {
   const [failed, setFailed] = useState(false);
   const [toast, setToast] = useObsToast();
 
-  const load = useCallback(async () => {
+  const load = useCallback(async (fresh = false) => {
     try {
-      setPeople(await social.blockedList());
+      setPeople(await remembered('blocked', () => social.blockedList(), fresh));
       setFailed(false);
     } catch {
       setFailed(true);
@@ -49,9 +50,10 @@ function BlockedScreen() {
         text: t('safety.unblock'),
         onPress: () => {
           setPeople((current) => current?.filter((p) => p.userId !== person.userId) ?? null);
+          forget();
           social.unblock(person.userId).catch(() => {
             setToast(t('social.offline'));
-            void load();
+            void load(true);
           });
         },
       },
@@ -93,7 +95,7 @@ function BlockedScreen() {
           <AppText variant="small" style={[styles.flex, { color: OBS.soft }]}>
             {t('social.offline')}
           </AppText>
-          <ObsChip label={t('social.retry')} filled onPress={() => void load()} />
+          <ObsChip label={t('social.retry')} filled onPress={() => void load(true)} />
         </View>
       ) : null}
     </ObservatoryScreen>

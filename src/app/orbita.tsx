@@ -12,6 +12,7 @@ import { SocialGate } from '@/components/social-gate';
 import { useNow } from '@/hooks/use-now';
 import { useT } from '@/i18n';
 import { eveningDay } from '@/lib/capture';
+import { forget, remembered } from '@/lib/remembered';
 import { displayName, initialOf, planetColor, social, type FollowState, type Orbit, type Person } from '@/lib/social';
 import { useSettings } from '@/state/settings';
 import { useSocial } from '@/state/social';
@@ -53,14 +54,15 @@ function OrbitScreen() {
     };
     setToast(text[action]);
     if (action === 'failed') return;
+    forget();
     if (action === 'blocked') setResults((current) => current?.filter((p) => p.userId !== acting?.person.userId) ?? null);
-    void load();
+    void load(true);
     void refresh();
   };
 
-  const load = useCallback(async () => {
+  const load = useCallback(async (fresh = false) => {
     try {
-      setOrbit(await social.orbit(today));
+      setOrbit(await remembered(`orbit.${today}`, () => social.orbit(today), fresh));
       setFailed(false);
     } catch {
       setFailed(true);
@@ -117,7 +119,8 @@ function OrbitScreen() {
       .follow(person.userId)
       .then((state) => {
         setFollow(person.userId, state);
-        void load();
+        forget();
+        void load(true);
         void refresh();
       })
       .catch(() => {
@@ -142,7 +145,10 @@ function OrbitScreen() {
             setFollow(person.userId, 'none');
             social
               .unfollow(person.userId)
-              .then(() => refresh())
+              .then(() => {
+                forget();
+                return refresh();
+              })
               .catch(() => {
                 setFollow(person.userId, before);
                 setToast(t('social.offline'));
@@ -165,10 +171,13 @@ function OrbitScreen() {
     );
     social
       .respond(person.userId, accept)
-      .then(() => refresh())
+      .then(() => {
+        forget();
+        return refresh();
+      })
       .catch(() => {
         setToast(t('social.offline'));
-        void load();
+        void load(true);
       });
   };
 
@@ -315,7 +324,7 @@ function OrbitScreen() {
                 <AppText variant="small" style={[styles.flex, { color: OBS.soft }]}>
                   {t('social.offline')}
                 </AppText>
-                <ObsChip label={t('social.retry')} filled onPress={() => void load()} />
+                <ObsChip label={t('social.retry')} filled onPress={() => void load(true)} />
               </View>
             ) : null}
           </View>

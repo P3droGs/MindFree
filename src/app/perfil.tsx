@@ -23,6 +23,7 @@ import {
   SocialError,
   type Activity,
 } from '@/lib/social';
+import { remembered } from '@/lib/remembered';
 import { dateFromKey, nightStreak, starsInMonth } from '@/state/journal';
 import { useJournal } from '@/state/journal-provider';
 import { usePosts } from '@/state/posts';
@@ -78,7 +79,7 @@ function ProfileScreen() {
   // Os brilhos, cutucões e quem entrou na órbita: busca toda vez que a tela abre.
   const loadActivity = useCallback(async () => {
     try {
-      setActivity(await social.activity());
+      setActivity(await remembered('activity', () => social.activity()));
       setActivityFailed(false);
     } catch {
       setActivityFailed(true);

@@ -15,6 +15,7 @@ import { useStartCapture } from '@/hooks/use-start-capture';
 import { useT } from '@/i18n';
 import { timeAgo } from '@/lib/dates';
 import { mural, type CloudPost } from '@/lib/mural';
+import { forget, remembered } from '@/lib/remembered';
 import { displayName, initialOf, planetColor } from '@/lib/social';
 import { formatMinutes, minutesOfDay } from '@/lib/time';
 import { changePosts, deletePhoto, POST_LIFETIME_MS, usePosts, type Post } from '@/state/posts';
@@ -58,12 +59,13 @@ function MuralScreen() {
   const myName = settings.name.trim().split(' ')[0] || t('friends.you');
   const nowMs = now.getTime();
 
-  const load = useCallback(async () => {
+  const load = useCallback(async (fresh = false) => {
     try {
-      const next = await mural.feed();
+      const next = await remembered('mural.feed', () => mural.feed(), fresh);
       setFeed(next);
       setFailed(false);
-      setLinks(await mural.photoLinks(next.map((post) => post.photoPath)));
+      // Os links valem 1 hora; lembrar por 30 s é seguro.
+      setLinks(await remembered('mural.links', () => mural.photoLinks(next.map((post) => post.photoPath)), fresh));
     } catch {
       setFailed(true);
     }
@@ -102,6 +104,7 @@ function MuralScreen() {
     setShined(post.id, on);
     try {
       await mural.shine(post.id, on);
+      forget('mural.');
     } catch {
       setShined(post.id, !on);
       setToast(t('mural.shineFailed'));
@@ -124,6 +127,7 @@ function MuralScreen() {
           if (item.kind === 'local') return forgetLocal(item.post);
           try {
             await mural.remove(item.post.id);
+            forget('mural.');
           } catch {
             setToast(t('mural.deleteFailed'));
             return;
@@ -145,6 +149,7 @@ function MuralScreen() {
       failed: t('social.offline'),
     };
     setToast(text[action]);
+    if (action !== 'failed') forget();
     if (action === 'blocked') setFeed((current) => current?.filter((post) => post.authorId !== author) ?? null);
   };
 
@@ -251,7 +256,7 @@ function MuralScreen() {
               <AppText variant="small" style={[styles.center, { color: OBS.soft }]}>
                 {t('mural.loadFailed')}
               </AppText>
-              <ObsChip label={t('social.retry')} onPress={() => void load()} />
+              <ObsChip label={t('social.retry')} onPress={() => void load(true)} />
             </View>
           ) : null}
           {items.length === 0 && feed && !failed ? (
