@@ -2,7 +2,7 @@
 // Uso: npm run test:sql (ou node supabase/tests/contas.test.mjs)
 import { check, errorOf, finish, startDb } from './local-supabase.mjs';
 
-const { db, as } = await startDb(['20261024120000_contas.sql']);
+const { db, as } = await startDb(['20261024120000_contas.sql', '20261104120000_cota_ia.sql']);
 check('migração aplica duas vezes sem erro', true);
 
 const A = '11111111-1111-1111-1111-111111111111'; // conta de verdade
@@ -79,11 +79,20 @@ await as(A, async () => {
   check('com conta: 20 por dia e a 21ª é recusada', results.slice(0, 20).every(Boolean) && results[20] === false);
 });
 
-// Limite total do app: com 300 usos no dia, ninguém mais consegue.
-await db.exec(`insert into public.ai_usage (user_id, day, count) values ('${B}', (now() at time zone 'utc')::date, 300 - 29);`);
+// O teto do app só vale para as contas invisíveis: 150 por dia entre todas. Quem tem conta não é travado.
+const D = '44444444-4444-4444-4444-444444444444'; // outra conta invisível, que abusou
+await db.exec(`insert into auth.users (id) values ('${D}');`);
+await db.exec(`insert into public.ai_usage (user_id, day, count, anonymous) values ('${D}', (now() at time zone 'utc')::date, 150 - 8, true);`);
+await as(C, async () => {
+  check('teto das invisíveis (150) barra outra invisível', (await db.query(`select public.consume_ai_quota() as ok`)).rows[0].ok === false);
+}, true);
 await as(B, async () => {
-  check('limite total de 300 por dia barra todo mundo', (await db.query(`select public.consume_ai_quota() as ok`)).rows[0].ok === false);
+  check('com o teto das invisíveis cheio, quem tem conta continua organizando', (await db.query(`select public.consume_ai_quota() as ok`)).rows[0].ok === true);
 });
+await db.exec(`insert into public.ai_usage (user_id, day, count, anonymous) values ('${A}', (now() at time zone 'utc')::date, 500, false) on conflict (user_id, day) do update set count = 500;`);
+const anonymousUsed = (await db.query(`select coalesce(sum(count), 0)::int as n from public.ai_usage where anonymous`)).rows[0].n;
+// C registrou 9 (a tentativa recusada também conta) e D, 142: as 500 de A ficam de fora.
+check('uso das contas de verdade não conta no teto das invisíveis', anonymousUsed === 151);
 
 // Sem login, nada funciona.
 await db.exec(`reset role; select set_config('request.jwt.claim.sub', '', false); set role anon;`);
