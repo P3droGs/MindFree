@@ -47,7 +47,8 @@ export default function EditTaskScreen() {
     if (key === today) return t('date.today');
     if (key === addDays(today, 1)) return t('date.tomorrow');
     const date = dateFromKey(key);
-    return `${weekdayName(t, date.getDay())} ${date.getDate()}`;
+    const name = weekdayName(t, date.getDay());
+    return `${name.charAt(0).toLocaleUpperCase() + name.slice(1)} ${date.getDate()}`;
   };
 
   const save = () => {

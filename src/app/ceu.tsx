@@ -25,6 +25,14 @@ const MINI_WIDTH = 52;
 const MINI_HEIGHT = 36;
 
 /** "outubro" no ano de agora; "outubro 2025" nos outros anos. */
+/** "3 coisas anotadas" e "1 concluída": o plural certo para cada número. */
+function countTexts(t: Translate, noted: number, done: number) {
+  return {
+    noted: noted === 1 ? t('sky.notedOne') : t('sky.noted', { n: noted }),
+    done: done === 1 ? t('sky.doneOne') : t('sky.done', { n: done }),
+  };
+}
+
 function monthLabel(t: Translate, month: MonthKey, currentYear: number): string {
   const [year, monthNumber] = month.split('-').map(Number);
   const name = monthName(t, monthNumber - 1);
@@ -122,8 +130,7 @@ export default function SkyScreen() {
               accessibilityState={{ selected: isSelected }}
               accessibilityLabel={t('sky.starLabel', {
                 date: longDate(t, star.night.day),
-                noted: star.progress.noted,
-                done: star.progress.done,
+                ...countTexts(t, star.progress.noted, star.progress.done),
               })}
               onPress={() => setSelectedId(star.night.id)}
               style={[
@@ -153,9 +160,9 @@ export default function SkyScreen() {
       {selected ? <NightDetail night={selected} isNew={selected.day === tonight} /> : null}
 
       <View style={[styles.stats, stackStats && styles.statsStacked]}>
-        <Stat value={nights.length} label={t('sky.statNights')} stacked={stackStats} />
-        <Stat value={totals.noted} label={t('sky.statNoted')} stacked={stackStats} />
-        <Stat value={totals.done} label={t('sky.statDone')} stacked={stackStats} />
+        <Stat value={nights.length} label={nights.length === 1 ? t('sky.statNightsOne') : t('sky.statNights')} stacked={stackStats} />
+        <Stat value={totals.noted} label={totals.noted === 1 ? t('sky.statNotedOne') : t('sky.statNoted')} stacked={stackStats} />
+        <Stat value={totals.done} label={totals.done === 1 ? t('sky.statDoneOne') : t('sky.statDone')} stacked={stackStats} />
       </View>
 
       <View style={styles.section}>
@@ -240,7 +247,7 @@ function NightDetail({ night, isNew }: { night: Night; isNew: boolean }) {
         </AppText>
       </View>
       <AppText variant="small" tone="secondary">
-        {t('sky.nightStats', { noted: progress.noted, done: progress.done })}
+        {t('sky.nightStats', countTexts(t, progress.noted, progress.done))}
       </AppText>
       <AppText variant="small">{hint}</AppText>
     </Card>

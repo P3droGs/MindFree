@@ -117,14 +117,18 @@ export default function CalendarScreen() {
           })}
         </View>
         <View style={styles.legend}>
-          <View style={[styles.dot, { backgroundColor: theme.accentStrong }]} />
-          <AppText variant="caption" tone="secondary">
-            {t('calendar.legendDone')}
-          </AppText>
-          <View style={[styles.legendNight, { backgroundColor: withAlpha(theme.accent, 0.16) }]} />
-          <AppText variant="caption" tone="secondary">
-            {t('calendar.legendNight')}
-          </AppText>
+          <View style={styles.legendItem}>
+            <View style={[styles.dot, { backgroundColor: theme.accentStrong }]} />
+            <AppText variant="caption" tone="secondary" style={styles.legendText}>
+              {t('calendar.legendDone')}
+            </AppText>
+          </View>
+          <View style={styles.legendItem}>
+            <View style={[styles.legendNight, { backgroundColor: withAlpha(theme.accent, 0.16) }]} />
+            <AppText variant="caption" tone="secondary" style={styles.legendText}>
+              {t('calendar.legendNight')}
+            </AppText>
+          </View>
         </View>
       </Card>
 
@@ -189,8 +193,10 @@ const styles = StyleSheet.create({
     borderColor: 'transparent',
   },
   dot: { width: 6, height: 6, borderRadius: 3 },
-  legend: { flexDirection: 'row', alignItems: 'center', gap: 6, flexWrap: 'wrap' },
-  legendNight: { width: 14, height: 14, borderRadius: 7, marginLeft: 8 },
+  legend: { flexDirection: 'row', alignItems: 'center', flexWrap: 'wrap', columnGap: 14, rowGap: 6 },
+  legendItem: { flexDirection: 'row', alignItems: 'center', gap: 6, maxWidth: '100%' },
+  legendText: { flexShrink: 1 },
+  legendNight: { width: 14, height: 14, borderRadius: 7 },
   section: { gap: 10 },
   night: { flexDirection: 'row', alignItems: 'center', gap: 10, padding: 12, borderRadius: 16, borderWidth: 1 },
 });

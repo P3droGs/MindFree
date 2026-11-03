@@ -77,6 +77,15 @@ export function saveJournal(journal: Journal): Promise<void> {
   return Storage.setItem(STORAGE_KEY, JSON.stringify(journal));
 }
 
+/** Grava já, antes de seguir (o app pode ir para o fundo e reler o diário logo em seguida). */
+export function saveJournalNow(journal: Journal) {
+  try {
+    Storage.setItemSync(STORAGE_KEY, JSON.stringify(journal));
+  } catch {
+    saveJournal(journal).catch(() => undefined);
+  }
+}
+
 export function newId(prefix: string): string {
   return `${prefix}-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 7)}`;
 }
