@@ -30,7 +30,7 @@
       ]
     },
     "web": {
-      "output": "server",
+      "output": "single",
       "favicon": "./assets/images/favicon.png"
     },
     "plugins": [
@@ -166,7 +166,8 @@
       ],
       "expo-asset",
       "expo-image",
-      "expo-secure-store"
+      "expo-secure-store",
+      "./plugins/android-release"
     ],
     "experiments": {
       "typedRoutes": true,

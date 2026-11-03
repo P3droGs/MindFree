@@ -6,7 +6,7 @@
 import Anthropic from 'npm:@anthropic-ai/sdk@1.1.0';
 import { createClient } from 'npm:@supabase/supabase-js@2.118.0';
 
-// O app grava no máximo 3 minutos (~3 MB). Qualquer coisa bem maior não veio do app.
+// O app grava no máximo 3 minutos de voz em mono (cerca de 1 MB). Qualquer coisa bem maior não veio do app.
 const MAX_AUDIO_BYTES = 5 * 1024 * 1024;
 const MAX_BODY_BYTES = MAX_AUDIO_BYTES + 64 * 1024;
 const MAX_TEXT_CHARS = 4000;

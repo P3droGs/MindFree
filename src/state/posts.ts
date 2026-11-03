@@ -60,8 +60,8 @@ export function usePosts(): Post[] {
 }
 
 /**
- * A foto escolhida fica numa pasta temporária, que o sistema pode limpar.
- * Copia para a pasta do app para o post não perder a imagem.
+ * A foto do post (a reduzida, que subiu) chega numa pasta temporária, que o sistema pode limpar.
+ * Vai para a pasta do app para o post não perder a imagem.
  */
 export async function keepPhoto(uri: string, id: string): Promise<string> {
   try {
@@ -69,7 +69,7 @@ export async function keepPhoto(uri: string, id: string): Promise<string> {
     if (!folder.exists) folder.create({ intermediates: true });
     const extension = uri.split('?')[0].split('.').pop()?.toLowerCase() ?? 'jpg';
     const target = new File(folder, `${id}.${extension.length <= 4 ? extension : 'jpg'}`);
-    await new File(uri).copy(target);
+    await new File(uri).move(target);
     return target.uri;
   } catch {
     return uri;

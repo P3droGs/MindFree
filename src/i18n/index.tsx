@@ -1,18 +1,7 @@
 import { getLocales, useLocales } from 'expo-localization';
 import { createContext, use, useMemo, type ReactNode } from 'react';
 
-import { ar } from '@/i18n/locales/ar';
-import { de } from '@/i18n/locales/de';
-import { en } from '@/i18n/locales/en';
-import { es } from '@/i18n/locales/es';
-import { fr } from '@/i18n/locales/fr';
-import { hi } from '@/i18n/locales/hi';
-import { it } from '@/i18n/locales/it';
-import { ja } from '@/i18n/locales/ja';
-import { ko } from '@/i18n/locales/ko';
 import { ptBR, type MessageKey, type Messages } from '@/i18n/locales/pt-BR';
-import { ptPT } from '@/i18n/locales/pt-PT';
-import { zh } from '@/i18n/locales/zh';
 import { useSettings } from '@/state/settings';
 
 export type LanguageCode = 'pt-BR' | 'pt-PT' | 'en' | 'es' | 'fr' | 'de' | 'it' | 'ja' | 'ko' | 'zh' | 'hi' | 'ar';
@@ -37,20 +26,24 @@ export const LANGUAGES: Language[] = [
   { code: 'ar', short: 'AR', native: 'العربية', rtl: true },
 ];
 
-const MESSAGES: Record<LanguageCode, Messages> = {
-  'pt-BR': ptBR,
-  'pt-PT': ptPT,
-  en,
-  es,
-  fr,
-  de,
-  it,
-  ja,
-  ko,
-  zh,
-  hi,
-  ar,
+// Cada idioma só é lido quando alguém pede por ele: ao abrir, o app carrega só o da pessoa, e não os 12.
+// O português do Brasil é a base dos outros (tapa o que faltar) e fica sempre carregado.
+/* eslint-disable @typescript-eslint/no-require-imports */
+const LOADERS: Record<LanguageCode, () => Messages> = {
+  'pt-BR': () => ptBR,
+  'pt-PT': () => (require('@/i18n/locales/pt-PT') as typeof import('@/i18n/locales/pt-PT')).ptPT,
+  en: () => (require('@/i18n/locales/en') as typeof import('@/i18n/locales/en')).en,
+  es: () => (require('@/i18n/locales/es') as typeof import('@/i18n/locales/es')).es,
+  fr: () => (require('@/i18n/locales/fr') as typeof import('@/i18n/locales/fr')).fr,
+  de: () => (require('@/i18n/locales/de') as typeof import('@/i18n/locales/de')).de,
+  it: () => (require('@/i18n/locales/it') as typeof import('@/i18n/locales/it')).it,
+  ja: () => (require('@/i18n/locales/ja') as typeof import('@/i18n/locales/ja')).ja,
+  ko: () => (require('@/i18n/locales/ko') as typeof import('@/i18n/locales/ko')).ko,
+  zh: () => (require('@/i18n/locales/zh') as typeof import('@/i18n/locales/zh')).zh,
+  hi: () => (require('@/i18n/locales/hi') as typeof import('@/i18n/locales/hi')).hi,
+  ar: () => (require('@/i18n/locales/ar') as typeof import('@/i18n/locales/ar')).ar,
 };
+/* eslint-enable @typescript-eslint/no-require-imports */
 
 export function languageByCode(code: LanguageCode): Language {
   return LANGUAGES.find((language) => language.code === code) ?? LANGUAGES[0];
@@ -75,7 +68,7 @@ export type TranslateParams = Record<string, string | number>;
 export type Translate = (key: MessageKey, params?: TranslateParams) => string;
 
 export function translator(language: LanguageCode): Translate {
-  const messages = MESSAGES[language];
+  const messages = LOADERS[language]();
   return (key, params) => {
     const text = messages[key] ?? ptBR[key];
     if (!params) return text;

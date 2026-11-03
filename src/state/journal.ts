@@ -155,6 +155,32 @@ export function addNight(journal: Journal, night: Night, tasks: Task[]): Journal
   return { tasks: [...journal.tasks, ...tasks], nights: [...journal.nights, night] };
 }
 
+/** O áudio de uma noite organizada fica 7 dias no celular. O texto, as tarefas e a estrela ficam para sempre. */
+const KEEP_AUDIO_MS = 7 * 24 * 60 * 60 * 1000;
+
+/**
+ * As noites organizadas há mais de 7 dias que ainda guardam o áudio. A gravação que espera para ser
+ * organizada fica, e a de exemplo (do app sem a IA configurada) também.
+ */
+export function expiredRecordings(journal: Journal, now = Date.now()): Night[] {
+  return journal.nights.filter(
+    (night) =>
+      night.audioUri &&
+      !night.pending &&
+      !night.example &&
+      // Uma noite organizada não muda mais: o `changedAt` é a hora em que ela foi organizada.
+      (night.changedAt ?? dateFromKey(night.day).getTime()) < now - KEEP_AUDIO_MS,
+  );
+}
+
+/** Tira o áudio dessas noites. O `changedAt` fica igual: o áudio nunca vai para a nuvem. */
+export function forgetRecordings(journal: Journal, ids: Set<string>): Journal {
+  return {
+    ...journal,
+    nights: journal.nights.map((night) => (ids.has(night.id) ? { ...night, audioUri: undefined } : night)),
+  };
+}
+
 /**
  * Uma noite "acesa": quantas tarefas ela tem e quantas já foram feitas.
  * Duas gravações no mesmo dia são uma estrela só, então as tarefas das duas contam juntas.

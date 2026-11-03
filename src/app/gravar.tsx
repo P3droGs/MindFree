@@ -4,10 +4,11 @@ import {
   setAudioModeAsync,
   useAudioRecorder,
   useAudioRecorderState,
+  type RecordingOptions,
 } from 'expo-audio';
 import { useRouter } from 'expo-router';
 import { useEffect, useRef } from 'react';
-import { Alert, BackHandler, Linking, StyleSheet, View } from 'react-native';
+import { Alert, BackHandler, Linking, Platform, StyleSheet, View } from 'react-native';
 import Svg, { Circle } from 'react-native-svg';
 
 import { AppText } from '@/components/app-text';
@@ -24,12 +25,25 @@ const RING = 116;
 const BARS = 14;
 /** A partir daqui, voltar pergunta antes de apagar o que já foi falado. */
 const CONFIRM_AFTER_SECONDS = 3;
+/**
+ * Voz, não música: mono e com bitrate baixo, de 3 a 4 vezes menor que o padrão do Expo (estéreo, 128 kbps).
+ * No Android, 16 kHz, a taxa que a transcrição usa. No iPhone, 44,1 kHz, em que o codificador AAC da Apple
+ * aceita de 32 a 160 kbps.
+ */
+const VOICE: RecordingOptions = {
+  ...RecordingPresets.HIGH_QUALITY,
+  sampleRate: Platform.OS === 'ios' ? 44100 : 16000,
+  numberOfChannels: 1,
+  bitRate: Platform.OS === 'ios' ? 48000 : 32000,
+  isMeteringEnabled: true,
+  directory: 'document',
+};
 
 export default function RecordScreen() {
   const router = useRouter();
   const theme = useAppTheme();
   const t = useT();
-  const recorder = useAudioRecorder({ ...RecordingPresets.HIGH_QUALITY, isMeteringEnabled: true, directory: 'document' });
+  const recorder = useAudioRecorder(VOICE);
   const state = useAudioRecorderState(recorder, 120);
   const finishing = useRef(false);
   const seconds = Math.floor(state.durationMillis / 1000);

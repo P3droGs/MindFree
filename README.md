@@ -54,7 +54,7 @@ O visual é calmo e fácil de entender: escuro e lilás à noite, claro e cor de
 ## Privacidade
 
 - **A IA pede consentimento antes do primeiro uso.** O app explica o que sai do celular, para quem e para quê, e "Agora não" não trava nada.
-- **As gravações e o texto do que foi falado ficam no celular**, mesmo com conta.
+- **As gravações e o texto do que foi falado ficam no celular**, mesmo com conta. O áudio sai do celular 7 dias depois de organizado; o texto e as tarefas ficam.
 - **As fotos do mural só saem do celular quando a pessoa posta.** Vão reduzidas para um espaço privado no servidor, abrem só para quem segue (por links que expiram em 1 hora) e são apagadas em 7 dias.
 - **Na rede, os amigos veem só os dias com estrela e o que a pessoa escolhe postar no mural.** O servidor entrega apenas o que a privacidade promete: as tabelas não aceitam leitura direta, e tudo passa por funções que conferem quem pode ver o quê.
 - **O filtro de moderação só recebe a foto e o texto do post na hora de publicar**, para dizer se podem ir ao ar.
@@ -90,6 +90,7 @@ src/
   widgets/      widgets do iPhone (ios/) e do Android (android/)
   i18n/         os 12 idiomas
   legal/        política de privacidade
+plugins/        ajustes do build de release no Android (sem o GIF e o WebP do <Image>, que o app não usa)
 supabase/
   functions/    as Edge Functions "organizar" (IA), "postar" (filtro do mural), "limpar-mural" e "avisar" (Deno)
   migrations/   o SQL do banco

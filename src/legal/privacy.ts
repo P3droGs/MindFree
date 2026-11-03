@@ -33,7 +33,7 @@ const pt: Policy = {
       title: 'Se você criar uma conta',
       paragraphs: [
         `Seu e-mail, sua senha (guardada de forma protegida pela Supabase, nunca em texto puro), seu nome, seus ajustes e suas tarefas e noites ficam guardados nos servidores da Supabase, na região ${REGION}, nos Estados Unidos, para você não perder nada e poder usar o app em outro celular. Ao criar a conta, você concorda com essa transferência internacional dos dados.`,
-        'As gravações de voz e o texto do que você falou continuam só no seu celular. As fotos do mural só saem dele quando você posta (veja "Se você entrar na rede").',
+        'As gravações de voz e o texto do que você falou continuam só no seu celular. O áudio de cada gravação é apagado do celular 7 dias depois de organizado; o texto e as tarefas ficam. As fotos do mural só saem dele quando você posta (veja "Se você entrar na rede").',
         'Ao sair da conta, as tarefas são apagadas deste celular e continuam na conta. Ao apagar a conta, tudo o que está nela é apagado do servidor.',
       ],
     },
@@ -126,7 +126,7 @@ const en: Policy = {
       title: 'If you create an account',
       paragraphs: [
         `Your email, your password (stored securely by Supabase, never in plain text), your name, your settings and your tasks and nights are stored on Supabase servers in the ${REGION} region, in the United States, so you don’t lose anything and can use the app on another phone. By creating an account, you agree to this international transfer of data.`,
-        'Voice recordings and the text of what you said stay only on your phone. Wall photos leave it only when you post (see "If you join the network").',
+        'Voice recordings and the text of what you said stay only on your phone. The audio of each recording is deleted from the phone 7 days after it is organized; the text and the tasks remain. Wall photos leave it only when you post (see "If you join the network").',
         'When you sign out, tasks are deleted from this phone and remain in the account. When you delete the account, everything in it is deleted from the server.',
       ],
     },

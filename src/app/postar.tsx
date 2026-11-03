@@ -1,7 +1,7 @@
 import { Image } from 'expo-image';
 import * as ImagePicker from 'expo-image-picker';
 import { useRouter } from 'expo-router';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Alert, Linking, Pressable, StyleSheet, TextInput, View } from 'react-native';
 
 import { AppText } from '@/components/app-text';
@@ -11,7 +11,8 @@ import { OBS, ObservatoryScreen, Sparkle } from '@/components/observatory';
 import { SocialGate } from '@/components/social-gate';
 import { useNow } from '@/hooks/use-now';
 import { useT } from '@/i18n';
-import { mural } from '@/lib/mural';
+import { deleteLocalFile, deleteTempFile } from '@/lib/files';
+import { mural, shrinkPhoto } from '@/lib/mural';
 import { SocialError } from '@/lib/social';
 import { formatMinutes } from '@/lib/time';
 import { addDays, dayKey, newId } from '@/state/journal';
@@ -49,6 +50,13 @@ function PostScreen() {
   const title = pickedTask?.title ?? ownTitle.trim();
   const canPost = !!photo && !!title && !posting;
 
+  // A foto do seletor é uma cópia temporária: sai do celular quando é trocada por outra ou quando a tela
+  // fecha. Depois de postar, quem fica guardada é a versão reduzida.
+  useEffect(() => {
+    if (!photo) return;
+    return () => deleteTempFile(photo);
+  }, [photo]);
+
   const choose = async (source: 'camera' | 'library') => {
     // Só a câmera pede permissão. A galeria abre o seletor do sistema, que só entrega a foto escolhida.
     if (source === 'camera') {
@@ -77,10 +85,13 @@ function PostScreen() {
   const post = async () => {
     if (!photo || !title) return;
     setPosting(true);
+    let small: string | undefined;
     try {
-      const cloud = await mural.publish(photo, title, caption.trim());
+      small = await shrinkPhoto(photo);
+      const cloud = await mural.publish(small, title, caption.trim());
       const id = newId('post');
-      const photoUri = await keepPhoto(photo, id);
+      // No celular fica a mesma foto reduzida que subiu, e não a original, bem mais pesada.
+      const photoUri = await keepPhoto(small, id);
       changePosts((current) => [
         {
           id,
@@ -96,6 +107,7 @@ function PostScreen() {
       router.dismissTo('/mural');
     } catch (error) {
       // Nada foi postado: a foto, a tarefa e a legenda continuam na tela para tentar de novo.
+      if (small) deleteLocalFile(small);
       setPosting(false);
       const failure = error instanceof SocialError ? error.failure : 'unknown';
       if (failure === 'flagged') {

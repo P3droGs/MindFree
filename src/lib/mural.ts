@@ -1,7 +1,6 @@
 import { File } from 'expo-file-system';
 import { ImageManipulator, SaveFormat } from 'expo-image-manipulator';
 
-import { deleteLocalFile } from '@/lib/files';
 import { call, SocialError, type ReportReason, type SocialFailure } from '@/lib/social';
 import { supabase, supabaseKey, supabaseUrl } from '@/lib/supabase';
 
@@ -29,28 +28,32 @@ const PHOTO_WIDTH = 1080;
 /** Os links das fotos valem 1 hora; o mural pede outros quando abre de novo. */
 const LINK_SECONDS = 60 * 60;
 
-/** Reduz a foto e envia para a sua pasta no Storage. Devolve o caminho dela lá. */
-async function uploadPhoto(localUri: string, userId: string): Promise<string> {
+/**
+ * A foto do post em JPEG com no máximo 1080 px de largura, numa pasta temporária. É essa que sobe e
+ * também a que fica no celular: a original da câmera pesa várias vezes mais.
+ */
+export async function shrinkPhoto(localUri: string): Promise<string> {
   const context = ImageManipulator.manipulate(localUri);
   const image = await context.resize({ width: PHOTO_WIDTH }).renderAsync();
   const saved = await image.saveAsync({ format: SaveFormat.JPEG, compress: 0.75 });
-  try {
-    const body = await new File(saved.uri).arrayBuffer();
-    const path = `${userId}/${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}.jpg`;
-    const { error } = await supabase!.storage.from(BUCKET).upload(path, body, { contentType: 'image/jpeg' });
-    if (error) throw new SocialError(/limit|quota|row-level/i.test(error.message) ? 'too_many' : 'network');
-    return path;
-  } finally {
-    deleteLocalFile(saved.uri);
-  }
+  return saved.uri;
+}
+
+/** Envia a foto (já reduzida) para a sua pasta no Storage. Devolve o caminho dela lá. */
+async function uploadPhoto(localUri: string, userId: string): Promise<string> {
+  const body = await new File(localUri).arrayBuffer();
+  const path = `${userId}/${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}.jpg`;
+  const { error } = await supabase!.storage.from(BUCKET).upload(path, body, { contentType: 'image/jpeg' });
+  if (error) throw new SocialError(/limit|quota|row-level/i.test(error.message) ? 'too_many' : 'network');
+  return path;
 }
 
 export const mural = {
   feed: () => call<CloudPost[]>('mural_feed'),
 
   /**
-   * Envia a foto e cria o post pela função "postar", que antes passa a foto e o texto pelo filtro de
-   * moderação. Se o post não for criado, a foto enviada é apagada.
+   * Envia a foto (reduzida por `shrinkPhoto`) e cria o post pela função "postar", que antes passa a foto
+   * e o texto pelo filtro de moderação. Se o post não for criado, a foto enviada é apagada.
    */
   publish: async (localUri: string, task: string, caption: string): Promise<CloudPost> => {
     if (!supabase) throw new SocialError('network');

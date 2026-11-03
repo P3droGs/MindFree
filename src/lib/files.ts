@@ -10,6 +10,11 @@ export function deleteLocalFile(uri: string) {
   }
 }
 
+/** Apaga um arquivo temporário do app (da pasta de cache, como a foto do seletor). Fora dela, não mexe em nada. */
+export function deleteTempFile(uri: string) {
+  if (uri.startsWith(Paths.cache.uri)) deleteLocalFile(uri);
+}
+
 // Onde ficam as mídias do app: gravações do expo-audio ("Audio" no Android, "ExpoAudio" no iPhone),
 // fotos do seletor ("ImagePicker") e as fotos do mural. Nenhuma dessas pastas guarda outra coisa.
 const MEDIA_FOLDERS = ['Audio', 'ExpoAudio', 'ImagePicker', 'mural'];

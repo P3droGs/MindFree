@@ -2,6 +2,24 @@
   "name": "mindfree",
   "version": "1.0.0",
   "main": "index.ts",
+  "expo": {
+    "autolinking": {
+      "exclude": [
+        "react-native-reanimated",
+        "react-native-worklets",
+        "react-native-gesture-handler"
+      ],
+      "android": {
+        "exclude": [
+          "react-native-reanimated",
+          "react-native-worklets",
+          "react-native-gesture-handler",
+          "@expo/ui",
+          "expo-widgets"
+        ]
+      }
+    }
+  },
   "dependencies": {
     "@expo-google-fonts/nunito": "^0.4.2",
     "@expo/ui": "~58.0.23",
@@ -10,7 +28,6 @@
     "expo-asset": "~58.0.18",
     "expo-audio": "~58.0.10",
     "expo-constants": "~58.0.12",
-    "expo-device": "~58.0.5",
     "expo-file-system": "~58.0.11",
     "expo-font": "~58.0.9",
     "expo-glass-effect": "~58.0.5",
@@ -26,21 +43,16 @@
     "expo-splash-screen": "~58.0.11",
     "expo-sqlite": "~58.0.14",
     "expo-status-bar": "~58.0.4",
-    "expo-symbols": "~58.0.4",
     "expo-system-ui": "~58.0.6",
-    "expo-web-browser": "~58.0.6",
     "expo-widgets": "~58.0.21",
     "react": "19.3.0",
     "react-dom": "19.3.0",
     "react-native": "0.88.0",
     "react-native-android-widget": "^0.23.0",
-    "react-native-gesture-handler": "~3.3.0",
-    "react-native-reanimated": "4.7.1",
     "react-native-safe-area-context": "~5.10.1",
     "react-native-screens": "~4.30.0",
     "react-native-svg": "15.16.0",
-    "react-native-web": "~0.21.4",
-    "react-native-worklets": "0.13.0"
+    "react-native-web": "~0.21.4"
   },
   "devDependencies": {
     "@electric-sql/pglite": "^0.5.10",
