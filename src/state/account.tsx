@@ -6,7 +6,7 @@ import { mergeRemote, toNightRow, toTaskRow, type NightRow, type TaskRow } from 
 import { deleteAllMedia } from '@/lib/files';
 import { mural } from '@/lib/mural';
 import { forgetThisDevice } from '@/lib/push';
-import { supabase } from '@/lib/supabase';
+import { supabase, supabaseKey, supabaseUrl } from '@/lib/supabase';
 import { useJournal } from '@/state/journal-provider';
 import { changePosts } from '@/state/posts';
 import { DEFAULT_SETTINGS, useSettings, type Settings } from '@/state/settings';
@@ -21,6 +21,8 @@ type AccountValue = {
   /** Tem conta de verdade (não a invisível). */
   signedIn: boolean;
   syncStatus: SyncStatus;
+  /** O relógio do celular está mais de 5 minutos fora da hora do servidor (a sincronização fica confusa). */
+  clockWrong: boolean;
   signIn: (email: string, password: string) => Promise<{ failure: AuthFailure | null; restored: boolean }>;
   signUp: (email: string, password: string) => Promise<AuthFailure | null>;
   /** "unsynced": não deu para guardar as últimas mudanças; chame de novo com `force` para sair mesmo assim. */
@@ -86,6 +88,7 @@ const SYNC_KEY = 'mindfree.sync.v1';
 const EPOCH = '1970-01-01T00:00:00.000Z';
 const PAGE = 500;
 const PUSH_DELAY_MS = 2500;
+const CLOCK_SKEW_LIMIT_MS = 5 * 60 * 1000;
 
 const freshState = (userId: string | null): SyncState => ({
   userId,
@@ -142,6 +145,9 @@ export function AccountProvider({ children }: { children: ReactNode }) {
   const { settings, update } = useSettings();
   const [account, setAccount] = useState<Account | null>(null);
   const [syncStatus, setSyncStatus] = useState<SyncStatus>('off');
+  // Quanto o relógio do celular difere do servidor (ms). É pela hora do celular que "a última mudança vence":
+  // um relógio muito errado faz este aparelho sempre perder (ou sempre ganhar) de outro.
+  const [clockSkewMs, setClockSkewMs] = useState(0);
 
   const [initialSyncState] = useState(loadSyncState);
   const accountRef = useRef(account);
@@ -235,6 +241,7 @@ export function AccountProvider({ children }: { children: ReactNode }) {
     const user = permanent();
     const client = supabase;
     if (!client || !user) return;
+    checkClock().catch(() => undefined);
     const fetchAll = async <Row extends { synced_at?: string }>(table: 'tasks' | 'nights', cursor: string) => {
       const rows: Row[] = [];
       let from = cursor;
@@ -266,6 +273,17 @@ export function AccountProvider({ children }: { children: ReactNode }) {
     });
   };
 
+  /** Lê a hora do servidor no cabeçalho de uma resposta leve e guarda a diferença para o celular. */
+  const checkClock = async () => {
+    if (!supabase) return;
+    const response = await fetch(`${supabaseUrl}/auth/v1/health`, { headers: { apikey: supabaseKey } });
+    const serverDate = response.headers.get('date');
+    if (!serverDate) return;
+    const serverMs = Date.parse(serverDate);
+    if (Number.isNaN(serverMs)) return;
+    setClockSkewMs(Date.now() - serverMs);
+  };
+
   const pushProfile = async () => {
     const user = permanent();
     if (!supabase || !user) return;
@@ -286,22 +304,30 @@ export function AccountProvider({ children }: { children: ReactNode }) {
     return true;
   };
 
-  /** Puxa e envia, uma vez por vez (se já estiver rodando, espera a atual e roda de novo). */
+  /**
+   * Puxa e envia, uma vez por vez. Chamadas que chegam no meio (voltar para o app, abrir uma tela e mudar
+   * uma tarefa costumam vir juntas) só marcam "roda de novo no fim": vira uma rodada extra, não uma por chamada.
+   */
+  const again = useRef(false);
   const sync = async (): Promise<void> => {
     if (!permanent()) return;
     if (running.current) {
+      again.current = true;
       await running.current;
-      return sync();
+      return;
     }
     const job = (async () => {
-      setSyncStatus('syncing');
-      try {
-        await pull();
-        await push();
-        setSyncStatus('synced');
-      } catch {
-        setSyncStatus('offline');
-      }
+      do {
+        again.current = false;
+        setSyncStatus('syncing');
+        try {
+          await pull();
+          await push();
+          setSyncStatus('synced');
+        } catch {
+          setSyncStatus('offline');
+        }
+      } while (again.current && permanent());
     })();
     running.current = job;
     try {
@@ -455,6 +481,7 @@ export function AccountProvider({ children }: { children: ReactNode }) {
     signedIn: !!account && !account.anonymous,
     // Sem conta de verdade não há o que sincronizar.
     syncStatus: accountKey ? syncStatus : 'off',
+    clockWrong: !!accountKey && Math.abs(clockSkewMs) > CLOCK_SKEW_LIMIT_MS,
     signIn,
     signUp,
     signOut,

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { ActivityIndicator, StyleSheet, View } from 'react-native';
 
 import { AppText } from '@/components/app-text';
@@ -21,13 +21,21 @@ export function PendingNights() {
   const [busy, setBusy] = useState(false);
   const [failed, setFailed] = useState<'network' | 'quota' | null>(null);
   const pending = journal.nights.filter((night) => night.pending && night.audioUri);
+  const latestJournal = useRef(journal);
+  useEffect(() => {
+    latestJournal.current = journal;
+  }, [journal]);
 
   if (pending.length === 0 || !aiAllowed(settings)) return null;
 
   const organizeAll = async () => {
+    if (busy) return;
     setBusy(true);
     setFailed(null);
     for (const night of pending) {
+      // A lista veio do render: se esta noite já foi organizada nesse meio-tempo (um toque duplo, por
+      // exemplo), pula, senão gastaria outra organização do dia e duplicaria as tarefas.
+      if (!latestJournal.current.nights.some((n) => n.id === night.id && n.pending)) continue;
       try {
         const now = nightMoment(night, settings.morningMinutes);
         const result = await organizeOnServer({ audioUri: night.audioUri! }, now, settings.morningMinutes, language.code);

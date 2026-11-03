@@ -49,7 +49,7 @@ export default function SettingsScreen() {
   const { journal, change } = useJournal();
   const posts = usePosts();
   const aiOn = aiAllowed(settings);
-  const { account, signedIn, syncStatus, signOut, deleteAccount } = useAccount();
+  const { account, signedIn, syncStatus, clockWrong, signOut, deleteAccount } = useAccount();
   const { status: socialStatus } = useSocial();
   const { nightMinutes, morningMinutes } = settings;
   const [scrollEnabled, setScrollEnabled] = useState(true);
@@ -168,6 +168,11 @@ export default function SettingsScreen() {
                     </AppText>
                   </View>
                 </View>
+                {clockWrong ? (
+                  <AppText variant="small" tone="danger" accessibilityLiveRegion="polite">
+                    {t('settings.clockWrong')}
+                  </AppText>
+                ) : null}
                 <View style={[styles.divider, { backgroundColor: theme.border }]} />
                 <LinkButton label={t('settings.signOut')} tone="primary" onPress={confirmSignOut} />
               </>

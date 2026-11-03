@@ -193,7 +193,7 @@ function TodayWidget({ props }: { props: MindFreeWidgetProps }) {
         style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', width: 'match_parent' }}>
         <FlexWidget style={{ flexDirection: 'row', alignItems: 'center', flexGap: 6 }}>
           <SvgWidget svg={icon('sun', palette.dayAccent)} style={{ width: 18, height: 18 }} />
-          <TextWidget text="Hoje" style={{ fontSize: 16, fontFamily: EXTRA_BOLD, color: DAY.text }} />
+          <TextWidget text={props.labels.today} style={{ fontSize: 16, fontFamily: EXTRA_BOLD, color: DAY.text }} />
         </FlexWidget>
         <TextWidget text={remainingLabel(props)} style={{ fontSize: 13, fontFamily: EXTRA_BOLD, color: DAY.secondary }} />
       </FlexWidget>

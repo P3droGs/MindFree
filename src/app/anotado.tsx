@@ -21,7 +21,8 @@ import { useAppTheme } from '@/theme/theme-provider';
 type Outcome =
   | { phase: 'working' }
   | { phase: 'done'; noted: number; example: boolean; localOnly?: boolean }
-  | { phase: 'failed'; quota: boolean };
+  | { phase: 'failed'; quota: boolean }
+  | { phase: 'noAudio' };
 
 /**
  * Depois de gravar ou escrever: organiza com a IA (servidor) e mostra "Anotado!", a estrela nova e o boa noite.
@@ -45,6 +46,12 @@ export default function SavedScreen() {
   const moment = useRef<Date | null>(null);
 
   const organize = async () => {
+    // A gravação não gerou arquivo (o microfone falhou): não há o que organizar nem guardar.
+    // Sem isto, nascia uma noite pendente sem áudio, que nunca seria organizada: uma estrela vazia para sempre.
+    if (voice && !audioUri) {
+      setOutcome({ phase: 'noAudio' });
+      return;
+    }
     moment.current ??= clock();
     const now = moment.current;
     const morning = settings.morningMinutes;
@@ -125,6 +132,30 @@ export default function SavedScreen() {
         <AppText tone="secondary" style={styles.center}>
           {t('saved.savingSub')}
         </AppText>
+      </Screen>
+    );
+  }
+
+  if (outcome.phase === 'noAudio') {
+    return (
+      <Screen scrollEnabled={false}>
+        <Spacer />
+        <View style={styles.body}>
+          <View style={[styles.badge, { backgroundColor: theme.raised }]}>
+            <Icon name="mic" size={40} color={theme.accentStrong} strokeWidth={2.3} />
+          </View>
+          <AppText variant="title" accessibilityRole="header" style={styles.center}>
+            {t('record.errorTitle')}
+          </AppText>
+          <AppText tone="secondary" style={styles.center}>
+            {t('record.errorBody')}
+          </AppText>
+        </View>
+        <Spacer />
+        <View style={styles.actions}>
+          <PrimaryButton label={t('saved.retryRecording')} icon="mic" onPress={() => router.replace('/gravar')} />
+          <LinkButton label={t('common.back')} align="center" onPress={goHome} />
+        </View>
       </Screen>
     );
   }
