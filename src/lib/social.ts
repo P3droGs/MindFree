@@ -17,6 +17,8 @@ export type SocialProfile = {
   following: number;
   /** Pedidos esperando a sua aprovação. */
   requests: number;
+  /** A moderação suspendeu a conta na rede: o app mostra o aviso em vez da parte social. */
+  suspended?: boolean;
 };
 
 export type FollowState = 'none' | 'pending' | 'accepted';
@@ -60,6 +62,15 @@ export type BlockedPerson = { userId: string; handle: string; name: string };
 export const REPORT_REASONS = ['spam', 'offensive', 'harassment', 'other'] as const;
 export type ReportReason = (typeof REPORT_REASONS)[number];
 
+/** Um aviso da moderação para a própria pessoa (nunca diz quem denunciou). */
+export type ModerationNotice = {
+  id: number;
+  kind: 'post_removed' | 'suspended' | 'unsuspended';
+  reason: string;
+  /** No post apagado: a tarefa do post. */
+  detail: string;
+};
+
 export type SocialFailure =
   | 'no_account'
   | 'no_profile'
@@ -69,6 +80,8 @@ export type SocialFailure =
   | 'own_code'
   | 'too_many'
   | 'photo_missing'
+  | 'flagged'
+  | 'suspended'
   | 'not_found'
   | 'network'
   | 'unknown';
@@ -149,6 +162,9 @@ export const social = {
   /** Vai para uma tabela que só o dono do app vê no Supabase. */
   report: (userId: string, reason: ReportReason, details: string) =>
     call<void>('social_report', { p_target: userId, p_reason: reason, p_details: details }),
+  /** Avisos da moderação ainda não vistos (post apagado, conta suspensa ou reativada). */
+  notices: () => call<ModerationNotice[]>('mod_my_notices'),
+  noticeSeen: (id: number) => call<void>('mod_notice_seen', { p_id: id }),
   /** Usa o código de um amigo: os dois passam a se seguir. */
   redeemInvite: async (code: string): Promise<Person> => {
     const result = await call<{ ok: boolean; reason?: SocialFailure; friend?: Person }>('social_use_invite', {

@@ -5,8 +5,11 @@ import { social, SocialError, type SocialProfile } from '@/lib/social';
 import { useAccount } from '@/state/account';
 import { useSettings } from '@/state/settings';
 
-/** off: sem conta de verdade · none: ainda não escolheu o @ · error: sem conexão na primeira vez. */
-export type SocialStatus = 'off' | 'loading' | 'none' | 'ready' | 'error';
+/**
+ * off: sem conta de verdade · none: ainda não escolheu o @ · error: sem conexão na primeira vez ·
+ * suspended: a moderação suspendeu a conta na rede.
+ */
+export type SocialStatus = 'off' | 'loading' | 'none' | 'ready' | 'error' | 'suspended';
 
 type SocialValue = {
   status: SocialStatus;
@@ -44,7 +47,7 @@ export function SocialProvider({ children }: { children: ReactNode }) {
   const load = useCallback(
     (key: string) =>
       social.profile().then(
-        (next) => setLoaded({ key, status: next ? 'ready' : 'none', profile: next }),
+        (next) => setLoaded({ key, status: !next ? 'none' : next.suspended ? 'suspended' : 'ready', profile: next }),
         () =>
           setLoaded((previous) =>
             previous && previous.key === key && previous.profile ? previous : { key, status: 'error', profile: null },

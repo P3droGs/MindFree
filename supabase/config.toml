@@ -13,3 +13,7 @@ verify_jwt = false
 # Os avisos da rede só entregam o que já está na fila do banco, então não precisam de login.
 [functions.avisar]
 verify_jwt = false
+
+# Publicar no Mural: confere a chave publicável e o login dentro da função (como a organizar).
+[functions.postar]
+verify_jwt = false

@@ -8,6 +8,7 @@ import { useEffect } from 'react';
 
 import { I18nProvider } from '@/i18n';
 import { useExactAlarmRefresh } from '@/hooks/use-exact-alarm-refresh';
+import { useModerationNotices } from '@/hooks/use-moderation-notices';
 import { usePushSync } from '@/hooks/use-push-sync';
 import { configureNotifications } from '@/lib/notifications';
 import { AccountProvider } from '@/state/account';
@@ -52,6 +53,7 @@ function AppNavigator() {
   useWidgetSync();
   usePushSync();
   useExactAlarmRefresh();
+  useModerationNotices();
   const base = theme.dark ? DarkTheme : DefaultTheme;
   const navigationTheme = {
     ...base,

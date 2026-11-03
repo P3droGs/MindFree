@@ -31,6 +31,7 @@ export function SocialGate({ children }: { children: ReactNode }) {
   if (!signedIn) return <NeedAccount />;
   if (status === 'ready') return children;
   if (status === 'none') return <ChooseHandle />;
+  if (status === 'suspended') return <Suspended />;
   if (status === 'error') return <Offline onRetry={() => void refresh()} />;
   return (
     <ObservatoryScreen dock={false} contentStyle={styles.centered}>
@@ -99,6 +100,25 @@ function Privacy({ text }: { text: string }) {
 }
 
 /** Sem conta: a rede precisa de e-mail para os amigos não se perderem ao trocar de celular. */
+/** A moderação suspendeu a conta na rede. O resto do app (noite, tarefas, Seu céu) continua igual. */
+function Suspended() {
+  const t = useT();
+  return (
+    <ObservatoryScreen dock={false}>
+      <GateTop />
+      <View style={styles.intro}>
+        <AppText variant="title" accessibilityRole="header" style={{ color: OBS.text }}>
+          {t('moderation.suspendedTitle')}
+        </AppText>
+        <AppText variant="small" style={{ color: OBS.soft }}>
+          {t('moderation.suspendedBody')}
+        </AppText>
+      </View>
+      <Privacy text={t('moderation.suspendedHint')} />
+    </ObservatoryScreen>
+  );
+}
+
 function NeedAccount() {
   const router = useRouter();
   const t = useT();

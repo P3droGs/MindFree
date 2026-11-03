@@ -40,6 +40,8 @@ O visual é calmo e fácil de entender: escuro e lilás à noite, claro e cor de
 - **Segurança na rede:** no "⋯" de cada pessoa dá para remover seguidor, bloquear ou denunciar.
   - **Bloquear** some dos dois lados: desfaz o seguir, apaga os brilhos e esconde da busca, sem avisar a outra pessoa. Dá para desbloquear em Ajustes.
   - **Denunciar** guarda o motivo (Spam, Conteúdo ofensivo, Assédio ou Outro) para a equipe do MindFree analisar, sem a outra pessoa saber.
+  - **Moderação:** a equipe pode apagar um post ou suspender uma conta na rede, e quem foi moderado recebe um aviso no app com o motivo.
+  - **Filtro ao postar:** antes de ir ao ar, a foto e o texto passam por um filtro de moderação automático. Nudez, violência ou ódio não são publicados.
 
 ### Mais
 - **Widgets** na tela do celular, no iPhone e no Android: as tarefas de hoje, a próxima tarefa e o Seu céu. À noite, o widget vira um atalho para gravar.
@@ -55,6 +57,7 @@ O visual é calmo e fácil de entender: escuro e lilás à noite, claro e cor de
 - **As gravações e o texto do que foi falado ficam no celular**, mesmo com conta.
 - **As fotos do mural só saem do celular quando a pessoa posta.** Vão reduzidas para um espaço privado no servidor, abrem só para quem segue (por links que expiram em 1 hora) e são apagadas em 7 dias.
 - **Na rede, os amigos veem só os dias com estrela e o que a pessoa escolhe postar no mural.** O servidor entrega apenas o que a privacidade promete: as tabelas não aceitam leitura direta, e tudo passa por funções que conferem quem pode ver o quê.
+- **O filtro de moderação só recebe a foto e o texto do post na hora de publicar**, para dizer se podem ir ao ar.
 - **As chaves das IAs ficam no servidor**, nunca no app. O uso da IA tem limite por pessoa e por dia.
 - **Os avisos dos amigos levam o mínimo:** o nome de quem mandou e, no Mural, a tarefa do post. Para saber quando silenciar, o servidor guarda só os horários da noite e da manhã e o fuso.
 - **Bloqueios e denúncias são confidenciais:** quem foi bloqueado ou denunciado não fica sabendo, e as denúncias não aparecem no app para ninguém.
@@ -87,7 +90,7 @@ src/
   i18n/         os 12 idiomas
   legal/        política de privacidade
 supabase/
-  functions/    as Edge Functions "organizar" (IA), "limpar-mural" e "avisar" (Deno)
+  functions/    as Edge Functions "organizar" (IA), "postar" (filtro do mural), "limpar-mural" e "avisar" (Deno)
   migrations/   o SQL do banco
   tests/        testes do SQL (PGlite)
 ```

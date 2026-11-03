@@ -2,8 +2,8 @@ import { File } from 'expo-file-system';
 import { ImageManipulator, SaveFormat } from 'expo-image-manipulator';
 
 import { deleteLocalFile } from '@/lib/files';
-import { call, SocialError, type ReportReason } from '@/lib/social';
-import { supabase } from '@/lib/supabase';
+import { call, SocialError, type ReportReason, type SocialFailure } from '@/lib/social';
+import { supabase, supabaseKey, supabaseUrl } from '@/lib/supabase';
 
 /** Um post do mural na nuvem (seu ou de quem você segue), como o servidor manda. */
 export type CloudPost = {
@@ -48,24 +48,37 @@ async function uploadPhoto(localUri: string, userId: string): Promise<string> {
 export const mural = {
   feed: () => call<CloudPost[]>('mural_feed'),
 
-  /** Envia a foto e cria o post. Se o post não for criado, a foto enviada é apagada. */
+  /**
+   * Envia a foto e cria o post pela função "postar", que antes passa a foto e o texto pelo filtro de
+   * moderação. Se o post não for criado, a foto enviada é apagada.
+   */
   publish: async (localUri: string, task: string, caption: string): Promise<CloudPost> => {
     if (!supabase) throw new SocialError('network');
     const { data } = await supabase.auth.getSession();
     const userId = data.session?.user.id;
-    if (!userId) throw new SocialError('no_account');
+    const token = data.session?.access_token;
+    if (!userId || !token) throw new SocialError('no_account');
     let path: string;
     try {
       path = await uploadPhoto(localUri, userId);
     } catch (error) {
       throw error instanceof SocialError ? error : new SocialError('network');
     }
+    let response: Response;
     try {
-      return await call<CloudPost>('mural_create', { p_photo: path, p_task: task, p_caption: caption });
-    } catch (error) {
-      await supabase.storage.from(BUCKET).remove([path]).catch(() => undefined);
-      throw error;
+      response = await fetch(`${supabaseUrl}/functions/v1/postar`, {
+        method: 'POST',
+        headers: { apikey: supabaseKey, Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ photo: path, task, caption }),
+      });
+    } catch {
+      response = new Response(JSON.stringify({ error: 'network' }), { status: 503 });
     }
+    const result = (await response.json().catch(() => ({}))) as CloudPost & { error?: SocialFailure };
+    if (response.ok && result.id) return result;
+    // Barrado pelo filtro, a função já apagou a foto; nos outros casos, o app apaga.
+    if (result.error !== 'flagged') await supabase.storage.from(BUCKET).remove([path]).catch(() => undefined);
+    throw new SocialError(result.error ?? 'unknown');
   },
 
   shine: (postId: string, on: boolean) => call<void>('mural_shine', { p_post: postId, p_on: on }),

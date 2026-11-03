@@ -13,7 +13,7 @@ const CONTACT = '[E-MAIL DE CONTATO]';
 const REGION = 'us-east-1';
 
 const pt: Policy = {
-  updated: 'Atualizada em 2 de novembro de 2026',
+  updated: 'Atualizada em 3 de novembro de 2026',
   draft: 'Rascunho em revisão. Esta versão ainda pode mudar antes do lançamento.',
   sections: [
     {
@@ -44,6 +44,7 @@ const pt: Policy = {
         'Quem você aprovar (conta privada) ou quem seguir você (conta pública) vê só os dias em que você acendeu uma estrela, quantas estrelas você tem no mês e se acendeu hoje. Nunca o que você falou, o texto, as tarefas ou o horário em que gravou.',
         'Qualquer pessoa com conta pode achar você pela busca e ver o seu @, o seu nome e se a conta é privada.',
         'Quando você posta no mural, a foto (reduzida), a tarefa que você escolheu e a legenda vão para os servidores da Supabase. Quem segue você vê o post, quantos brilhos ele tem e quem mandou. Depois de 7 dias, o post e a foto são apagados do servidor, e a sua cópia continua no seu celular, no Perfil. Você pode apagar um post antes disso.',
+        'Antes de publicar, a foto e o texto do post passam pelo filtro de moderação da OpenAI, que só responde se o conteúdo vai contra as regras (como nudez, violência ou ódio). Se for, o post não é publicado e a foto é apagada. A equipe do MindFree analisa as denúncias e pode apagar um post ou suspender uma conta na rede; quem foi moderado recebe um aviso no app com o motivo.',
         'Se você bloquear alguém, fica guardado quem bloqueou quem, até você desbloquear. Se você denunciar uma pessoa ou um post, ficam guardados o motivo, o texto que você escrever e, no caso de um post, a tarefa e a legenda dele, só para a equipe do MindFree analisar. A outra pessoa não fica sabendo.',
         'Avisos dos amigos: para avisar você de um brilho, um cutucão, um brilho no Mural ou um pedido para seguir, ficam guardados o endereço de avisos deste celular, quais avisos você quer receber, os seus horários da noite e da manhã, o seu fuso horário e o idioma do app. O aviso passa pelo Expo (Expo Push) e pelo Google (Firebase) ou pela Apple, levando o nome de quem mandou e, no Mural, a tarefa do post. Cada tipo de aviso pode ser desligado em Ajustes → Notificações, e ao sair da conta este celular deixa de receber.',
         'Para sair da rede, deixe de seguir as pessoas ou apague a conta (Ajustes → Privacidade → Apagar todos os meus dados): o seu perfil na rede, os seguidores, os brilhos, os posts e as fotos do mural, os bloqueios, as denúncias que você fez e o código são apagados junto.',
@@ -105,7 +106,7 @@ const pt: Policy = {
 };
 
 const en: Policy = {
-  updated: 'Updated on November 2, 2026',
+  updated: 'Updated on November 3, 2026',
   draft: 'Draft under review. This version may still change before launch.',
   sections: [
     {
@@ -136,6 +137,7 @@ const en: Policy = {
         'People you approve (private account) or who follow you (public account) see only the days you lit a star, how many stars you have this month and whether you lit one today. Never what you said, the text, your tasks or the time you recorded.',
         'Anyone with an account can find you in search and see your @, your name and whether your account is private.',
         'When you post on the wall, the photo (downsized), the task you chose and the caption go to Supabase servers. People who follow you see the post, how many sparkles it has and who sent them. After 7 days, the post and the photo are deleted from the server, and your copy stays on your phone, on your Profile. You can delete a post before then.',
+        'Before a post is published, its photo and text go through OpenAI’s moderation filter, which only answers whether the content breaks the rules (such as nudity, violence or hate). If it does, the post is not published and the photo is deleted. The MindFree team reviews reports and may delete a post or suspend an account from the network; whoever was moderated gets a notice in the app with the reason.',
         'If you block someone, we keep a record of who blocked whom until you unblock. If you report a person or a post, we keep the reason, any text you write and, for a post, its task and caption, only for the MindFree team to review. The other person is not told.',
         'Friends’ alerts: to tell you about a sparkle, a nudge, a sparkle on the wall or a follow request, we store this phone’s alert address, which alerts you want, your evening and morning times, your time zone and the app language. The alert goes through Expo (Expo Push) and Google (Firebase) or Apple, carrying the sender’s name and, for the wall, the post’s task. Each kind of alert can be turned off in Settings → Notifications, and when you sign out this phone stops receiving them.',
         'To leave the network, unfollow people or delete your account (Settings → Privacy → Delete all my data): your network profile, followers, sparkles, wall posts and photos, blocks, the reports you made and your code are deleted with it.',

@@ -97,8 +97,13 @@ function PostScreen() {
     } catch (error) {
       // Nada foi postado: a foto, a tarefa e a legenda continuam na tela para tentar de novo.
       setPosting(false);
-      const tooMany = error instanceof SocialError && error.failure === 'too_many';
-      Alert.alert(t('post.failedTitle'), tooMany ? t('post.tooMany') : t('post.failedBody'));
+      const failure = error instanceof SocialError ? error.failure : 'unknown';
+      if (failure === 'flagged') {
+        // O filtro de moderação barrou: a foto já foi apagada do servidor.
+        Alert.alert(t('post.flaggedTitle'), t('post.flaggedBody'));
+        return;
+      }
+      Alert.alert(t('post.failedTitle'), failure === 'too_many' ? t('post.tooMany') : t('post.failedBody'));
     }
   };
 
