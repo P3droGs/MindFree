@@ -4,7 +4,7 @@ import { Pressable, StyleSheet, View } from 'react-native';
 import { AppText } from '@/components/app-text';
 import { ProfileBadge } from '@/components/avatar';
 import { IconButton } from '@/components/buttons';
-import { Icon } from '@/components/icon';
+import { LogoGlyph } from '@/components/logo-glyph';
 import { useT } from '@/i18n';
 import { useSettings } from '@/state/settings';
 import { useSocial } from '@/state/social';
@@ -24,7 +24,10 @@ export function HomeHeader() {
   return (
     <View style={styles.header}>
       <View style={styles.brand}>
-        <Icon name="moon" size={22} color={theme.accentStrong} strokeWidth={2.3} />
+        {/* O mesmo quadrado azul-noite do ícone do app: aparece igual de noite e de manhã. */}
+        <View style={styles.logo}>
+          <LogoGlyph size={18} />
+        </View>
         <AppText variant="heading" style={styles.brandName}>
           MindFree
         </AppText>
@@ -57,6 +60,15 @@ const styles = StyleSheet.create({
   header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
   brand: { flexDirection: 'row', alignItems: 'center', gap: 8 },
   brandName: { fontSize: 19 },
+  logo: {
+    width: 28,
+    height: 28,
+    borderRadius: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#141A48',
+    experimental_backgroundImage: 'radial-gradient(circle at 50% 72%, #262C6E 0%, #141A48 60%, #0B0E24 100%)',
+  },
   actions: { flexDirection: 'row', alignItems: 'center', marginRight: -6 },
   dot: {
     position: 'absolute',

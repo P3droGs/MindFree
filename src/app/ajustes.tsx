@@ -308,10 +308,11 @@ export default function SettingsScreen() {
             onPress={() => setLanguagesOpen(true)}
             style={({ pressed }) => [styles.languageRow, { opacity: pressed ? 0.7 : 1 }]}>
             <Icon name="globe" size={20} color={theme.text} />
-            <AppText variant="bodyStrong" style={styles.languageLabel}>
+            {/* Com fonte grande, quem quebra a linha é o nome do idioma, nunca a palavra "Idioma". */}
+            <AppText variant="bodyStrong" style={styles.languageName}>
               {t('lang.label')}
             </AppText>
-            <AppText variant="small" tone="secondary">
+            <AppText variant="small" tone="secondary" style={styles.languageValue}>
               {settings.language === 'device' ? t('lang.device') : language.native}
             </AppText>
             <Icon name="chevron-right" size={18} color={theme.textSecondary} strokeWidth={2.4} />
@@ -431,6 +432,8 @@ const styles = StyleSheet.create({
   nameInput: { height: 52, borderRadius: 16, borderWidth: 1, paddingHorizontal: 18, fontFamily: fonts.semiBold, fontSize: 17 },
   languageRow: { minHeight: 48, flexDirection: 'row', alignItems: 'center', gap: 10 },
   languageLabel: { flex: 1 },
+  languageName: { flexGrow: 1, flexShrink: 0 },
+  languageValue: { flexShrink: 1, textAlign: 'right' },
   aiRow: { flexDirection: 'row', alignItems: 'center', gap: 12 },
   accountRow: { flexDirection: 'row', alignItems: 'center', gap: 12 },
   accountBadge: { width: 44, height: 44, borderRadius: 22, alignItems: 'center', justifyContent: 'center' },
