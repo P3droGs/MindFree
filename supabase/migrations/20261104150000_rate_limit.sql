@@ -72,10 +72,11 @@ $$;
 revoke all on function public.social_caller(text, integer) from public, anon, authenticated;
 
 -- A busca: 30 por minuto (o app espera a pessoa parar de digitar antes de buscar).
+-- Sem "stable": o PostgREST roda função stable em transação só de leitura e a contagem do limite grava
+-- (com stable, a API respondia 405 a toda busca; o Postgres local dos testes não reproduz isso).
 create or replace function public.social_search(p_query text, p_today date)
 returns json
 language plpgsql
-stable
 security definer
 set search_path = ''
 as $$
@@ -303,3 +304,4 @@ alter function public.social_friends_week(date, date) volatile;
 alter function public.social_activity() volatile;
 alter function public.social_blocked_list() volatile;
 alter function public.mural_feed() volatile;
+alter function public.social_search(text, date) volatile;
