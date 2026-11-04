@@ -24,6 +24,7 @@
     "@expo-google-fonts/nunito": "^0.4.2",
     "@expo/ui": "~58.0.27",
     "@supabase/supabase-js": "2.118.0",
+    "@types/jest": "30.0.0",
     "expo": "~58.0.23",
     "expo-asset": "~58.0.18",
     "expo-audio": "~58.0.11",
@@ -45,6 +46,8 @@
     "expo-status-bar": "~58.0.4",
     "expo-system-ui": "~58.0.7",
     "expo-widgets": "~58.0.21",
+    "jest": "~30.5.2",
+    "jest-expo": "~58.0.14",
     "react": "19.3.0",
     "react-dom": "19.3.0",
     "react-native": "0.88.1",
@@ -57,6 +60,7 @@
   "devDependencies": {
     "@electric-sql/pglite": "^0.5.10",
     "@expo/ngrok": "^4.1.0",
+    "@testing-library/react-native": "^14.1.0",
     "@types/react": "~19.3.0",
     "eslint": "^9.0.0",
     "eslint-config-expo": "~58.0.4",
@@ -68,7 +72,9 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "lint": "expo lint",
-    "test:sql": "node supabase/tests/contas.test.mjs && node supabase/tests/rede.test.mjs && node supabase/tests/bloquear.test.mjs && node supabase/tests/mural.test.mjs && node supabase/tests/avisos.test.mjs && node supabase/tests/moderacao.test.mjs"
+    "test:sql": "node supabase/tests/contas.test.mjs && node supabase/tests/rede.test.mjs && node supabase/tests/bloquear.test.mjs && node supabase/tests/mural.test.mjs && node supabase/tests/avisos.test.mjs && node supabase/tests/moderacao.test.mjs",
+    "test": "jest",
+    "test:all": "jest && npm run test:sql"
   },
   "private": true
 }

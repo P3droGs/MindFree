@@ -76,6 +76,7 @@ O visual é calmo e fácil de entender: escuro e lilás à noite, claro e cor de
 | Widgets | expo-widgets (iPhone) e react-native-android-widget (Android) |
 | Servidor | [Supabase](https://supabase.com): login, Postgres com RLS, Storage (fotos do mural) e Edge Functions |
 | IA | OpenAI `gpt-4o-mini-transcribe` (voz para texto) e Claude (organiza em tarefas) |
+| Testes | Jest (`jest-expo` e Testing Library) para as regras e as telas do app; PGlite para o SQL do servidor, sem precisar do Supabase |
 
 ---
 
@@ -89,6 +90,7 @@ src/
   lib/          IA, datas, avisos, constelações e chamadas da rede
   widgets/      widgets do iPhone (ios/) e do Android (android/)
   i18n/         os 12 idiomas
+  test/         o que os testes do app usam (armazenamento de mentira, tradução de mentira)
   legal/        política de privacidade
 plugins/        ajustes do build de release no Android (sem o GIF e o WebP do <Image>, que o app não usa)
 supabase/
