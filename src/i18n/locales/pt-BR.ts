@@ -214,6 +214,9 @@ export const ptBR = {
   'notif.nightBody': 'Fale por 1 minuto tudo o que está na sua cabeça e durma mais leve.',
   'notif.morningTitle': 'Bom dia!',
   'notif.morningBody': 'Toque para ver o que você deixou organizado para hoje.',
+  'notif.morningTasksMore': '{list} · e mais {n}',
+  'notif.snoozeHour': '+1 hora',
+  'notif.snoozeTomorrow': 'Amanhã',
 
   'widget.today': 'Hoje',
   'widget.next': 'Próxima',

@@ -215,6 +215,9 @@ export const de: Messages = {
   'notif.nightBody': 'Sprich 1 Minute lang über alles, was dir durch den Kopf geht, und schlaf leichter.',
   'notif.morningTitle': 'Guten Morgen!',
   'notif.morningBody': 'Tippe, um zu sehen, was du für heute geordnet hast.',
+  'notif.morningTasksMore': '{list} · und {n} weitere',
+  'notif.snoozeHour': '+1 Stunde',
+  'notif.snoozeTomorrow': 'Morgen',
 
   'widget.today': 'Heute',
   'widget.next': 'Als Nächstes',

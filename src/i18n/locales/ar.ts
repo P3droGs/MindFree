@@ -212,6 +212,9 @@ export const ar: Messages = {
   'notif.nightBody': 'تحدّث لمدة دقيقة عن كل ما يدور في رأسك ونم بخفة أكبر.',
   'notif.morningTitle': 'صباح الخير!',
   'notif.morningBody': 'اضغط لترى ما نظّمته لليوم.',
+  'notif.morningTasksMore': '{list} · و{n} أخرى',
+  'notif.snoozeHour': '+ ساعة',
+  'notif.snoozeTomorrow': 'غدًا',
 
   'widget.today': 'اليوم',
   'widget.next': 'التالي',

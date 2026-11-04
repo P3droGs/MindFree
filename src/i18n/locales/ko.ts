@@ -212,6 +212,9 @@ export const ko: Messages = {
   'notif.nightBody': '1분 동안 머릿속에 있는 모든 것을 말하고 가볍게 잠드세요.',
   'notif.morningTitle': '좋은 아침이에요!',
   'notif.morningBody': '눌러서 오늘을 위해 정리한 내용을 확인하세요.',
+  'notif.morningTasksMore': '{list} · 외 {n}개',
+  'notif.snoozeHour': '+1시간',
+  'notif.snoozeTomorrow': '내일',
 
   'widget.today': '오늘',
   'widget.next': '다음 할 일',

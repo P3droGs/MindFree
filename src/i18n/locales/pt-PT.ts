@@ -215,6 +215,9 @@ export const ptPT: Messages = {
   'notif.nightBody': 'Fale durante 1 minuto sobre tudo o que tem na cabeça e durma mais leve.',
   'notif.morningTitle': 'Bom dia!',
   'notif.morningBody': 'Toque para ver o que deixou organizado para hoje.',
+  'notif.morningTasksMore': '{list} · e mais {n}',
+  'notif.snoozeHour': '+1 hora',
+  'notif.snoozeTomorrow': 'Amanhã',
 
   'widget.today': 'Hoje',
   'widget.next': 'Próxima',

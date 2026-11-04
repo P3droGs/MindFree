@@ -212,6 +212,9 @@ export const zh: Messages = {
   'notif.nightBody': '花 1 分钟说出脑子里的一切，睡得更轻松。',
   'notif.morningTitle': '早上好！',
   'notif.morningBody': '点按查看你为今天整理好的内容。',
+  'notif.morningTasksMore': '{list} · 还有 {n} 项',
+  'notif.snoozeHour': '+1 小时',
+  'notif.snoozeTomorrow': '明天',
 
   'widget.today': '今天',
   'widget.next': '下一项',

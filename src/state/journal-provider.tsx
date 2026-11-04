@@ -3,8 +3,9 @@ import { AppState } from 'react-native';
 
 import { useT } from '@/i18n';
 import { deleteLocalFile } from '@/lib/files';
-import { scheduleTaskReminders } from '@/lib/notifications';
+import { hasNotificationPermission, scheduleDailyReminders, scheduleTaskReminders } from '@/lib/notifications';
 import { expiredRecordings, forgetRecordings, loadJournal, saveJournalNow, type Journal } from '@/state/journal';
+import { useSettings } from '@/state/settings';
 
 type JournalValue = {
   journal: Journal;
@@ -29,6 +30,7 @@ function readJournal(): { journal: Journal; cleaned: boolean } {
 
 export function JournalProvider({ children }: { children: ReactNode }) {
   const t = useT();
+  const { settings } = useSettings();
   const [first] = useState(readJournal);
   const [journal, setJournal] = useState(first.journal);
   // O objeto do diário que já está gravado no celular. Só salva quando `journal` é outro objeto: cada
@@ -59,15 +61,23 @@ export function JournalProvider({ children }: { children: ReactNode }) {
 
   // Lembretes de cada tarefa, no horário dela (com atraso, para juntar vários toques). Só o que mudou é
   // reagendado; quando o idioma muda (o `t` troca), o texto de todos muda e a lista é refeita.
+  // Junto vão os dois avisos do dia: o resumo da manhã com as tarefas do dia e o lembrete da noite, que
+  // é pulado quando a estrela de hoje já acendeu.
   const lastT = useRef(t);
+  const { onboarded, nightMinutes, morningMinutes } = settings;
   useEffect(() => {
     const rebuild = lastT.current !== t;
     lastT.current = t;
     const timeout = setTimeout(() => {
       scheduleTaskReminders(journal.tasks, t, rebuild).catch(() => undefined);
+      if (onboarded) {
+        hasNotificationPermission()
+          .then((allowed) => (allowed ? scheduleDailyReminders(nightMinutes, morningMinutes, t, journal) : undefined))
+          .catch(() => undefined);
+      }
     }, 1200);
     return () => clearTimeout(timeout);
-  }, [journal.tasks, t]);
+  }, [journal, t, onboarded, nightMinutes, morningMinutes]);
 
   return <JournalContext value={{ journal, change: (update) => setJournal(update) }}>{children}</JournalContext>;
 }

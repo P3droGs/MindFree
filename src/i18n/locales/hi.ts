@@ -213,6 +213,9 @@ export const hi: Messages = {
   'notif.nightBody': '1 मिनट तक वह सब बोलें जो मन में है और हल्के मन से सोएँ।',
   'notif.morningTitle': 'सुप्रभात!',
   'notif.morningBody': 'टैप करके देखें कि आपने आज के लिए क्या व्यवस्थित किया है।',
+  'notif.morningTasksMore': '{list} · और {n}',
+  'notif.snoozeHour': '+1 घंटा',
+  'notif.snoozeTomorrow': 'कल',
 
   'widget.today': 'आज',
   'widget.next': 'अगला',

@@ -2,7 +2,9 @@ import type * as NotificationsModule from 'expo-notifications';
 import { Platform } from 'react-native';
 
 import type { Translate } from '@/i18n';
-import { dateFromKey, type Task } from '@/state/journal';
+import { eveningDay } from '@/lib/capture';
+import { formatMinutes } from '@/lib/time';
+import { dateFromKey, dayKey, nightOfDay, tasksOfDay, type Journal, type Task } from '@/state/journal';
 
 const CHANNEL_ID = 'lembretes';
 const NIGHT_REMINDER_ID = 'mindfree-noite';
@@ -68,39 +70,54 @@ export async function requestNotificationPermission(t: Translate): Promise<boole
   return isAllowed(N, await N.requestPermissionsAsync());
 }
 
-function dailyTrigger(N: typeof NotificationsModule, minutes: number): NotificationsModule.DailyTriggerInput {
-  return {
-    type: N.SchedulableTriggerInputTypes.DAILY,
-    hour: Math.floor(minutes / 60),
-    minute: minutes % 60,
-    channelId: CHANNEL_ID,
-  };
+/** A próxima vez (a partir de `now`) em que dá `minutes` do dia: hoje, se ainda não passou; senão amanhã. */
+export function nextOccurrence(now: Date, minutes: number): Date {
+  const date = new Date(now.getFullYear(), now.getMonth(), now.getDate(), Math.floor(minutes / 60), minutes % 60, 0, 0);
+  if (date.getTime() <= now.getTime()) date.setDate(date.getDate() + 1);
+  return date;
 }
 
 /**
- * Agenda (ou reagenda) os dois avisos de todo dia: o lembrete da noite e o resumo da manhã.
+ * O texto do resumo da manhã: as primeiras tarefas do dia que começa (com horário quando têm),
+ * para a pessoa saber o que a espera sem abrir o app. Sem tarefas, o convite de sempre.
+ */
+export function morningBody(journal: Journal, day: string, t: Translate): string {
+  const tasks = tasksOfDay(journal, day).filter((task) => !task.done && !task.example);
+  if (tasks.length === 0) return t('notif.morningBody');
+  const shown = tasks.slice(0, 3).map((task) => (task.minutes === null ? task.title : `${formatMinutes(task.minutes)} ${task.title}`));
+  const more = tasks.length - shown.length;
+  return more > 0 ? t('notif.morningTasksMore', { list: shown.join(' · '), n: more }) : shown.join(' · ');
+}
+
+/**
+ * Agenda (ou reagenda) os dois avisos do dia: o lembrete da noite e o resumo da manhã, cada um na próxima
+ * ocorrência. Com o diário, o resumo traz as tarefas do dia e o lembrete da noite é pulado quando a estrela
+ * de hoje já acendeu (o JournalProvider chama de novo a cada mudança, então eles acompanham a vida da pessoa).
  * O texto vai no idioma de agora; quando o idioma muda, é preciso reagendar.
  */
-export async function scheduleDailyReminders(nightMinutes: number, morningMinutes: number, t: Translate) {
+export async function scheduleDailyReminders(nightMinutes: number, morningMinutes: number, t: Translate, journal?: Journal) {
   const N = notifications();
   if (!N) return;
   await ensureChannel(N, t);
   await cancelDailyReminders();
+  const now = new Date();
+  const nightAt = nextOccurrence(now, nightMinutes);
+  const morningAt = nextOccurrence(now, morningMinutes);
+  // A noite que o lembrete anuncia já acendeu? Então ele só volta na noite seguinte.
+  const litAlready = !!journal && !!nightOfDay(journal, eveningDay(nightAt, morningMinutes));
+  if (litAlready) nightAt.setDate(nightAt.getDate() + 1);
   await N.scheduleNotificationAsync({
     identifier: NIGHT_REMINDER_ID,
-    content: {
-      title: t('notif.nightTitle'),
-      body: t('notif.nightBody'),
-    },
-    trigger: dailyTrigger(N, nightMinutes),
+    content: { title: t('notif.nightTitle'), body: t('notif.nightBody') },
+    trigger: { type: N.SchedulableTriggerInputTypes.DATE, date: nightAt, channelId: CHANNEL_ID },
   });
   await N.scheduleNotificationAsync({
     identifier: MORNING_SUMMARY_ID,
     content: {
       title: t('notif.morningTitle'),
-      body: t('notif.morningBody'),
+      body: journal ? morningBody(journal, dayKey(morningAt), t) : t('notif.morningBody'),
     },
-    trigger: dailyTrigger(N, morningMinutes),
+    trigger: { type: N.SchedulableTriggerInputTypes.DATE, date: morningAt, channelId: CHANNEL_ID },
   });
 }
 
@@ -113,6 +130,17 @@ export async function cancelDailyReminders() {
 }
 
 const TASK_PREFIX = 'mindfree-tarefa-';
+/** A categoria dos lembretes de tarefa: os botões "+1 h" e "Amanhã" no próprio aviso. */
+const TASK_CATEGORY = 'tarefa';
+export const SNOOZE_HOUR = 'adiar-1h';
+export const SNOOZE_TOMORROW = 'adiar-amanha';
+
+async function ensureTaskCategory(N: typeof NotificationsModule, t: Translate) {
+  await N.setNotificationCategoryAsync(TASK_CATEGORY, [
+    { identifier: SNOOZE_HOUR, buttonTitle: t('notif.snoozeHour'), options: { opensAppToForeground: false } },
+    { identifier: SNOOZE_TOMORROW, buttonTitle: t('notif.snoozeTomorrow'), options: { opensAppToForeground: false } },
+  ]).catch(() => undefined);
+}
 /** O iPhone guarda no máximo 64 avisos agendados; sobra espaço para os dois avisos do dia. */
 const MAX_TASK_REMINDERS = 50;
 
@@ -129,6 +157,7 @@ export async function scheduleTaskReminders(tasks: Task[], t: Translate, rebuild
   const N = notifications();
   if (!N || !(await hasNotificationPermission())) return;
   await ensureChannel(N, t);
+  if (rebuild || scheduledTasks.size === 0) await ensureTaskCategory(N, t);
 
   // Na primeira vez (ou ao refazer), descobre o que o sistema tem, para não agendar em dobro nem
   // deixar aviso de uma tarefa que não existe mais.
@@ -167,7 +196,7 @@ export async function scheduleTaskReminders(tasks: Task[], t: Translate, rebuild
     const task = upcoming.find((item) => item.task.id === id)!.task;
     await N.scheduleNotificationAsync({
       identifier: TASK_PREFIX + id,
-      content: { title: task.title, body: task.note || t('notif.taskBody') },
+      content: { title: task.title, body: task.note || t('notif.taskBody'), categoryIdentifier: TASK_CATEGORY, data: { taskId: id } },
       trigger: { type: N.SchedulableTriggerInputTypes.DATE, date, channelId: CHANNEL_ID },
     });
     scheduledTasks.set(id, signature);
@@ -211,13 +240,24 @@ export async function pushToken(t: Translate, projectId: string | undefined): Pr
 
 /**
  * Chama `open` com o caminho do app (ex.: "/mural") quando a pessoa toca num aviso dos amigos,
- * inclusive no que abriu o app fechado. Devolve a função que para de escutar.
+ * inclusive no que abriu o app fechado, e `snooze` quando ela toca em "+1 h" ou "Amanhã" num lembrete
+ * de tarefa. Devolve a função que para de escutar.
  */
-export function listenNotificationOpens(open: (path: string) => void): () => void {
+export function listenNotificationOpens(
+  open: (path: string) => void,
+  snooze?: (taskId: string, by: 'hour' | 'tomorrow') => void,
+): () => void {
   const N = notifications();
   if (!N) return () => undefined;
   const handle = (response: NotificationsModule.NotificationResponse | null) => {
-    const url = response?.notification.request.content.data?.url;
+    if (!response) return;
+    const data = response.notification.request.content.data ?? {};
+    const taskId = data.taskId;
+    if (typeof taskId === 'string' && (response.actionIdentifier === SNOOZE_HOUR || response.actionIdentifier === SNOOZE_TOMORROW)) {
+      snooze?.(taskId, response.actionIdentifier === SNOOZE_HOUR ? 'hour' : 'tomorrow');
+      return;
+    }
+    const url = data.url;
     if (typeof url === 'string' && url.startsWith('/')) open(url);
   };
   const last = N.getLastNotificationResponse();

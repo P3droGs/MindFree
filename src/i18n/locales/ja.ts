@@ -213,6 +213,9 @@ export const ja: Messages = {
   'notif.nightBody': '頭の中にあることを1分間話して、軽い気持ちで眠りましょう。',
   'notif.morningTitle': 'おはようございます！',
   'notif.morningBody': 'タップして、今日のために整理したことを確認しましょう。',
+  'notif.morningTasksMore': '{list} · 他 {n} 件',
+  'notif.snoozeHour': '+1時間',
+  'notif.snoozeTomorrow': '明日',
 
   'widget.today': '今日',
   'widget.next': '次の予定',
