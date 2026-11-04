@@ -2,6 +2,7 @@
   "expo": {
     "name": "MindFree",
     "slug": "mindfree",
+    "owner": "pedr0gs",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -9,7 +10,23 @@
     "userInterfaceStyle": "automatic",
     "ios": {
       "icon": "./assets/images/icon.png",
-      "bundleIdentifier": "com.mindfree.app"
+      "bundleIdentifier": "com.mindfree.app",
+      "infoPlist": {
+        "CFBundleLocalizations": [
+          "pt-BR",
+          "pt-PT",
+          "en",
+          "es",
+          "fr",
+          "de",
+          "it",
+          "ja",
+          "ko",
+          "zh-Hans",
+          "hi",
+          "ar"
+        ]
+      }
     },
     "android": {
       "package": "com.mindfree.app",
@@ -27,7 +44,9 @@
         "android.permission.WRITE_EXTERNAL_STORAGE"
       ],
       "permissions": [
-        "android.permission.SCHEDULE_EXACT_ALARM"
+        "android.permission.SCHEDULE_EXACT_ALARM",
+        "android.permission.RECORD_AUDIO",
+        "android.permission.MODIFY_AUDIO_SETTINGS"
       ]
     },
     "web": {
@@ -173,6 +192,33 @@
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
+    },
+    "extra": {
+      "router": {
+        "asyncRoutes": {
+          "web": true
+        }
+      },
+      "eas": {
+        "build": {
+          "experimental": {
+            "ios": {
+              "appExtensions": [
+                {
+                  "targetName": "ExpoWidgetsTarget",
+                  "bundleIdentifier": "com.mindfree.app.ExpoWidgetsTarget",
+                  "entitlements": {
+                    "com.apple.security.application-groups": [
+                      "group.com.mindfree.app"
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        },
+        "projectId": "5264b2b9-2737-43fe-9197-230f9b102709"
+      }
     }
   }
 }
