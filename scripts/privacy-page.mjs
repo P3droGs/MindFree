@@ -1,6 +1,7 @@
-// Gera a página pública da política de privacidade (GitHub Pages) a partir de src/legal/privacy.ts,
-// para o texto do app e o da web serem sempre o mesmo. Uso: node scripts/privacy-page.mjs
-// Saída: docs/privacidade/index.html (português e inglês) e docs/index.html (a porta de entrada).
+// Gera as páginas públicas da política de privacidade e dos termos de uso (GitHub Pages) a partir de
+// src/legal/privacy.ts e src/legal/terms.ts, para o texto do app e o da web serem sempre o mesmo.
+// Uso: node scripts/privacy-page.mjs
+// Saída: docs/privacidade/index.html, docs/termos/index.html (português e inglês) e docs/index.html.
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { createRequire } from 'node:module';
 
@@ -8,12 +9,23 @@ const require = createRequire(import.meta.url);
 const ts = require('typescript');
 const root = new URL('../', import.meta.url);
 
-// O arquivo do app importa só um tipo; fora do app, basta tirar a linha e transpilar.
-const source = readFileSync(new URL('src/legal/privacy.ts', root), 'utf8').replace(/^import type .*$/m, '');
-const js = ts.transpileModule(source, { compilerOptions: { module: ts.ModuleKind.ESNext, target: ts.ScriptTarget.ES2022 } }).outputText;
-const { privacyPolicyFor } = await import(`data:text/javascript;base64,${Buffer.from(js).toString('base64')}`);
+// Os arquivos do app importam um tipo do i18n e os termos importam a política; fora do app, basta tirar
+// a linha do tipo, apontar a importação para o arquivo transpilado ao lado e carregar os dois.
+const cache = new URL('node_modules/.cache/legal/', root);
+mkdirSync(cache, { recursive: true });
+for (const name of ['privacy', 'terms']) {
+  const source = readFileSync(new URL(`src/legal/${name}.ts`, root), 'utf8')
+    .replace(/^import type .*$/m, '')
+    .replace("from '@/legal/privacy'", "from './privacy.mjs'");
+  const js = ts.transpileModule(source, { compilerOptions: { module: ts.ModuleKind.ESNext, target: ts.ScriptTarget.ES2022 } }).outputText;
+  writeFileSync(new URL(`${name}.mjs`, cache), js);
+}
+const { privacyPolicyFor } = await import(new URL('privacy.mjs', cache).href);
+const { termsFor } = await import(new URL('terms.mjs', cache).href);
 const pt = privacyPolicyFor('pt-BR').policy;
 const en = privacyPolicyFor('en').policy;
+const termsPt = termsFor('pt-BR').terms;
+const termsEn = termsFor('en').terms;
 
 const escape = (text) => text.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;');
 // "• item\n• item" vira uma lista; o resto é parágrafo.
@@ -35,13 +47,13 @@ const sparkle = (x, y, r) => {
 };
 const logo = `<svg width="28" height="28" viewBox="170 198 727 610" aria-hidden="true"><circle cx="226" cy="584" r="46" fill="#D9CFFF"/><line x1="280" y1="630" x2="334" y2="680" stroke="#D9CFFF" stroke-width="40" stroke-linecap="round"/><circle cx="394" cy="740" r="58" fill="#D9CFFF"/><line x1="452" y1="676" x2="648" y2="454" stroke="#D9CFFF" stroke-width="40" stroke-linecap="round"/><path d="${sparkle(712, 383, 175)}" fill="#FFC857"/></svg>`;
 
-const page = (title, lang, body) => `<!doctype html>
+const page = (title, lang, body, nested = false) => `<!doctype html>
 <html lang="${lang}">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>${title}</title>
-<link rel="icon" href="${lang === 'pt-BR' && title.includes('privacidade') ? '../' : ''}favicon.png">
+<link rel="icon" href="${nested ? '../' : ''}favicon.png">
 <style>
   :root { --night: #0B0E24; --card: #141A42; --line: #262D63; --text: #EEF0FF; --soft: #B4B9DD; --lilac: #C7B8FF; --gold: #FFC857; color-scheme: dark; }
   * { box-sizing: border-box; }
@@ -81,18 +93,31 @@ const privacy = page(
   <nav aria-label="Idioma"><a href="#pt">Português</a><a href="#en" hreflang="en">English</a></nav>
   ${policy(pt, 'pt-BR', 'Português')}
   ${policy(en, 'en', 'English')}`,
+  true,
+);
+const terms = page(
+  'Termos de uso · MindFree',
+  'pt-BR',
+  `<h1>Termos de uso</h1>
+  <nav aria-label="Idioma"><a href="#pt">Português</a><a href="#en" hreflang="en">English</a></nav>
+  ${policy(termsPt, 'pt-BR', 'Português')}
+  ${policy(termsEn, 'en', 'English')}`,
+  true,
 );
 const home = page(
   'MindFree',
   'pt-BR',
   `<h1>Antes de dormir, fale o que está na sua cabeça. De manhã, está tudo organizado.</h1>
   <p>O MindFree é um app para iPhone e Android que transforma o que você fala à noite em tarefas com dia, horário e lembrete.</p>
-  <p><a href="privacidade/">Política de privacidade</a> · <a href="privacidade/#en" hreflang="en">Privacy policy</a></p>`,
+  <p><a href="privacidade/">Política de privacidade</a> · <a href="termos/">Termos de uso</a></p>
+  <p lang="en"><a href="privacidade/#en" hreflang="en">Privacy policy</a> · <a href="termos/#en" hreflang="en">Terms of use</a></p>`,
 );
 
 mkdirSync(new URL('docs/privacidade/', root), { recursive: true });
 writeFileSync(new URL('docs/privacidade/index.html', root), privacy);
+mkdirSync(new URL('docs/termos/', root), { recursive: true });
+writeFileSync(new URL('docs/termos/index.html', root), terms);
 writeFileSync(new URL('docs/index.html', root), home);
 writeFileSync(new URL('docs/.nojekyll', root), '');
 writeFileSync(new URL('docs/favicon.png', root), readFileSync(new URL('assets/images/favicon.png', root)));
-console.log('gerado: docs/index.html e docs/privacidade/index.html');
+console.log('gerado: docs/index.html, docs/privacidade/index.html e docs/termos/index.html');

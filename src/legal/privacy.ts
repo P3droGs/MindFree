@@ -7,8 +7,8 @@ import type { LanguageCode } from '@/i18n';
 export type PolicySection = { title: string; paragraphs: string[] };
 export type Policy = { updated: string; draft: string; sections: PolicySection[] };
 
-const CONTROLLER = '[NOME DO RESPONSÁVEL]';
-const CONTACT = '[E-MAIL DE CONTATO]';
+export const CONTROLLER = '[NOME DO RESPONSÁVEL]';
+export const CONTACT = '[E-MAIL DE CONTATO]';
 // Onde fica o projeto do Supabase (Project Settings → General → Region no painel).
 const REGION = 'us-east-1';
 
@@ -94,7 +94,9 @@ const pt: Policy = {
     },
     {
       title: 'Crianças',
-      paragraphs: ['O MindFree não é destinado a crianças.'],
+      paragraphs: [
+        `O MindFree não é destinado a menores de 13 anos. Para criar uma conta e entrar na rede é preciso ter 13 anos ou mais, e o cadastro pede essa confirmação. Não coletamos de propósito dados de crianças; se soubermos de uma conta de alguém com menos de 13 anos, ela é apagada. Pais e responsáveis podem escrever para ${CONTACT}.`,
+      ],
     },
     {
       title: 'Mudanças nesta política',
@@ -187,7 +189,9 @@ const en: Policy = {
     },
     {
       title: 'Children',
-      paragraphs: ['MindFree is not intended for children.'],
+      paragraphs: [
+        `MindFree is not intended for children under 13. To create an account and join the network you must be 13 or older, and sign-up asks you to confirm it. We do not knowingly collect children’s data; if we learn of an account belonging to someone under 13, it is deleted. Parents and guardians can write to ${CONTACT}.`,
+      ],
     },
     {
       title: 'Changes to this policy',

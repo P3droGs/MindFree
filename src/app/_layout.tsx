@@ -105,6 +105,7 @@ function AppNavigator() {
         {/* Abrem de qualquer lugar: a política e entrar ou criar conta (no começo ou depois, em Ajustes).
             Ficam por último porque a primeira tela disponível da lista é a que abre o app. */}
         <Stack.Screen name="privacidade" options={{ animation: 'slide_from_right' }} />
+        <Stack.Screen name="termos" options={{ animation: 'slide_from_right' }} />
         <Stack.Screen name="entrar" options={{ animation: 'slide_from_right' }} />
         <Stack.Screen name="criar-conta" options={{ animation: 'slide_from_right' }} />
         <Stack.Screen name="codigo" options={{ animation: 'slide_from_right' }} />

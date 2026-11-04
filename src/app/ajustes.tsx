@@ -354,6 +354,17 @@ export default function SettingsScreen() {
             </AppText>
             <Icon name="chevron-right" size={18} color={theme.textSecondary} strokeWidth={2.4} />
           </Pressable>
+          <View style={[styles.divider, { backgroundColor: theme.border }]} />
+          <Pressable
+            accessibilityRole="button"
+            onPress={() => router.push('/termos')}
+            style={({ pressed }) => [styles.languageRow, { opacity: pressed ? 0.7 : 1 }]}>
+            <Icon name="checklist" size={20} color={theme.text} />
+            <AppText variant="bodyStrong" style={styles.languageLabel}>
+              {t('settings.terms')}
+            </AppText>
+            <Icon name="chevron-right" size={18} color={theme.textSecondary} strokeWidth={2.4} />
+          </Pressable>
           {signedIn ? (
             <>
               <View style={[styles.divider, { backgroundColor: theme.border }]} />

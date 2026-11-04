@@ -62,7 +62,8 @@ O visual é calmo e fácil de entender: escuro e lilás à noite, claro e cor de
 - **Os avisos dos amigos levam o mínimo:** o nome de quem mandou e, no Mural, a tarefa do post. Para saber quando silenciar, o servidor guarda só os horários da noite e da manhã e o fuso.
 - **Bloqueios e denúncias são confidenciais:** quem foi bloqueado ou denunciado não fica sabendo, e as denúncias não aparecem no app para ninguém.
 - **Apagar todos os dados** (e a conta) é um botão nos Ajustes.
-- **A política de privacidade completa** está em https://p3drogs.github.io/MindFree/privacidade/ (rascunho em revisão).
+- **A política de privacidade completa** está em https://p3drogs.github.io/MindFree/privacidade/ e **os termos de uso** em https://p3drogs.github.io/MindFree/termos/ (rascunhos em revisão). Os dois também abrem dentro do app, em Ajustes › Privacidade.
+- **Idade mínima de 13 anos** para criar conta e entrar na rede: o cadastro pede essa confirmação junto com o aceite dos termos e da política.
 
 ---
 
@@ -91,7 +92,7 @@ src/
   widgets/      widgets do iPhone (ios/) e do Android (android/)
   i18n/         os 12 idiomas
   test/         o que os testes do app usam (armazenamento de mentira, tradução de mentira)
-  legal/        política de privacidade
+  legal/        política de privacidade e termos de uso
 plugins/        ajustes do build de release no Android (sem o GIF e o WebP do <Image>, que o app não usa)
 supabase/
   functions/    as Edge Functions "organizar" (IA), "postar" (filtro do mural), "limpar-mural" e "avisar" (Deno)

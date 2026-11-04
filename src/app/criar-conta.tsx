@@ -34,6 +34,8 @@ export default function SignUpScreen() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState<{ email?: string; password?: string; form?: string }>({});
+  // Idade mínima e aceite dos termos e da política: uma caixa só, obrigatória, sem guardar nada além da conta.
+  const [agreed, setAgreed] = useState(false);
   const [busy, setBusy] = useState(false);
   const strength = passwordStrength(password);
   const barColors = ['', theme.danger, '#FFC857', '#7FDBB6'];
@@ -43,8 +45,8 @@ export default function SignUpScreen() {
       email: isValidEmail(email) ? undefined : t('auth.invalidEmail'),
       password: password.length >= 8 ? undefined : t('auth.passwordShort'),
     };
-    setErrors(next);
-    if (next.email || next.password) return;
+    setErrors({ ...next, form: agreed ? undefined : t('signup.ageRequired') });
+    if (next.email || next.password || !agreed) return;
     setBusy(true);
     const failure = await signUp(email, password);
     setBusy(false);
@@ -120,6 +122,7 @@ export default function SignUpScreen() {
           checked={settings.keepSignedIn}
           onChange={(keepSignedIn) => update({ keepSignedIn })}
         />
+        <Checkbox label={t('signup.age')} checked={agreed} onChange={setAgreed} />
       </View>
       {errors.form ? (
         <AppText variant="small" tone="danger" accessibilityLiveRegion="polite">
@@ -139,7 +142,10 @@ export default function SignUpScreen() {
         <AppText variant="caption" tone="secondary" style={styles.center}>
           {t('signup.terms')}
         </AppText>
-        <LinkButton label={t('consent.policy')} align="center" onPress={() => router.push('/privacidade')} />
+        <View style={styles.footerRow}>
+          <LinkButton label={t('signup.readTerms')} onPress={() => router.push('/termos')} />
+          <LinkButton label={t('consent.policy')} onPress={() => router.push('/privacidade')} />
+        </View>
       </View>
     </HeroSheet>
   );
