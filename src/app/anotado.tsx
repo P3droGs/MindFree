@@ -20,7 +20,7 @@ import { useAppTheme } from '@/theme/theme-provider';
 
 type Outcome =
   | { phase: 'working' }
-  | { phase: 'done'; noted: number; example: boolean; localOnly?: boolean }
+  | { phase: 'done'; noted: number; example: boolean; localOnly?: boolean; ai?: boolean }
   | { phase: 'failed'; quota: boolean }
   | { phase: 'noAudio' };
 
@@ -63,7 +63,7 @@ export default function SavedScreen() {
         if (!useAi) throw new Error('sem IA');
         const result = await organizeOnServer({ text }, now, morning, language.code);
         change((current) => captureOrganized(current, { ...result, transcript: text }, { via: 'texto' }, now, morning).journal);
-        setOutcome({ phase: 'done', noted: result.tasks.length, example: false });
+        setOutcome({ phase: 'done', noted: result.tasks.length, example: false, ai: true });
       } catch {
         const local = captureText({ tasks: [], nights: [] }, text, now, morning).noted;
         change((current) => captureText(current, text, now, morning).journal);
@@ -89,7 +89,7 @@ export default function SavedScreen() {
       if (!audioUri) throw new Error('sem gravação');
       const result = await organizeOnServer({ audioUri }, now, morning, language.code);
       change((current) => captureOrganized(current, result, { via: 'voz', audioUri }, now, morning).journal);
-      setOutcome({ phase: 'done', noted: result.tasks.length, example: false });
+      setOutcome({ phase: 'done', noted: result.tasks.length, example: false, ai: true });
     } catch (error) {
       setOutcome({ phase: 'failed', quota: error instanceof QuotaError });
     }
@@ -192,7 +192,7 @@ export default function SavedScreen() {
     );
   }
 
-  const { noted, example, localOnly } = outcome;
+  const { noted, example, localOnly, ai } = outcome;
   let count = t('saved.countMany', { n: noted });
   if (noted === 0) count = t('saved.countZero');
   if (noted === 1) count = t('saved.countOne');
@@ -217,6 +217,11 @@ export default function SavedScreen() {
         {example ? (
           <AppText variant="caption" tone="secondary" style={styles.center}>
             {t('saved.exampleNote')}
+          </AppText>
+        ) : null}
+        {ai && noted > 0 ? (
+          <AppText variant="caption" tone="secondary" style={styles.center}>
+            {t('saved.aiNote')}
           </AppText>
         ) : null}
         <Pressable

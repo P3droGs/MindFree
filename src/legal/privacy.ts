@@ -1,25 +1,24 @@
 import type { LanguageCode } from '@/i18n';
 
-// Política de privacidade do MindFree. RASCUNHO: os campos entre colchetes precisam ser
-// preenchidos e o texto deve passar por um advogado antes de publicar nas lojas.
+// Política de privacidade do MindFree. RASCUNHO: o texto deve passar por um advogado antes de publicar nas lojas.
 // Fica fora dos arquivos de idioma porque é texto jurídico: por enquanto só português e inglês.
 
 export type PolicySection = { title: string; paragraphs: string[] };
 export type Policy = { updated: string; draft: string; sections: PolicySection[] };
 
-export const CONTROLLER = '[NOME DO RESPONSÁVEL]';
-export const CONTACT = '[E-MAIL DE CONTATO]';
+export const CONTROLLER = 'MindFree';
+export const CONTACT = 'contato@mindfree.com.br';
 // Onde fica o projeto do Supabase (Project Settings → General → Region no painel).
 const REGION = 'us-east-1';
 
 const pt: Policy = {
-  updated: 'Atualizada em 3 de novembro de 2026',
+  updated: 'Atualizada em 4 de novembro de 2026',
   draft: 'Rascunho em revisão. Esta versão ainda pode mudar antes do lançamento.',
   sections: [
     {
       title: 'Quem cuida dos seus dados',
       paragraphs: [
-        `O MindFree é desenvolvido por ${CONTROLLER}, que é o controlador dos seus dados pessoais nos termos da Lei Geral de Proteção de Dados (Lei nº 13.709/2018). Contato para assuntos de privacidade: ${CONTACT}.`,
+        `O app MindFree é desenvolvido pela ${CONTROLLER}, que é a controladora dos seus dados pessoais nos termos da Lei Geral de Proteção de Dados (Lei nº 13.709/2018). Contato para assuntos de privacidade: ${CONTACT}.`,
       ],
     },
     {
@@ -33,6 +32,7 @@ const pt: Policy = {
       title: 'Se você criar uma conta',
       paragraphs: [
         `Seu e-mail, sua senha (guardada de forma protegida pela Supabase, nunca em texto puro), seu nome, seus ajustes e suas tarefas e noites ficam guardados nos servidores da Supabase, na região ${REGION}, nos Estados Unidos, para você não perder nada e poder usar o app em outro celular. Ao criar a conta, você concorda com essa transferência internacional dos dados.`,
+        'Os e-mails do app (o código que confirma o cadastro e o de senha nova) são enviados pela Resend, nos Estados Unidos, que recebe só o seu endereço de e-mail e o conteúdo da mensagem.',
         'As gravações de voz e o texto do que você falou continuam só no seu celular. O áudio de cada gravação é apagado do celular 7 dias depois de organizado; o texto e as tarefas ficam. As fotos do mural só saem dele quando você posta (veja "Se você entrar na rede").',
         'Ao sair da conta, as tarefas são apagadas deste celular e continuam na conta. Ao apagar a conta, tudo o que está nela é apagado do servidor.',
       ],
@@ -68,6 +68,14 @@ const pt: Policy = {
       ],
     },
     {
+      title: 'Quem nos ajuda a operar o app',
+      paragraphs: [
+        'Estas empresas tratam dados em nosso nome (são os operadores), cada uma só para prestar o seu serviço ao MindFree:',
+        '• Supabase (Estados Unidos): servidor, banco de dados, login e as fotos do mural;\n• OpenAI (Estados Unidos): transforma a fala em texto;\n• Anthropic (Estados Unidos): organiza o texto em tarefas;\n• Resend (Estados Unidos): envia os e-mails de confirmação e de senha nova;\n• Expo (Estados Unidos): entrega os avisos dos amigos (push) ao Google e à Apple, usando o identificador de notificações do seu celular.',
+        `Se você escrever para ${CONTACT}, a mensagem passa pela Cloudflare e chega à nossa caixa de e-mail no Google.`,
+      ],
+    },
+    {
       title: 'Para que usamos seus dados',
       paragraphs: [
         'Só para o app funcionar: organizar suas tarefas, lembrar você nos horários escolhidos e mostrar o seu céu. Não vendemos seus dados, não mostramos anúncios e não criamos perfis sobre você.',
@@ -83,7 +91,7 @@ const pt: Policy = {
       title: 'Seus direitos',
       paragraphs: [
         'Pela LGPD, você pode saber quais dados tratamos e com quem compartilhamos, corrigir, apagar, levar seus dados para outro serviço e retirar o consentimento a qualquer momento, sem custo.',
-        `No app: Ajustes → Privacidade, para desligar a organização com IA ou apagar todos os seus dados (e a sua conta, se tiver uma). Para qualquer outro pedido, escreva para ${CONTACT}.`,
+        `No app: Ajustes → Privacidade, para exportar os seus dados num arquivo ("Exportar meus dados"), desligar a organização com IA ou apagar todos os seus dados (e a sua conta, se tiver uma). Para qualquer outro pedido, escreva para ${CONTACT}.`,
       ],
     },
     {
@@ -108,13 +116,13 @@ const pt: Policy = {
 };
 
 const en: Policy = {
-  updated: 'Updated on November 3, 2026',
+  updated: 'Updated on November 4, 2026',
   draft: 'Draft under review. This version may still change before launch.',
   sections: [
     {
       title: 'Who takes care of your data',
       paragraphs: [
-        `MindFree is developed by ${CONTROLLER}, the controller of your personal data under Brazil’s General Data Protection Law (LGPD, Law No. 13,709/2018). Privacy contact: ${CONTACT}.`,
+        `The MindFree app is developed by ${CONTROLLER}, the controller of your personal data under Brazil’s General Data Protection Law (LGPD, Law No. 13,709/2018). Privacy contact: ${CONTACT}.`,
       ],
     },
     {
@@ -128,6 +136,7 @@ const en: Policy = {
       title: 'If you create an account',
       paragraphs: [
         `Your email, your password (stored securely by Supabase, never in plain text), your name, your settings and your tasks and nights are stored on Supabase servers in the ${REGION} region, in the United States, so you don’t lose anything and can use the app on another phone. By creating an account, you agree to this international transfer of data.`,
+        'The app’s emails (the code that confirms sign-up and the new-password code) are sent by Resend, in the United States, which receives only your email address and the message content.',
         'Voice recordings and the text of what you said stay only on your phone. The audio of each recording is deleted from the phone 7 days after it is organized; the text and the tasks remain. Wall photos leave it only when you post (see "If you join the network").',
         'When you sign out, tasks are deleted from this phone and remain in the account. When you delete the account, everything in it is deleted from the server.',
       ],
@@ -163,6 +172,14 @@ const en: Policy = {
       ],
     },
     {
+      title: 'Who helps us run the app',
+      paragraphs: [
+        'These companies process data on our behalf (they are our processors), each one only to provide its service to MindFree:',
+        '• Supabase (United States): server, database, sign-in and the wall photos;\n• OpenAI (United States): turns speech into text;\n• Anthropic (United States): organizes the text into tasks;\n• Resend (United States): sends the confirmation and new-password emails;\n• Expo (United States): delivers friends’ notifications (push) to Google and Apple, using your phone’s notification identifier.',
+        `If you write to ${CONTACT}, the message goes through Cloudflare and reaches our mailbox at Google.`,
+      ],
+    },
+    {
       title: 'What we use your data for',
       paragraphs: [
         'Only to make the app work: organize your tasks, remind you at the times you chose and show your sky. We don’t sell your data, show ads or build profiles about you.',
@@ -178,7 +195,7 @@ const en: Policy = {
       title: 'Your rights',
       paragraphs: [
         'Under the LGPD, you can learn what data we process and who we share it with, correct it, delete it, take it to another service and withdraw your consent at any time, free of charge.',
-        `In the app: Settings → Privacy, to turn off AI organizing or delete all your data (and your account, if you have one). For any other request, write to ${CONTACT}.`,
+        `In the app: Settings → Privacy, to export your data to a file ("Export my data"), turn off AI organizing or delete all your data (and your account, if you have one). For any other request, write to ${CONTACT}.`,
       ],
     },
     {

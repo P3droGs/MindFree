@@ -1,5 +1,7 @@
 import Constants from 'expo-constants';
+import { File, Paths } from 'expo-file-system';
 import { useFocusEffect, useRouter } from 'expo-router';
+import * as Sharing from 'expo-sharing';
 import { useCallback, useEffect, useState, type ReactNode } from 'react';
 import { Alert, Linking, Pressable, StyleSheet, Switch, TextInput, View } from 'react-native';
 
@@ -15,7 +17,9 @@ import { Segmented } from '@/components/segmented';
 import { TimeStepper } from '@/components/time-stepper';
 import { useI18n, type MessageKey } from '@/i18n';
 import { aiAllowed } from '@/lib/consent';
+import { buildExport, exportFileName, type ExportNetwork } from '@/lib/export';
 import { deleteAllMedia, deleteLocalFile } from '@/lib/files';
+import { mural } from '@/lib/mural';
 import {
   cancelDailyReminders,
   hasExactAlarms,
@@ -24,6 +28,7 @@ import {
   requestNotificationPermission,
   scheduleDailyReminders,
 } from '@/lib/notifications';
+import { social } from '@/lib/social';
 import { serverConfigured } from '@/lib/supabase';
 import { formatMinutes } from '@/lib/time';
 import { useAccount, type SyncStatus } from '@/state/account';
@@ -51,7 +56,8 @@ export default function SettingsScreen() {
   const posts = usePosts();
   const aiOn = aiAllowed(settings);
   const { account, signedIn, syncStatus, clockWrong, signOut, deleteAccount } = useAccount();
-  const { status: socialStatus } = useSocial();
+  const { status: socialStatus, profile } = useSocial();
+  const [exporting, setExporting] = useState(false);
   const { nightMinutes, morningMinutes } = settings;
   const [scrollEnabled, setScrollEnabled] = useState(true);
   const [notificationsOn, setNotificationsOn] = useState<boolean | null>(null);
@@ -115,6 +121,41 @@ export default function SettingsScreen() {
   };
 
   /** Apaga do celular tudo o que o MindFree guardou (e a conta, se tiver) e volta para o começo. */
+  // "Exportar meus dados" (LGPD, acesso e portabilidade): um JSON com tudo o que o app guarda, pela folha de
+  // compartilhar do sistema. A parte da rede vem do servidor na hora; sem internet, vai marcada como indisponível.
+  const exportData = async () => {
+    setExporting(true);
+    try {
+      let network: ExportNetwork = null;
+      if (signedIn && profile) {
+        try {
+          const now = new Date();
+          const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+          const [orbit, blocked, posts] = await Promise.all([social.orbit(today), social.blockedList(), mural.feed()]);
+          network = { profile, orbit, blocked, posts: posts.filter((post) => post.mine) };
+        } catch {
+          network = 'unavailable';
+        }
+      }
+      const data = buildExport({
+        now: new Date(),
+        version: Constants.expoConfig?.version ?? '?',
+        language: language.code,
+        settings,
+        journal,
+        account: account && !account.anonymous ? { id: account.id, email: account.email } : null,
+        network,
+      });
+      const file = new File(Paths.cache, exportFileName(new Date()));
+      file.write(JSON.stringify(data, null, 2));
+      await Sharing.shareAsync(file.uri, { mimeType: 'application/json', dialogTitle: t('settings.exportTitle'), UTI: 'public.json' });
+    } catch {
+      Alert.alert(t('settings.export'), t('settings.exportFailed'));
+    } finally {
+      setExporting(false);
+    }
+  };
+
   const deleteAll = () => {
     Alert.alert(t('settings.deleteAllTitle'), signedIn ? t('settings.deleteAllBodyAccount') : t('settings.deleteAllBody'), [
       { text: t('common.cancel'), style: 'cancel' },
@@ -363,6 +404,22 @@ export default function SettingsScreen() {
             <AppText variant="bodyStrong" style={styles.languageLabel}>
               {t('settings.terms')}
             </AppText>
+            <Icon name="chevron-right" size={18} color={theme.textSecondary} strokeWidth={2.4} />
+          </Pressable>
+          <View style={[styles.divider, { backgroundColor: theme.border }]} />
+          <Pressable
+            accessibilityRole="button"
+            accessibilityState={{ busy: exporting }}
+            disabled={exporting}
+            onPress={() => void exportData()}
+            style={({ pressed }) => [styles.languageRow, { opacity: pressed || exporting ? 0.7 : 1 }]}>
+            <Icon name="share" size={20} color={theme.text} />
+            <View style={styles.languageLabel}>
+              <AppText variant="bodyStrong">{t('settings.export')}</AppText>
+              <AppText variant="caption" tone="secondary">
+                {t('settings.exportHint')}
+              </AppText>
+            </View>
             <Icon name="chevron-right" size={18} color={theme.textSecondary} strokeWidth={2.4} />
           </Pressable>
           {signedIn ? (

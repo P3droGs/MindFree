@@ -1,8 +1,8 @@
 import type { LanguageCode } from '@/i18n';
 import { CONTACT, CONTROLLER, type Policy } from '@/legal/privacy';
 
-// Termos de uso do MindFree. RASCUNHO: os campos entre colchetes vêm da política de privacidade e o
-// texto deve passar por um advogado antes de publicar nas lojas. Como a política, fica fora dos
+// Termos de uso do MindFree. RASCUNHO: o texto deve passar por um advogado antes de publicar nas lojas.
+// O nome da empresa e o contato vêm da política de privacidade. Como a política, fica fora dos
 // arquivos de idioma por ser texto jurídico: por enquanto só português e inglês.
 
 /** A idade mínima para criar conta e entrar na rede. O cadastro pede essa confirmação. */
@@ -15,7 +15,7 @@ const pt: Policy = {
     {
       title: 'Sobre estes termos',
       paragraphs: [
-        `O MindFree é oferecido por ${CONTROLLER}. Ao usar o app, e em especial ao criar uma conta, você aceita estes termos e a Política de Privacidade, que explica o que acontece com os seus dados. Se não concordar com algo, não use o app.`,
+        `O MindFree é oferecido pela ${CONTROLLER}. Ao usar o app, e em especial ao criar uma conta, você aceita estes termos e a Política de Privacidade, que explica o que acontece com os seus dados. Se não concordar com algo, não use o app.`,
       ],
     },
     {

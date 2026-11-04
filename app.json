@@ -187,7 +187,8 @@
       "expo-asset",
       "expo-image",
       "expo-secure-store",
-      "./plugins/android-release"
+      "./plugins/android-release",
+      "expo-sharing"
     ],
     "experiments": {
       "typedRoutes": true,

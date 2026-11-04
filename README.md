@@ -64,6 +64,8 @@ O visual é calmo e fácil de entender: escuro e lilás à noite, claro e cor de
 - **Apagar todos os dados** (e a conta) é um botão nos Ajustes.
 - **A política de privacidade completa** está em https://p3drogs.github.io/MindFree/privacidade/ e **os termos de uso** em https://p3drogs.github.io/MindFree/termos/ (rascunhos em revisão). Os dois também abrem dentro do app, em Ajustes › Privacidade.
 - **Idade mínima de 13 anos** para criar conta e entrar na rede: o cadastro pede essa confirmação junto com o aceite dos termos e da política.
+- **Exportar meus dados** (Ajustes › Privacidade): um arquivo JSON com tudo o que o app guarda sobre a pessoa, inclusive o que está na rede, pela folha de compartilhar do celular.
+- **O que a IA organiza vem com aviso** ("Organizado pela IA. Confira os dias e os horários.") na tela Anotado.
 
 ---
 
