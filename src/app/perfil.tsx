@@ -37,6 +37,9 @@ const ACTIVITY_TEXT: Record<Activity['kind'], MessageKey> = {
   follow: 'profile.joinedOrbit',
 };
 
+/** O vão entre os quadrinhos das conquistas, em px. */
+const GRID_GAP = 8;
+
 export default function ProfileRoute() {
   return (
     <SocialGate>
@@ -61,6 +64,10 @@ function ProfileScreen() {
   const [name, setName] = useState(settings.name);
   const [bio, setBio] = useState(settings.bio);
   const [tab, setTab] = useState<'grid' | 'shine'>('grid');
+  // A largura da grade das conquistas, medida na tela: cada quadrinho é um terço dela, com 8 px de vão.
+  // (Com `aspectRatio` e largura em %, o quadrinho saía com 5 px de altura numa linha que quebra.)
+  const [gridWidth, setGridWidth] = useState(0);
+  const tileWidth = gridWidth > 0 ? Math.floor((gridWidth - 2 * GRID_GAP) / 3) : 0;
   const [activity, setActivity] = useState<Activity[] | null>(null);
   const [activityFailed, setActivityFailed] = useState(false);
   const now = useNow();
@@ -359,14 +366,14 @@ function ProfileScreen() {
 
         {tab === 'grid' ? (
           posts.length > 0 ? (
-            <View style={styles.grid}>
+            <View style={styles.grid} onLayout={(event) => setGridWidth(event.nativeEvent.layout.width)}>
               {posts.map((post) => (
                 <Pressable
                   key={post.id}
                   accessibilityRole="button"
                   accessibilityLabel={post.taskTitle}
                   onPress={() => router.push('/mural')}
-                  style={styles.tile}>
+                  style={[styles.tile, { width: tileWidth, height: Math.round((tileWidth * 4) / 3) }]}>
                   <Image source={{ uri: post.photoUri }} style={StyleSheet.absoluteFill} contentFit="cover" accessibilityIgnoresInvertColors />
                 </Pressable>
               ))}
@@ -608,10 +615,8 @@ const styles = StyleSheet.create({
     borderColor: OBS.cardBorder,
   },
   tab: { flex: 1, minHeight: 40, borderRadius: 999, alignItems: 'center', justifyContent: 'center' },
-  grid: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
+  grid: { flexDirection: 'row', flexWrap: 'wrap', gap: GRID_GAP },
   tile: {
-    width: '31.5%',
-    aspectRatio: 3 / 4,
     borderTopLeftRadius: 999,
     borderTopRightRadius: 999,
     borderBottomLeftRadius: 14,
