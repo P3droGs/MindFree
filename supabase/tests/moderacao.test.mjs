@@ -11,6 +11,7 @@ const { db, as } = await startDb([
   '20261103120000_moderacao.sql',
   '20261104130000_seguranca.sql',
   '20261104140000_rede_rapida.sql',
+  '20261104150000_rate_limit.sql',
 ]);
 check('migrações aplicam duas vezes sem erro', true);
 
@@ -110,5 +111,17 @@ check('ela recebe o aviso de que voltou', (await notices(A)).some((x) => x.kind 
 // Apagar a conta leva os avisos junto.
 await as(A, () => db.query(`select public.delete_my_account()`));
 check('apagar a conta apaga os avisos', (await rpc(`select count(*)::int as n from public.moderation_notices where user_id = '${A}'`)).n === 0);
+
+// Limite de chamadas por minuto: a busca aguenta 30 e a 31ª para; as leituras gerais, 120; a janela é por minuto.
+{
+  const results = [];
+  for (let i = 0; i < 31; i += 1) results.push(await errorOf(() => as(B, () => json(`select public.social_search($1, $2) as s`, ['an', today]))));
+  check('busca: 30 por minuto passam', results.slice(0, 30).every((e) => e === null));
+  check('busca: a 31ª é recusada com too_many', results[30]?.includes('mindfree:too_many'));
+  check('o limite da busca não trava as leituras gerais', (await errorOf(() => as(B, () => json(`select public.social_orbit($1) as o`, [today])))) === null);
+  await db.exec(`update public.rate_hits set minute = minute - interval '1 minute' where action = 'busca';`);
+  check('no minuto seguinte a busca volta', (await errorOf(() => as(B, () => json(`select public.social_search($1, $2) as s`, ['an', today])))) === null);
+  check('ninguém lê a tabela de contagem', (await errorOf(() => as(B, () => db.query(`select * from public.rate_hits`)))) !== null);
+}
 
 finish();

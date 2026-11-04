@@ -612,6 +612,7 @@ export const ko: Messages = {
   'social.handlePrivacy': '네트워크에서는 다른 사람이 내 @, 이름, 소개를 볼 수 있어요. 별은 내가 승인한 사람만 볼 수 있어요(처음에는 비공개 계정이에요). 내가 말한 내용과 할 일은 절대 보이지 않아요.',
   'social.join': '네트워크 들어가기',
   'social.offline': '서버에 연결하지 못했어요. 인터넷을 확인하고 다시 시도해 주세요.',
+  'social.tooMany': '잠깐, 한 번에 너무 많이 했어요. 1분 뒤에 다시 시도해 주세요.',
   'social.retry': '다시 시도',
   'safety.moreLabel': '{name} 더보기',
   'safety.removeFollower': '팔로워 삭제',

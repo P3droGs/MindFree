@@ -616,6 +616,7 @@ export const en: Messages = {
   'social.handlePrivacy': 'On the network, people see your @, your name and your bio. Your stars, only people you approve: your account starts private. Never what you say or your tasks.',
   'social.join': 'Join the network',
   'social.offline': 'I couldn’t reach the server. Check your internet and try again.',
+  'social.tooMany': 'Easy there, that was a lot at once. Wait a minute and try again.',
   'social.retry': 'Try again',
   'safety.moreLabel': 'More options for {name}',
   'safety.removeFollower': 'Remove follower',

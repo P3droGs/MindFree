@@ -612,6 +612,7 @@ export const zh: Messages = {
   'social.handlePrivacy': '在网络里，别人能看到你的 @、名字和简介。你的星星只有你批准的人能看到：账号默认是私密的。你说的话和你的任务永远不会被看到。',
   'social.join': '加入网络',
   'social.offline': '连不上服务器。请检查网络后再试一次。',
+  'social.tooMany': '操作太频繁了。请等一分钟再试。',
   'social.retry': '再试一次',
   'safety.moreLabel': '{name}的更多选项',
   'safety.removeFollower': '移除粉丝',

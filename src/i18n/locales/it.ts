@@ -619,6 +619,7 @@ export const it: Messages = {
   'social.handlePrivacy': 'Nella rete le persone vedono il tuo @, il tuo nome e la tua bio. Le tue stelle, solo chi approvi: l’account parte privato. Mai quello che dici né le tue attività.',
   'social.join': 'Entra nella rete',
   'social.offline': 'Non sono riuscito a raggiungere il server. Controlla la connessione e riprova.',
+  'social.tooMany': 'Piano, troppe azioni di fila. Aspetta un minuto e riprova.',
   'social.retry': 'Riprova',
   'safety.moreLabel': 'Altre opzioni per {name}',
   'safety.removeFollower': 'Rimuovi follower',

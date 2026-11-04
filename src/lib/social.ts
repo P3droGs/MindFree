@@ -128,6 +128,11 @@ function failureOf(error: { message?: string; code?: string } | null): SocialFai
   return 'unknown';
 }
 
+/** O que dizer quando uma ação da rede falha: "calma" quando bateu no limite por minuto; senão, "sem internet". */
+export function failureText(error: unknown, t: (key: 'social.tooMany' | 'social.offline') => string): string {
+  return t(error instanceof SocialError && error.failure === 'too_many' ? 'social.tooMany' : 'social.offline');
+}
+
 export async function call<T>(fn: string, args?: Record<string, unknown>): Promise<T> {
   if (!supabase) throw new SocialError('network');
   const { data, error } = await supabase.rpc(fn, args);

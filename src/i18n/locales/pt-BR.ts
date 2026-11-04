@@ -639,6 +639,7 @@ export const ptBR = {
   'social.handlePrivacy': 'Na rede, as pessoas veem seu @, seu nome e sua bio. Suas estrelas, só quem você aprovar: a conta começa privada. Nunca o que você fala nem as suas tarefas.',
   'social.join': 'Entrar na rede',
   'social.offline': 'Não consegui falar com o servidor. Confira a internet e tente de novo.',
+  'social.tooMany': 'Calma, muitas ações seguidas. Espere um minuto e tente de novo.',
   'social.retry': 'Tentar de novo',
   'safety.moreLabel': 'Mais opções para {name}',
   'safety.removeFollower': 'Remover seguidor',

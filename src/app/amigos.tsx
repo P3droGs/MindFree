@@ -13,7 +13,7 @@ import { useNow } from '@/hooks/use-now';
 import { useT } from '@/i18n';
 import { eveningDay } from '@/lib/capture';
 import { forget, remembered } from '@/lib/remembered';
-import { displayName, initialOf, planetColor, social, type Friend } from '@/lib/social';
+import { displayName, failureText, initialOf, planetColor, social, type Friend } from '@/lib/social';
 import { addDays, mondayOf, nightOfDay, weekNights } from '@/state/journal';
 import { useJournal } from '@/state/journal-provider';
 import { useSettings } from '@/state/settings';
@@ -114,9 +114,9 @@ function FriendsSkyScreen() {
     setFriend(person.id, { shined: on });
     setToast(on ? t('friends.shineSent', { name: person.name }) : '');
     forget('friends.');
-    social.interact(person.id, 'shine', tonight, on).catch(() => {
+    social.interact(person.id, 'shine', tonight, on).catch((error) => {
       setFriend(person.id, { shined: !on });
-      setToast(t('social.offline'));
+      setToast(failureText(error, t));
     });
   };
 
@@ -125,9 +125,9 @@ function FriendsSkyScreen() {
     setFriend(person.id, { poked: true });
     setToast(t('friends.pokeSent', { name: person.name }));
     forget('friends.');
-    social.interact(person.id, 'poke', tonight, true).catch(() => {
+    social.interact(person.id, 'poke', tonight, true).catch((error) => {
       setFriend(person.id, { poked: false });
-      setToast(t('social.offline'));
+      setToast(failureText(error, t));
     });
   };
 

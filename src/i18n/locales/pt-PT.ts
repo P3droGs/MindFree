@@ -619,6 +619,7 @@ export const ptPT: Messages = {
   'social.handlePrivacy': 'Na rede, as pessoas veem o teu @, o teu nome e a tua bio. As tuas estrelas, só quem aprovares: a conta começa privada. Nunca o que dizes nem as tuas tarefas.',
   'social.join': 'Entrar na rede',
   'social.offline': 'Não consegui falar com o servidor. Verifica a internet e tenta outra vez.',
+  'social.tooMany': 'Calma, muitas ações seguidas. Espera um minuto e tenta outra vez.',
   'social.retry': 'Tentar outra vez',
   'safety.moreLabel': 'Mais opções para {name}',
   'safety.removeFollower': 'Remover seguidor',

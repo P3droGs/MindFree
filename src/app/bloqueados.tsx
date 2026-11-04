@@ -9,7 +9,7 @@ import { OBS, ObsChip, ObservatoryScreen, useObsToast } from '@/components/obser
 import { SocialGate } from '@/components/social-gate';
 import { useT } from '@/i18n';
 import { forget, remembered } from '@/lib/remembered';
-import { displayName, initialOf, planetColor, social, type BlockedPerson } from '@/lib/social';
+import { displayName, failureText, initialOf, planetColor, social, type BlockedPerson } from '@/lib/social';
 
 export default function BlockedRoute() {
   return (
@@ -51,8 +51,8 @@ function BlockedScreen() {
         onPress: () => {
           setPeople((current) => current?.filter((p) => p.userId !== person.userId) ?? null);
           forget();
-          social.unblock(person.userId).catch(() => {
-            setToast(t('social.offline'));
+          social.unblock(person.userId).catch((error) => {
+            setToast(failureText(error, t));
             void load(true);
           });
         },

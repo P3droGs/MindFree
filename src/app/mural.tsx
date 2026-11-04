@@ -16,7 +16,7 @@ import { useT } from '@/i18n';
 import { timeAgo } from '@/lib/dates';
 import { mural, type CloudPost } from '@/lib/mural';
 import { forget, remembered } from '@/lib/remembered';
-import { displayName, initialOf, planetColor } from '@/lib/social';
+import { displayName, failureText, initialOf, planetColor } from '@/lib/social';
 import { formatMinutes, minutesOfDay } from '@/lib/time';
 import { changePosts, deletePhoto, POST_LIFETIME_MS, usePosts, type Post } from '@/state/posts';
 import { useSettings } from '@/state/settings';
@@ -105,9 +105,9 @@ function MuralScreen() {
     try {
       await mural.shine(post.id, on);
       forget('mural.');
-    } catch {
+    } catch (error) {
       setShined(post.id, !on);
-      setToast(t('mural.shineFailed'));
+      setToast(error instanceof Error && error.message === 'too_many' ? failureText(error, t) : t('mural.shineFailed'));
     }
   };
 

@@ -13,7 +13,7 @@ import { useNow } from '@/hooks/use-now';
 import { useT } from '@/i18n';
 import { eveningDay } from '@/lib/capture';
 import { forget, remembered } from '@/lib/remembered';
-import { displayName, initialOf, planetColor, social, type FollowState, type Orbit, type Person } from '@/lib/social';
+import { displayName, failureText, initialOf, planetColor, social, type FollowState, type Orbit, type Person } from '@/lib/social';
 import { useSettings } from '@/state/settings';
 import { useSocial } from '@/state/social';
 import { fonts } from '@/theme/typography';
@@ -85,8 +85,8 @@ function OrbitScreen() {
         .then((found) => {
           if (active) setResults(found);
         })
-        .catch(() => {
-          if (active) setToast(t('social.offline'));
+        .catch((error) => {
+          if (active) setToast(failureText(error, t));
         });
     }, 350);
     return () => {
@@ -123,9 +123,9 @@ function OrbitScreen() {
         void load(true);
         void refresh();
       })
-      .catch(() => {
+      .catch((error) => {
         setFollow(person.userId, 'none');
-        setToast(t('social.offline'));
+        setToast(failureText(error, t));
       });
   };
 
@@ -149,9 +149,9 @@ function OrbitScreen() {
                 forget();
                 return refresh();
               })
-              .catch(() => {
+              .catch((error) => {
                 setFollow(person.userId, before);
-                setToast(t('social.offline'));
+                setToast(failureText(error, t));
               });
           },
         },
@@ -175,8 +175,8 @@ function OrbitScreen() {
         forget();
         return refresh();
       })
-      .catch(() => {
-        setToast(t('social.offline'));
+      .catch((error) => {
+        setToast(failureText(error, t));
         void load(true);
       });
   };

@@ -613,6 +613,7 @@ export const ja: Messages = {
   'social.handlePrivacy': 'ネットワークでは、@・名前・自己紹介がほかの人に見えます。星はあなたが承認した人だけ（最初は非公開アカウントです）。話した内容やタスクは決して見えません。',
   'social.join': 'ネットワークに参加',
   'social.offline': 'サーバーにつながりませんでした。インターネット接続を確認して、もう一度お試しください。',
+  'social.tooMany': '少し操作が多すぎました。1分待ってからもう一度お試しください。',
   'social.retry': 'もう一度試す',
   'safety.moreLabel': '{name}のその他のオプション',
   'safety.removeFollower': 'フォロワーから削除',

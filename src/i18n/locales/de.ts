@@ -619,6 +619,7 @@ export const de: Messages = {
   'social.handlePrivacy': 'Im Netzwerk sehen andere dein @, deinen Namen und deine Bio. Deine Sterne nur Leute, die du annimmst: Das Konto startet privat. Nie, was du sagst, und keine deiner Aufgaben.',
   'social.join': 'Dem Netzwerk beitreten',
   'social.offline': 'Ich konnte den Server nicht erreichen. Prüf deine Internetverbindung und versuch es noch einmal.',
+  'social.tooMany': 'Langsam, das waren viele Aktionen auf einmal. Warte eine Minute und versuch es erneut.',
   'social.retry': 'Noch einmal versuchen',
   'safety.moreLabel': 'Weitere Optionen für {name}',
   'safety.removeFollower': 'Follower entfernen',
