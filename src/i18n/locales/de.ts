@@ -126,7 +126,7 @@ export const de: Messages = {
   'settings.notNow': 'Nicht jetzt',
   'settings.openSettings': 'Einstellungen öffnen',
   'settings.general': 'Allgemein',
-  'settings.version': 'MindFree · Version 0.1 (Test)',
+  'settings.version': 'MindFree · Version {version}',
 
   'accent.classico': 'Klassisch',
   'accent.lilas': 'Flieder',

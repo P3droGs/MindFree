@@ -123,7 +123,7 @@ export const zh: Messages = {
   'settings.notNow': '以后再说',
   'settings.openSettings': '打开设置',
   'settings.general': '通用',
-  'settings.version': 'MindFree · 版本 0.1（测试）',
+  'settings.version': 'MindFree · 版本 {version}',
 
   'accent.classico': '经典',
   'accent.lilas': '丁香紫',

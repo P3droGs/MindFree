@@ -119,7 +119,7 @@ const MindFreeLayout = (props: MindFreeWidgetProps, environment: WidgetEnvironme
     <VStack alignment="leading" spacing={4} modifiers={dayContainer}>
       <HStack spacing={6}>
         <Image systemName="sun.max.fill" size={15} color={colors.dayAccent} />
-        <Text modifiers={[rounded(15, 'heavy'), foregroundStyle(day.text)]}>Hoje</Text>
+        <Text modifiers={[rounded(15, 'heavy'), foregroundStyle(day.text)]}>{labels.today}</Text>
         <Spacer />
         <Text modifiers={[rounded(13, 'bold'), foregroundStyle(day.secondary)]}>{remaining}</Text>
       </HStack>

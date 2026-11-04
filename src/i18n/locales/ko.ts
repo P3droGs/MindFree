@@ -123,7 +123,7 @@ export const ko: Messages = {
   'settings.notNow': '나중에',
   'settings.openSettings': '설정 열기',
   'settings.general': '일반',
-  'settings.version': 'MindFree · 버전 0.1 (테스트)',
+  'settings.version': 'MindFree · 버전 {version}',
 
   'accent.classico': '클래식',
   'accent.lilas': '라일락',

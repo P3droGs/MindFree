@@ -124,7 +124,7 @@ export const ja: Messages = {
   'settings.notNow': '今はしない',
   'settings.openSettings': '設定を開く',
   'settings.general': '一般',
-  'settings.version': 'MindFree・バージョン 0.1（テスト）',
+  'settings.version': 'MindFree・バージョン {version}',
 
   'accent.classico': 'クラシック',
   'accent.lilas': 'ライラック',

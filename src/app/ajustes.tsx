@@ -1,3 +1,4 @@
+import Constants from 'expo-constants';
 import { useFocusEffect, useRouter } from 'expo-router';
 import { useCallback, useEffect, useState, type ReactNode } from 'react';
 import { Alert, Linking, Pressable, StyleSheet, Switch, TextInput, View } from 'react-native';
@@ -399,7 +400,7 @@ export default function SettingsScreen() {
       ) : null}
 
       <AppText variant="caption" tone="secondary" style={styles.center}>
-        {t('settings.version')}
+        {t('settings.version', { version: Constants.expoConfig?.version ?? '?' })}
       </AppText>
 
       <LanguageSheet visible={languagesOpen} onClose={() => setLanguagesOpen(false)} />

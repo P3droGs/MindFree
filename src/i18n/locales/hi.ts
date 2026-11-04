@@ -124,7 +124,7 @@ export const hi: Messages = {
   'settings.notNow': 'अभी नहीं',
   'settings.openSettings': 'सेटिंग्स खोलें',
   'settings.general': 'सामान्य',
-  'settings.version': 'MindFree · संस्करण 0.1 (परीक्षण)',
+  'settings.version': 'MindFree · संस्करण {version}',
 
   'accent.classico': 'क्लासिक',
   'accent.lilas': 'लैवेंडर',

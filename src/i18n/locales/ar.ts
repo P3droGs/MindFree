@@ -123,7 +123,7 @@ export const ar: Messages = {
   'settings.notNow': 'ليس الآن',
   'settings.openSettings': 'فتح الإعدادات',
   'settings.general': 'عام',
-  'settings.version': 'MindFree · الإصدار 0.1 (تجريبي)',
+  'settings.version': 'MindFree · الإصدار {version}',
 
   'accent.classico': 'كلاسيكي',
   'accent.lilas': 'ليلكي',

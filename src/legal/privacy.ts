@@ -26,7 +26,7 @@ const pt: Policy = {
       title: 'O que fica guardado no seu celular',
       paragraphs: [
         'Seu nome, suas preferências (cores, horários e idioma), suas tarefas, as gravações de voz e o texto delas, e as fotos que você posta no mural. Sem conta, tudo isso fica guardado só no seu aparelho.',
-        'Se o backup do celular estiver ligado (iCloud ou Google), esses dados podem ir junto no backup da sua conta, conforme as regras da Apple ou do Google.',
+        'No Android, o MindFree fica fora do backup automático do Google: esses dados não saem do aparelho. No iPhone, se o backup do iCloud estiver ligado, eles podem ir junto no backup da sua conta, conforme as regras da Apple.',
       ],
     },
     {
@@ -119,7 +119,7 @@ const en: Policy = {
       title: 'What stays on your phone',
       paragraphs: [
         'Your name, your preferences (colors, times and language), your tasks, your voice recordings and their text, and the photos you post on the wall. Without an account, all of this is stored only on your device.',
-        'If your phone backup is on (iCloud or Google), this data may be included in your account’s backup, under Apple’s or Google’s rules.',
+        'On Android, MindFree is excluded from Google’s automatic backup: this data does not leave the device. On iPhone, if iCloud backup is on, it may be included in your account’s backup, under Apple’s rules.',
       ],
     },
     {

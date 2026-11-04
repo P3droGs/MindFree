@@ -16,11 +16,22 @@ const B = String.raw`(?<![\p{L}\d])`;
 const E = String.raw`(?![\p{L}\d])`;
 const word = (body: string) => new RegExp(`${B}(?:${body})${E}`, 'iu');
 
+// "Preciso lembrar de mandar o e-mail": tira os dois ("preciso" e "lembrar de"), por isso roda em sequência.
 const FILLERS = [
   /^(?:e\s+)?(?:eu\s+)?(?:preciso|tenho que|tenho de|devo|vou|quero|lembrar de|não esquecer de|nao esquecer de)\s+/iu,
+  /^(?:de\s+)?(?:lembrar de|não esquecer de|nao esquecer de)\s+/iu,
   /^(?:and\s+)?(?:i\s+)?(?:need to|have to|must|should|remember to|don't forget to)\s+/iu,
+  /^(?:to\s+)?(?:remember to|don't forget to)\s+/iu,
   /^(?:tengo que|necesito|debo)\s+/iu,
 ];
+
+// " e comprar presente": um "e" (ou "and", "y", "et", "und") seguido de outra ação vira outra tarefa.
+// Só separa quando o que vem depois parece uma ação (um verbo no infinitivo nas línguas latinas, ou qualquer
+// palavra em inglês): "ir ao mercado e não esquecer do leite" continua uma tarefa só.
+const AND_SPLIT = new RegExp(
+  String.raw`\s+(?:e|and|y|et|und)\s+(?=(?:não\s+|nao\s+|don't\s+)?(?:[\p{L}]+(?:ar|er|ir|re|en|eren)|call|buy|send|pay|go|book|pick|get|take|check|email|text)\b)`,
+  'iu',
+);
 
 const TODAY = word(`hoje|today|hoy|aujourd'hui|heute|oggi`);
 const TOMORROW = word('amanhã|amanha|tomorrow|mañana|demain|morgen|domani');
@@ -78,6 +89,7 @@ function tidy(text: string): string {
 export function parseTasks(text: string, today = new Date()): TaskDraft[] {
   return text
     .split(/\n|;|,|\.\s+|\.$/)
+    .flatMap((piece) => piece.split(AND_SPLIT))
     .map((piece) => {
       const time = readTime(piece);
       const day = readDay(time.rest, today);

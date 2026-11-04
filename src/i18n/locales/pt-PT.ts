@@ -126,7 +126,7 @@ export const ptPT: Messages = {
   'settings.notNow': 'Agora não',
   'settings.openSettings': 'Abrir definições',
   'settings.general': 'Geral',
-  'settings.version': 'MindFree · versão 0.1 (teste)',
+  'settings.version': 'MindFree · versão {version}',
 
   'accent.classico': 'Clássico',
   'accent.lilas': 'Lilás',
