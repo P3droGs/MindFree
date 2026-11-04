@@ -59,6 +59,11 @@ export const zh: Messages = {
   'code.resent': '好了，已重新发送。',
   'code.incomplete': '请输入完整的 6 位验证码。',
   'code.saveEnter': '保存并登录',
+  'code.sentTo': '已发送至 {email}。',
+  'code.continue': '继续',
+  'code.newTitle': '设置新密码',
+  'code.newSub': '验证码正确。现在只需为你的账户创建一个新密码。',
+  'code.wrong': '验证码无效或已过期。请检查数字或重新获取。',
 
   'signup.title': '创建你的账号',
   'signup.sub': '用邮箱和密码注册。任何邮箱都可以：Gmail、Outlook、iCloud…',

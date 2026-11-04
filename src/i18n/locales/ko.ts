@@ -59,6 +59,11 @@ export const ko: Messages = {
   'code.resent': '다시 보냈어요.',
   'code.incomplete': '코드 6자리를 모두 입력하세요.',
   'code.saveEnter': '저장하고 로그인',
+  'code.sentTo': '{email}(으)로 보냈어요.',
+  'code.continue': '계속',
+  'code.newTitle': '새 비밀번호 정하기',
+  'code.newSub': '코드가 맞아요. 이제 계정의 새 비밀번호만 만들면 돼요.',
+  'code.wrong': '코드가 잘못됐거나 만료됐어요. 숫자를 확인하거나 다시 요청해 주세요.',
 
   'signup.title': '계정 만들기',
   'signup.sub': '이메일과 비밀번호로 가입해요. 어떤 이메일이든 괜찮아요: Gmail, Outlook, iCloud…',

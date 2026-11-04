@@ -60,6 +60,11 @@ export const ja: Messages = {
   'code.resent': '再送信しました。',
   'code.incomplete': '6桁のコードをすべて入力してください。',
   'code.saveEnter': '保存してログイン',
+  'code.sentTo': '{email} に送信しました。',
+  'code.continue': '続ける',
+  'code.newTitle': '新しいパスワードを決める',
+  'code.newSub': 'コードが確認できました。あとはアカウントの新しいパスワードを作るだけです。',
+  'code.wrong': 'コードが無効か期限切れです。数字を確認するか、もう一度送ってください。',
 
   'signup.title': 'アカウントを作成',
   'signup.sub': 'メールアドレスとパスワードで登録します。どのメールでもOK：Gmail、Outlook、iCloud…',

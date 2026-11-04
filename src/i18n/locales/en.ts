@@ -60,6 +60,11 @@ export const en: Messages = {
   'code.resent': 'Done, we sent it again.',
   'code.incomplete': 'Enter all 6 digits of the code.',
   'code.saveEnter': 'Save and sign in',
+  'code.sentTo': 'Sent to {email}.',
+  'code.continue': 'Continue',
+  'code.newTitle': 'Choose a new password',
+  'code.newSub': 'The code checks out. Now just create a new password for your account.',
+  'code.wrong': 'Invalid or expired code. Check the numbers or request another one.',
 
   'signup.title': 'Create your account',
   'signup.sub': 'Sign up with an email and a password. Any email works: Gmail, Outlook, iCloud…',

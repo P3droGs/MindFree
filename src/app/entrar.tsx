@@ -22,12 +22,28 @@ export default function SignInScreen() {
   const t = useT();
   const { height } = useWindowDimensions();
   const { settings, update } = useSettings();
-  const { signIn } = useAccount();
+  const { signIn, requestPasswordCode } = useAccount();
   const [mode, setMode] = useState<Mode>('entrar');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState<{ email?: string; password?: string; form?: string }>({});
   const [busy, setBusy] = useState(false);
+
+  const sendCode = async () => {
+    if (!isValidEmail(email)) {
+      setErrors({ email: t('auth.invalidEmail') });
+      return;
+    }
+    setBusy(true);
+    setErrors({});
+    const failure = await requestPasswordCode(email);
+    setBusy(false);
+    if (failure) {
+      setErrors({ form: t(AUTH_FAILURE_TEXT[failure]) });
+      return;
+    }
+    router.push({ pathname: '/codigo', params: { kind: 'recovery', email: email.trim() } });
+  };
 
   const submit = async () => {
     const next = {
@@ -126,7 +142,29 @@ export default function SignInScreen() {
       {mode === 'recuperar' ? (
         <>
           <AuthBackLink onPress={() => goTo('entrar')} />
-          <AuthHeading title={t('forgot.title')} subtitle={t('forgot.soon')} />
+          <AuthHeading title={t('forgot.title')} subtitle={t('forgot.sub')} />
+          <View style={styles.fields}>
+            <TextField
+              icon="mail"
+              label={t('auth.emailLabel')}
+              placeholder={t('auth.emailExample')}
+              value={email}
+              onChangeText={setEmail}
+              error={errors.email}
+              keyboardType="email-address"
+              autoCapitalize="none"
+              autoComplete="email"
+              textContentType="emailAddress"
+              returnKeyType="send"
+              onSubmitEditing={() => void sendCode()}
+            />
+          </View>
+          {errors.form ? (
+            <AppText variant="small" tone="danger" accessibilityLiveRegion="polite">
+              {errors.form}
+            </AppText>
+          ) : null}
+          <PrimaryButton label={busy ? t('auth.working') : t('forgot.send')} disabled={busy} onPress={() => void sendCode()} />
           <OutlineButton label={t('signin.create')} icon="user-plus" onPress={() => router.push('/criar-conta')} />
         </>
       ) : null}

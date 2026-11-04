@@ -59,6 +59,11 @@ export const ar: Messages = {
   'code.resent': 'تم، أرسلناه مرة أخرى.',
   'code.incomplete': 'أدخل أرقام الرمز الستة كلها.',
   'code.saveEnter': 'حفظ وتسجيل الدخول',
+  'code.sentTo': 'أُرسل إلى {email}.',
+  'code.continue': 'متابعة',
+  'code.newTitle': 'اختر كلمة مرور جديدة',
+  'code.newSub': 'الرمز صحيح. الآن فقط أنشئ كلمة مرور جديدة لحسابك.',
+  'code.wrong': 'الرمز غير صالح أو منتهي الصلاحية. تحقق من الأرقام أو اطلب رمزًا آخر.',
 
   'signup.title': 'أنشئ حسابك',
   'signup.sub': 'سجّل ببريد إلكتروني وكلمة مرور. أي بريد إلكتروني يصلح: Gmail أو Outlook أو iCloud…',

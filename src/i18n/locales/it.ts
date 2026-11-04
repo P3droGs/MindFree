@@ -61,6 +61,11 @@ export const it: Messages = {
   'code.resent': "Fatto, l'abbiamo inviato di nuovo.",
   'code.incomplete': 'Inserisci tutte le 6 cifre del codice.',
   'code.saveEnter': 'Salva e accedi',
+  'code.sentTo': 'Inviato a {email}.',
+  'code.continue': 'Continua',
+  'code.newTitle': 'Scegli la nuova password',
+  'code.newSub': 'Il codice è giusto. Ora basta creare una nuova password per il tuo account.',
+  'code.wrong': 'Codice non valido o scaduto. Controlla i numeri o richiedine un altro.',
 
   'signup.title': 'Crea il tuo account',
   'signup.sub': "Registrati con un'email e una password. Va bene qualsiasi email: Gmail, Outlook, iCloud…",

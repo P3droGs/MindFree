@@ -61,6 +61,11 @@ export const fr: Messages = {
   'code.resent': "C'est fait, nous l'avons renvoyé.",
   'code.incomplete': 'Saisissez les 6 chiffres du code.',
   'code.saveEnter': 'Enregistrer et se connecter',
+  'code.sentTo': 'Envoyé à {email}.',
+  'code.continue': 'Continuer',
+  'code.newTitle': 'Choisissez un nouveau mot de passe',
+  'code.newSub': 'Le code est bon. Il ne reste qu’à créer un nouveau mot de passe pour votre compte.',
+  'code.wrong': 'Code invalide ou expiré. Vérifiez les chiffres ou demandez-en un autre.',
 
   'signup.title': 'Créez votre compte',
   'signup.sub': "Inscrivez-vous avec un e-mail et un mot de passe. N'importe quel e-mail : Gmail, Outlook, iCloud…",

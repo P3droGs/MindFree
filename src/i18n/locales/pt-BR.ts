@@ -60,6 +60,11 @@ export const ptBR = {
   'code.resent': 'Pronto, enviamos de novo.',
   'code.incomplete': 'Digite os 6 números do código.',
   'code.saveEnter': 'Salvar e entrar',
+  'code.sentTo': 'Enviado para {email}.',
+  'code.continue': 'Continuar',
+  'code.newTitle': 'Escolha a senha nova',
+  'code.newSub': 'Pronto, o código bateu. Agora é só criar uma senha nova para a sua conta.',
+  'code.wrong': 'Código inválido ou vencido. Confira os números ou peça outro.',
 
   'signup.title': 'Crie sua conta',
   'signup.sub': 'Cadastre um e-mail e uma senha. Pode ser qualquer e-mail: Gmail, Outlook, iCloud…',

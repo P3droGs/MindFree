@@ -61,6 +61,11 @@ export const de: Messages = {
   'code.resent': 'Erledigt, wir haben ihn erneut gesendet.',
   'code.incomplete': 'Gib alle 6 Ziffern des Codes ein.',
   'code.saveEnter': 'Speichern und anmelden',
+  'code.sentTo': 'Gesendet an {email}.',
+  'code.continue': 'Weiter',
+  'code.newTitle': 'Neues Passwort wählen',
+  'code.newSub': 'Der Code stimmt. Jetzt nur noch ein neues Passwort für dein Konto anlegen.',
+  'code.wrong': 'Ungültiger oder abgelaufener Code. Prüfe die Ziffern oder fordere einen neuen an.',
 
   'signup.title': 'Erstelle dein Konto',
   'signup.sub': 'Registriere dich mit E-Mail und Passwort. Jede E-Mail geht: Gmail, Outlook, iCloud…',

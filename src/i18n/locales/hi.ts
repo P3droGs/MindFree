@@ -60,6 +60,11 @@ export const hi: Messages = {
   'code.resent': 'हो गया, हमने फिर से भेज दिया।',
   'code.incomplete': 'कोड के सभी 6 अंक डालें।',
   'code.saveEnter': 'सहेजें और साइन इन करें',
+  'code.sentTo': '{email} पर भेजा गया।',
+  'code.continue': 'आगे बढ़ें',
+  'code.newTitle': 'नया पासवर्ड चुनें',
+  'code.newSub': 'कोड सही है। अब बस अपने खाते के लिए नया पासवर्ड बनाएँ।',
+  'code.wrong': 'कोड गलत है या समाप्त हो गया। अंक जाँचें या नया कोड माँगें।',
 
   'signup.title': 'अपना खाता बनाएँ',
   'signup.sub': 'ईमेल और पासवर्ड से रजिस्टर करें। कोई भी ईमेल चलेगा: Gmail, Outlook, iCloud…',

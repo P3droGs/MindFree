@@ -61,6 +61,11 @@ export const ptPT: Messages = {
   'code.resent': 'Pronto, enviámos novamente.',
   'code.incomplete': 'Introduza os 6 dígitos do código.',
   'code.saveEnter': 'Guardar e entrar',
+  'code.sentTo': 'Enviado para {email}.',
+  'code.continue': 'Continuar',
+  'code.newTitle': 'Escolhe a palavra-passe nova',
+  'code.newSub': 'Pronto, o código está certo. Agora é só criares uma palavra-passe nova para a tua conta.',
+  'code.wrong': 'Código inválido ou expirado. Confere os números ou pede outro.',
 
   'signup.title': 'Crie a sua conta',
   'signup.sub': 'Registe um e-mail e uma palavra-passe. Pode ser qualquer e-mail: Gmail, Outlook, iCloud…',

@@ -10,5 +10,6 @@ export const AUTH_FAILURE_TEXT: Record<AuthFailure, MessageKey> = {
   network: 'auth.networkError',
   unavailable: 'auth.unavailable',
   confirm: 'auth.confirmNeeded',
+  code: 'code.wrong',
   unknown: 'auth.genericError',
 };

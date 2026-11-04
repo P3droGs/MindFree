@@ -48,6 +48,11 @@ export default function SignUpScreen() {
     setBusy(true);
     const failure = await signUp(email, password);
     setBusy(false);
+    if (failure === 'confirm') {
+      // A conta existe, mas só fica ativa com o código que foi para o e-mail.
+      router.push({ pathname: '/codigo', params: { kind: 'signup', email: email.trim() } });
+      return;
+    }
     if (failure) {
       setErrors({ form: t(AUTH_FAILURE_TEXT[failure]) });
       return;

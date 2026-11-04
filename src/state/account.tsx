@@ -15,7 +15,7 @@ import { DEFAULT_SETTINGS, useSettings, type Settings } from '@/state/settings';
 /** A conta de agora: de verdade (e-mail e senha) ou a invisível, que só serve para o limite da IA. */
 export type Account = { id: string; email: string | null; anonymous: boolean };
 export type SyncStatus = 'off' | 'syncing' | 'synced' | 'offline';
-export type AuthFailure = 'credentials' | 'taken' | 'weak' | 'busy' | 'network' | 'unavailable' | 'confirm' | 'unknown';
+export type AuthFailure = 'credentials' | 'taken' | 'weak' | 'busy' | 'network' | 'unavailable' | 'confirm' | 'code' | 'unknown';
 
 type AccountValue = {
   account: Account | null;
@@ -30,6 +30,13 @@ type AccountValue = {
   signOut: (force?: boolean) => Promise<'ok' | 'unsynced'>;
   /** Apaga a conta no servidor (com tudo o que está nela). Falso se não conseguiu. */
   deleteAccount: () => Promise<boolean>;
+  /** "Esqueci a senha": manda o código de 6 números para o e-mail. */
+  requestPasswordCode: (email: string) => Promise<AuthFailure | null>;
+  /** Confere o código do e-mail (recuperar a senha ou confirmar a conta nova). Dá certo, a pessoa já está logada. */
+  verifyCode: (email: string, code: string, kind: 'recovery' | 'signup') => Promise<AuthFailure | null>;
+  resendCode: (email: string, kind: 'recovery' | 'signup') => Promise<AuthFailure | null>;
+  /** Depois do código de recuperação: a senha nova. */
+  setNewPassword: (password: string) => Promise<AuthFailure | null>;
 };
 
 // Ajustes que acompanham a conta (vão para a tabela profiles). Ficam de fora os que são do aparelho:
@@ -127,6 +134,9 @@ function failureOf(error: unknown): AuthFailure {
     case 'email_provider_disabled':
     case 'signup_disabled':
       return 'unavailable';
+    case 'otp_expired':
+    case 'otp_disabled':
+      return 'code';
     default:
       return 'unknown';
   }
@@ -463,6 +473,41 @@ export function AccountProvider({ children }: { children: ReactNode }) {
     return 'ok';
   };
 
+  const requestPasswordCode: AccountValue['requestPasswordCode'] = async (email) => {
+    if (!supabase) return 'unavailable';
+    const { error } = await supabase.auth.resetPasswordForEmail(email.trim());
+    return error ? failureOf(error) : null;
+  };
+
+  const verifyCode: AccountValue['verifyCode'] = async (email, code, kind) => {
+    if (!supabase) return 'unavailable';
+    const { data, error } = await supabase.auth.verifyOtp({ email: email.trim(), token: code, type: kind });
+    // Um código errado volta como "credentials" sem detalhe; para a pessoa, é "código inválido".
+    if (error) return failureOf(error) === 'credentials' ? 'code' : failureOf(error);
+    if (!data.session) return 'code';
+    if (kind === 'signup') {
+      // Conta nova, agora confirmada: o perfil nasce com os ajustes deste celular.
+      accountRef.current = toAccount(data.session.user);
+      await pushProfile().catch(() => undefined);
+    }
+    return null;
+  };
+
+  const resendCode: AccountValue['resendCode'] = async (email, kind) => {
+    if (!supabase) return 'unavailable';
+    const { error } =
+      kind === 'signup'
+        ? await supabase.auth.resend({ type: 'signup', email: email.trim() })
+        : await supabase.auth.resetPasswordForEmail(email.trim());
+    return error ? failureOf(error) : null;
+  };
+
+  const setNewPassword: AccountValue['setNewPassword'] = async (password) => {
+    if (!supabase) return 'unavailable';
+    const { error } = await supabase.auth.updateUser({ password });
+    return error ? failureOf(error) : null;
+  };
+
   const deleteAccount: AccountValue['deleteAccount'] = async () => {
     if (!supabase || !permanent()) return true;
     suspended.current = true;
@@ -488,6 +533,10 @@ export function AccountProvider({ children }: { children: ReactNode }) {
     signUp,
     signOut,
     deleteAccount,
+    requestPasswordCode,
+    verifyCode,
+    resendCode,
+    setNewPassword,
   };
   return <AccountContext value={value}>{children}</AccountContext>;
 }
