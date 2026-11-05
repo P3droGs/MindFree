@@ -1,8 +1,10 @@
 // Função do Supabase que entrega os avisos da rede (brilho, cutucão, brilho no Mural e pedido para seguir).
 // Ela esvazia a fila push_outbox (preenchida por gatilhos no banco) e manda tudo pelo Expo Push, que entrega
 // no Android (Firebase) e no iPhone (Apple). No horário de sono de quem recebe, o aviso vai sem som.
-// Só o banco a chama (Cron e push_wake), com a chave de serviço lida do Vault: sem ela, responde 401.
-// A chave de serviço é colocada pelo próprio Supabase em toda função (SUPABASE_SERVICE_ROLE_KEY).
+// Só o banco a chama (Cron e push_wake), com a chave de serviço lida do Vault. A chave recebida vira a
+// credencial do cliente: push_claim só existe para a service_role, então qualquer outra chave (anon, de
+// usuário, inventada) para no banco e a função responde 401. Vale tanto para a chave legada (eyJ…) quanto
+// para a nova (sb_secret_…), sem depender do que o Supabase coloca em SUPABASE_SERVICE_ROLE_KEY.
 import { createClient } from 'npm:@supabase/supabase-js@2.118.0';
 
 type Kind = 'shine' | 'poke' | 'mural' | 'request';
@@ -99,6 +101,11 @@ const TEXTS: Record<string, Record<Kind, string>> = {
   },
 };
 
+/** A RPC recusou a chave: ou não é de serviço (42501) ou o gateway nem a aceitou (apikey/JWT inválido). */
+function keyRejected(error: { code?: string; message?: string }): boolean {
+  return error.code === '42501' || /api ?key|jwt|unauthorized/i.test(error.message ?? '');
+}
+
 function json(body: unknown, status = 200) {
   return new Response(JSON.stringify(body), { status, headers: { 'Content-Type': 'application/json' } });
 }
@@ -124,17 +131,17 @@ function messagesOf(item: Claimed) {
 Deno.serve(async (request) => {
   if (request.method !== 'POST') return json({ error: 'method' }, 405);
   const url = Deno.env.get('SUPABASE_URL');
-  const serviceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
-  if (!url || !serviceKey) return json({ error: 'config' }, 500);
-  // Só o banco chama (pelo Cron e, nos avisos, na hora): ele manda a chave de serviço, lida do Vault.
-  if (request.headers.get('authorization') !== `Bearer ${serviceKey}`) return json({ error: 'unauthorized' }, 401);
-  const supabase = createClient(url, serviceKey, { auth: { persistSession: false, autoRefreshToken: false } });
+  if (!url) return json({ error: 'config' }, 500);
+  // Só o banco chama (pelo Cron e, nos avisos, na hora), com a chave de serviço lida do Vault.
+  const bearer = request.headers.get('authorization')?.replace(/^Bearer\s+/i, '').trim() ?? '';
+  if (!bearer) return json({ error: 'unauthorized' }, 401);
+  const supabase = createClient(url, bearer, { auth: { persistSession: false, autoRefreshToken: false } });
 
   let sent = 0;
   let failed = 0;
   for (let round = 0; round < MAX_ROUNDS; round += 1) {
     const { data, error } = await supabase.rpc('push_claim', { p_limit: BATCH });
-    if (error) return json({ error: 'claim', sent, failed }, 500);
+    if (error) return keyRejected(error) ? json({ error: 'unauthorized' }, 401) : json({ error: 'claim', code: error.code, sent, failed }, 500);
     const claimed = (data ?? []) as Claimed[];
     const messages = claimed.flatMap(messagesOf);
     for (let start = 0; start < messages.length; start += BATCH) {
