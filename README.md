@@ -101,6 +101,7 @@ supabase/
   functions/    as Edge Functions "organizar" (IA), "postar" (filtro do mural), "limpar-mural" e "avisar" (Deno)
   migrations/   o SQL do banco
   tests/        testes do SQL (PGlite)
+  tests/modelos/ teste cego dos modelos da IA: custo, tempo e qualidade (node run.mjs, node avaliar.mjs)
 ```
 
 ---

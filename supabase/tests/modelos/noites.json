@@ -1,0 +1,124 @@
+{
+  "now": { "weekday": "Thursday", "today": "2026-11-05", "time": "22:40", "defaultDay": "2026-11-06" },
+  "nights": [
+    {
+      "id": 1, "name": "simples, com uma preocupação sem ação", "language": "pt-BR",
+      "text": "é... deixa eu ver... amanhã eu tenho que ligar pro dentista de manhã, remarcar a limpeza, ah e... pagar o boleto da internet que vence sexta, acho que é sexta, é. hmm... e comprar ração pro gato, tá acabando. tô preocupado com a reunião de segunda mas isso não tem o que fazer agora. é isso, acho.",
+      "count": [3, 3],
+      "items": [
+        { "name": "dentista", "match": "dentista", "dates": ["2026-11-06"], "times": ["", "08:00", "09:00", "10:00"] },
+        { "name": "boleto internet", "match": "internet|boleto", "dates": ["2026-11-06"] },
+        { "name": "ração", "match": "ra[çc][ãa]o|gato", "dates": ["2026-11-06"] }
+      ],
+      "forbidden": ["reuni"]
+    },
+    {
+      "id": 2, "name": "datas relativas: sábado, semana que vem, dia 15, quarta que vem", "language": "pt-BR",
+      "text": "ok então... sábado é o aniversário da minha mãe, preciso comprar o presente antes, tipo sexta no máximo. e semana que vem eu tenho que levar o carro pra revisão, qualquer dia, terça talvez. ah, dia 15 vence o IPVA... não, o IPVA não, o seguro do carro, vence dia 15, tenho que pagar. e... ah é, mandar o relatório pro Marcos até quarta que vem, ele pediu com urgência.",
+      "count": [4, 5],
+      "items": [
+        { "name": "presente da mãe", "match": "presente", "dates": ["2026-11-06"] },
+        { "name": "revisão do carro", "match": "revis", "dates": ["2026-11-09", "2026-11-10", "2026-11-11", "2026-11-12", "2026-11-13"] },
+        { "name": "seguro do carro", "match": "seguro", "dates": ["2026-11-13", "2026-11-14", "2026-11-15"] },
+        { "name": "relatório Marcos", "match": "relat", "dates": ["2026-11-06", "2026-11-09", "2026-11-10", "2026-11-11"] }
+      ],
+      "forbidden": ["ipva"]
+    },
+    {
+      "id": 3, "name": "só desabafo, nada a fazer", "language": "pt-BR",
+      "text": "nossa, que dia... eu fico pensando se eu falei besteira na reunião, sei lá, o Paulo ficou com uma cara... e tô cansado, muito cansado, acho que não tô dormindo direito. enfim. espero que amanhã seja melhor. é isso.",
+      "count": [0, 0],
+      "items": [],
+      "forbidden": ["reuni", "paulo", "dormir", "cansa"]
+    },
+    {
+      "id": 4, "name": "longa, com horários, item repetido e compras", "language": "pt-BR",
+      "text": "tá, lista. amanhã de manhã às 8 eu tenho que estar no laboratório pro exame de sangue, em jejum, não esquecer. depois do exame passar no mercado: leite, pão, café, e... detergente. à tarde, tipo umas 3, ligar pra Dra. Helena pra marcar o retorno. ah, e o exame de sangue, 8 horas, jejum, já falei. hmm... o João pediu pra eu mandar as fotos do churrasco, mando amanhã. ah e o aluguel! transferir o aluguel pro proprietário, vence dia 10. e terminar a apresentação do trabalho até quinta que vem, é a de vendas. acho que é isso... ah não, pegar a roupa na lavanderia, tá lá desde terça.",
+      "count": [6, 8],
+      "items": [
+        { "name": "exame de sangue", "match": "sangue|exame|laborat", "dates": ["2026-11-06"], "times": ["08:00"] },
+        { "name": "mercado", "match": "mercado|compra", "dates": ["2026-11-06"] },
+        { "name": "Dra. Helena", "match": "helena|retorno", "dates": ["2026-11-06"], "times": ["15:00"] },
+        { "name": "fotos João", "match": "foto", "dates": ["2026-11-06"] },
+        { "name": "aluguel", "match": "aluguel", "dates": ["2026-11-06", "2026-11-07", "2026-11-08", "2026-11-09", "2026-11-10"] },
+        { "name": "apresentação de vendas", "match": "apresenta", "dates": ["2026-11-06", "2026-11-09", "2026-11-10", "2026-11-11", "2026-11-12"] },
+        { "name": "lavanderia", "match": "lavanderia|roupa", "dates": ["2026-11-06"] }
+      ],
+      "single": ["sangue|exame|laborat"],
+      "forbidden": []
+    },
+    {
+      "id": 5, "name": "erros de transcrição, gíria, feriado do dia 20", "language": "pt-BR",
+      "text": "então né, o Carlo me ligou... Carlos, e falou do churras no sábado, tenho que confirmar com ele e levar a carne, uns dois quilo de picanha. hmm, e depois do feriado do dia 20 eu vou ter que renovar a carteira de motorista, vence em dezembro, então segunda depois do feriado. ah, e o remédio da pressão da minha vó, buscar na farmácia amanhã, a receita tá na gaveta. tô devendo ligar pra tia Lu, faz tempo, qualquer dia desses. e... ah, o pneu, calibrar o pneu, tá murcho.",
+      "count": [4, 6],
+      "items": [
+        { "name": "churrasco (confirmar/carne)", "match": "churras|carne|picanha|carlos", "dates": ["2026-11-06", "2026-11-07"] },
+        { "name": "renovar CNH", "match": "carteira|cnh|habilita|motorista", "dates": ["2026-11-23"] },
+        { "name": "remédio da vó", "match": "rem[ée]dio|farm[áa]cia|press[ãa]o", "dates": ["2026-11-06"] },
+        { "name": "ligar tia Lu", "match": "tia|lu\\b", "dates": ["2026-11-06", "2026-11-07", "2026-11-08", "2026-11-09", "2026-11-10", "2026-11-11", "2026-11-12", "2026-11-13"] },
+        { "name": "calibrar pneu", "match": "pneu", "dates": ["2026-11-06"] }
+      ],
+      "forbidden": []
+    },
+    {
+      "id": 6, "name": "horários: 10 e meia, depois do almoço, fim da tarde, 8 da noite", "language": "pt-BR",
+      "text": "amanhã... reunião com a contadora às 10 e meia, levar os extratos. depois do almoço passar no correio pra mandar a encomenda da Bia. no fim da tarde, buscar as crianças na escola, a Ana não vai poder. e... de noite, umas 8, ligar pra minha irmã que é aniversário dela. ah, e sexta que vem levar o cachorro no veterinário, vacina, de manhã cedo.",
+      "count": [5, 5],
+      "items": [
+        { "name": "contadora", "match": "contadora|extrato", "dates": ["2026-11-06"], "times": ["10:30"] },
+        { "name": "correio", "match": "correio|encomenda", "dates": ["2026-11-06"], "times": ["13:00", "13:30", "14:00"] },
+        { "name": "buscar crianças", "match": "crian[çc]a|escola", "dates": ["2026-11-06"], "times": ["", "17:00", "17:30", "18:00"] },
+        { "name": "ligar irmã", "match": "irm[ãa]", "dates": ["2026-11-06"], "times": ["20:00"] },
+        { "name": "veterinário", "match": "veterin|cachorro|vacina", "dates": ["2026-11-06", "2026-11-13"], "times": ["", "07:00", "08:00", "09:00"] }
+      ],
+      "forbidden": []
+    },
+    {
+      "id": 7, "name": "inglês, com prazo e preocupação", "language": "en",
+      "text": "okay so, um, tomorrow I need to, uh, send the invoice to the client, the design one, before noon ideally. and I should book the flight for Chicago, the conference is on the 18th, so book it this week. uh, call mom back, she called twice. and, um, gym, I keep saying that, let's say Saturday morning. oh and renew the domain, it expires on the 12th, don't forget. that's it I think, I'm worried about the budget review but whatever.",
+      "count": [5, 5],
+      "items": [
+        { "name": "invoice", "match": "invoice", "dates": ["2026-11-06"], "times": ["", "09:00", "10:00", "11:00", "11:30", "12:00"] },
+        { "name": "flight", "match": "flight|chicago", "dates": ["2026-11-06", "2026-11-07", "2026-11-08"] },
+        { "name": "call mom", "match": "mom", "dates": ["2026-11-06"] },
+        { "name": "gym", "match": "gym", "dates": ["2026-11-07"] },
+        { "name": "domain", "match": "domain", "dates": ["2026-11-06", "2026-11-07", "2026-11-08", "2026-11-09", "2026-11-10", "2026-11-11", "2026-11-12"] }
+      ],
+      "forbidden": ["budget"]
+    },
+    {
+      "id": 8, "name": "espanhol, com horários e domingo", "language": "es",
+      "text": "a ver... mañana tengo que ir al banco a las nueve para firmar lo del préstamo, llevar el documento. y comprar las entradas del concierto, salen a la venta el lunes a las diez de la mañana, hay que estar atento. eh... llamar al plomero por la fuga de la cocina, eso urgente, mañana mismo. y el domingo comida en casa de mis padres, llevar el postre. estoy un poco agobiado con el trabajo pero bueno.",
+      "count": [4, 4],
+      "items": [
+        { "name": "banco", "match": "banco|pr[ée]stamo", "dates": ["2026-11-06"], "times": ["09:00"] },
+        { "name": "entradas concierto", "match": "entrada|concierto", "dates": ["2026-11-09"], "times": ["10:00"] },
+        { "name": "plomero", "match": "plomero|fuga", "dates": ["2026-11-06"] },
+        { "name": "postre padres", "match": "postre|padres", "dates": ["2026-11-08"] }
+      ],
+      "forbidden": ["agobiad", "trabajo"]
+    },
+    {
+      "id": 9, "name": "curtíssima, uma coisa só", "language": "pt-BR",
+      "text": "hã... é... só lembrar de... de levar o guarda-chuva amanhã que vai chover. e... é isso. boa noite.",
+      "count": [1, 1],
+      "items": [
+        { "name": "guarda-chuva", "match": "guarda", "dates": ["2026-11-06"] }
+      ],
+      "forbidden": []
+    },
+    {
+      "id": 10, "name": "correção no meio da fala, repetição e todo dia", "language": "pt-BR",
+      "text": "tá... daqui a duas semanas é a entrega do projeto, então na segunda que vem eu preciso sentar com o time e dividir as tarefas, de manhã. no fim do mês tenho que declarar o imposto da empresa, o simples, antes do dia 30... acho que é dia 20 na verdade, o simples vence dia 20, então dia 20. hmm, começar a caminhar todo dia, pelo menos amanhã. ah, e já falei do time? sentar com o time segunda. e trocar a lâmpada do corredor, queimou de novo, comprar lâmpada e trocar.",
+      "count": [4, 5],
+      "items": [
+        { "name": "reunião com o time", "match": "time|equipe|tarefas", "dates": ["2026-11-09"] },
+        { "name": "simples (imposto)", "match": "simples|imposto|declar", "dates": ["2026-11-19", "2026-11-20"] },
+        { "name": "caminhar", "match": "caminh", "dates": ["2026-11-06"] },
+        { "name": "lâmpada", "match": "l[âa]mpada", "dates": ["2026-11-06"] }
+      ],
+      "single": ["time|equipe"],
+      "forbidden": []
+    }
+  ]
+}

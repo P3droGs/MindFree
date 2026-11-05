@@ -1,0 +1,9 @@
+{
+  "name": "mindfree-teste-modelos",
+  "private": true,
+  "type": "module",
+  "description": "Teste cego dos modelos da função organizar: node run.mjs, depois node avaliar.mjs",
+  "dependencies": {
+    "@anthropic-ai/sdk": "1.1.0"
+  }
+}

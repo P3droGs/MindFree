@@ -76,7 +76,9 @@ type Task = { title: string; note: string; date: string; time: string };
 
 async function organize(transcript: string, context: Record<string, string>): Promise<Task[]> {
   const response = await anthropic.beta.messages.create({
-    model: 'claude-opus-5-5',
+    // Sonnet 5.5 desde 2026-11-05: no teste cego de 10 noites (supabase/tests/modelos) acertou as mesmas tarefas,
+    // dias e horas que o Opus 5.5, por 2,5x menos e quase 2 s mais rápido.
+    model: 'claude-sonnet-5-5',
     max_tokens: 16000,
     system: SYSTEM,
     // Se o modelo recusar por engano, a própria API tenta de novo no modelo recomendado.
