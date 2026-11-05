@@ -73,7 +73,7 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "lint": "expo lint",
-    "test:sql": "node supabase/tests/contas.test.mjs && node supabase/tests/rede.test.mjs && node supabase/tests/bloquear.test.mjs && node supabase/tests/mural.test.mjs && node supabase/tests/avisos.test.mjs && node supabase/tests/moderacao.test.mjs",
+    "test:sql": "node supabase/tests/contas.test.mjs && node supabase/tests/rede.test.mjs && node supabase/tests/bloquear.test.mjs && node supabase/tests/mural.test.mjs && node supabase/tests/avisos.test.mjs && node supabase/tests/moderacao.test.mjs && node supabase/tests/backup.test.mjs",
     "test": "jest",
     "test:all": "jest && npm run test:sql"
   },

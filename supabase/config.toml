@@ -17,3 +17,7 @@ verify_jwt = false
 # Publicar no Mural: confere a chave publicável e o login dentro da função (como a organizar).
 [functions.postar]
 verify_jwt = false
+
+# A cópia de segurança diária só grava o retrato do banco num bucket privado; o Cron chama com a chave de serviço.
+[functions.backup]
+verify_jwt = false
