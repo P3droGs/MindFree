@@ -58,7 +58,7 @@ O visual é calmo e fácil de entender: escuro e lilás à noite, claro e cor de
 - **As fotos do mural só saem do celular quando a pessoa posta.** Vão reduzidas para um espaço privado no servidor, abrem só para quem segue (por links que expiram em 1 hora) e são apagadas em 7 dias.
 - **Na rede, os amigos veem só os dias com estrela e o que a pessoa escolhe postar no mural.** O servidor entrega apenas o que a privacidade promete: as tabelas não aceitam leitura direta, e tudo passa por funções que conferem quem pode ver o quê.
 - **O filtro de moderação só recebe a foto e o texto do post na hora de publicar**, para dizer se podem ir ao ar.
-- **As chaves das IAs ficam no servidor**, nunca no app. O uso da IA tem limite por pessoa e por dia.
+- **As chaves das IAs ficam no servidor**, nunca no app. O uso da IA tem limite por pessoa e por dia, mais um teto do app por dia; se a IA falhar, a organização do dia é devolvida.
 - **Os avisos dos amigos levam o mínimo:** o nome de quem mandou e, no Mural, a tarefa do post. Para saber quando silenciar, o servidor guarda só os horários da noite e da manhã e o fuso.
 - **Bloqueios e denúncias são confidenciais:** quem foi bloqueado ou denunciado não fica sabendo, e as denúncias não aparecem no app para ninguém.
 - **Apagar todos os dados** (e a conta) é um botão nos Ajustes.

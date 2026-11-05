@@ -19,6 +19,10 @@ type Claimed = {
 };
 
 const EXPO_PUSH = 'https://exp.host/--/api/v2/push/send';
+// Com "Enhanced push security" ligado no projeto do Expo, só pedidos com um token de acesso da conta passam.
+// O token fica nos segredos do Supabase (EXPO_ACCESS_TOKEN); sem ele, o pedido vai como antes.
+const EXPO_TOKEN = Deno.env.get('EXPO_ACCESS_TOKEN') ?? '';
+const EXPO_TIMEOUT_MS = 20_000;
 const BATCH = 100;
 const MAX_ROUNDS = 5;
 
@@ -148,8 +152,13 @@ Deno.serve(async (request) => {
       const chunk = messages.slice(start, start + BATCH);
       const response = await fetch(EXPO_PUSH, {
         method: 'POST',
-        headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          ...(EXPO_TOKEN ? { Authorization: `Bearer ${EXPO_TOKEN}` } : {}),
+        },
         body: JSON.stringify(chunk),
+        signal: AbortSignal.timeout(EXPO_TIMEOUT_MS),
       });
       const result = (await response.json().catch(() => ({}))) as {
         data?: { status: string; details?: { error?: string } }[];

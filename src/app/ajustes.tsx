@@ -1,5 +1,5 @@
 import Constants from 'expo-constants';
-import { File, Paths } from 'expo-file-system';
+import { Directory, File, Paths } from 'expo-file-system';
 import { useFocusEffect, useRouter } from 'expo-router';
 import * as Sharing from 'expo-sharing';
 import { useCallback, useEffect, useState, type ReactNode } from 'react';
@@ -46,6 +46,17 @@ const PUSH_KINDS: { key: keyof Pick<Settings, 'pushShine' | 'pushPoke' | 'pushMu
   { key: 'pushMural', label: 'push.mural' },
   { key: 'pushRequests', label: 'push.requests' },
 ];
+
+/** Apaga exportações antigas que ficaram no cache (o app fechou antes de o arquivo sair). */
+function sweepExports() {
+  try {
+    for (const item of new Directory(Paths.cache).list()) {
+      if (item instanceof File && /^mindfree-dados-\d{4}-\d{2}-\d{2}\.json$/.test(item.name)) item.delete();
+    }
+  } catch {
+    // O cache some sozinho.
+  }
+}
 
 export default function SettingsScreen() {
   const router = useRouter();
@@ -146,9 +157,19 @@ export default function SettingsScreen() {
         account: account && !account.anonymous ? { id: account.id, email: account.email } : null,
         network,
       });
+      // Uma exportação antiga que tenha ficado no cache (app fechado antes da hora) sai antes da nova.
+      sweepExports();
       const file = new File(Paths.cache, exportFileName(new Date()));
       file.write(JSON.stringify(data, null, 2));
       await Sharing.shareAsync(file.uri, { mimeType: 'application/json', dialogTitle: t('settings.exportTitle'), UTI: 'public.json' });
+      // O app que recebeu já pegou o arquivo; um minuto depois a cópia sai do cache.
+      setTimeout(() => {
+        try {
+          file.delete();
+        } catch {
+          // O cache some sozinho.
+        }
+      }, 60_000);
     } catch {
       Alert.alert(t('settings.export'), t('settings.exportFailed'));
     } finally {

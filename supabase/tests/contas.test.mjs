@@ -2,7 +2,7 @@
 // Uso: npm run test:sql (ou node supabase/tests/contas.test.mjs)
 import { check, errorOf, finish, startDb } from './local-supabase.mjs';
 
-const { db, as } = await startDb(['20261024120000_contas.sql', '20261104120000_cota_ia.sql']);
+const { db, as } = await startDb(['20261024120000_contas.sql', '20261104120000_cota_ia.sql', '20261105130000_auditoria.sql']);
 check('migração aplica duas vezes sem erro', true);
 
 const A = '11111111-1111-1111-1111-111111111111'; // conta de verdade
@@ -93,6 +93,28 @@ await db.exec(`insert into public.ai_usage (user_id, day, count, anonymous) valu
 const anonymousUsed = (await db.query(`select coalesce(sum(count), 0)::int as n from public.ai_usage where anonymous`)).rows[0].n;
 // C registrou 9 (a tentativa recusada também conta) e D, 142: as 500 de A ficam de fora.
 check('uso das contas de verdade não conta no teto das invisíveis', anonymousUsed === 151);
+
+// O teto das contas com e-mail (500 por dia entre todas): A sozinha já gastou 500, então B não organiza mais.
+await as(B, async () => {
+  check('teto das contas com e-mail (500) barra quem tem conta', (await db.query(`select public.consume_ai_quota() as ok`)).rows[0].ok === false);
+});
+// A IA falhou para A: a função organizar devolve a organização com a chave de serviço, e o teto reabre.
+await db.exec(`reset role; set role service_role;`);
+await db.exec(`select public.refund_ai_quota_for('${A}'); select public.refund_ai_quota_for('${A}');`);
+await db.exec(`reset role;`);
+const refunded = (await db.query(`select count from public.ai_usage where user_id = '${A}' and day = (now() at time zone 'utc')::date`)).rows[0].count;
+check('devolver tira uma organização de quem usou', Number(refunded) === 498);
+await as(B, async () => {
+  check('com a devolução, o teto das contas com e-mail reabre', (await db.query(`select public.consume_ai_quota() as ok`)).rows[0].ok === true);
+  check('quem tem conta não devolve a própria cota', await fails(() => db.query(`select public.refund_ai_quota_for('${B}')`)));
+});
+// (como superusuário do Postgres local, sem passar pelas políticas: só para zerar o uso de B)
+await db.exec(`reset role;`);
+await db.exec(`update public.ai_usage set count = 0 where user_id = '${B}';`);
+await db.exec(`set role service_role;`);
+await db.exec(`select public.refund_ai_quota_for('${B}');`);
+await db.exec(`reset role;`);
+check('devolver não deixa o uso negativo', Number((await db.query(`select count from public.ai_usage where user_id = '${B}'`)).rows[0].count) === 0);
 
 // Sem login, nada funciona.
 await db.exec(`reset role; select set_config('request.jwt.claim.sub', '', false); set role anon;`);

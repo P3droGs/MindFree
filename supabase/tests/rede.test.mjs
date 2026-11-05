@@ -2,7 +2,7 @@
 // Uso: npm run test:sql (ou node supabase/tests/rede.test.mjs)
 import { check, errorOf, finish, startDb } from './local-supabase.mjs';
 
-const { db, as } = await startDb(['20261024120000_contas.sql', '20261027120000_rede.sql']);
+const { db, as } = await startDb(['20261024120000_contas.sql', '20261027120000_rede.sql', '20261105130000_auditoria.sql']);
 check('migrações aplicam duas vezes sem erro', true);
 
 const A = '11111111-1111-1111-1111-111111111111'; // Ana, conta privada
@@ -181,5 +181,15 @@ check(
   Object.values(leftovers).every((value) => Number(value) === 0),
 );
 check('o @ fica livre de novo', (await as(B, () => json(`select public.social_search($1, $2) as s`, ['ana', TODAY]))).length === 0);
+
+// Nome e bio sem caracteres invisíveis nem de controle (auditoria B5): o gatilho limpa em qualquer caminho.
+const Z = '77777777-7777-7777-7777-777777777777';
+await db.exec(`insert into auth.users (id) values ('${Z}');`);
+await as(Z, async () => {
+  await json(`select public.social_save_profile($1, $2, $3, $4) as p`, ['zeca', 'Ze​ca\u0007 Silva\n', '\tfaz‮ bolo\nde cenoura ', false]);
+  const me = await json(`select public.social_profile() as p`);
+  check('nome perde o invisível e os controles viram um espaço só', me.name === 'Zeca Silva');
+  check('bio idem', me.bio === 'faz bolo de cenoura');
+});
 
 finish();

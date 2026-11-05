@@ -10,6 +10,7 @@ const { db, as } = await startDb([
   '20261102120000_avisos.sql',
   '20261104130000_seguranca.sql',
   '20261104140000_rede_rapida.sql',
+  '20261105130000_auditoria.sql',
 ]);
 check('migrações aplicam duas vezes sem erro', true);
 

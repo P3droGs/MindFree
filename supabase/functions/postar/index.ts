@@ -5,6 +5,10 @@
 import { createClient } from 'npm:@supabase/supabase-js@2.118.0';
 
 const MAX_PHOTO_BYTES = 3 * 1024 * 1024;
+// O caminho da foto do jeito que o app monta: a pasta da pessoa (o id dela), um nome curto em base 36 e .jpg.
+// Nada de "..", subpastas, outra extensão ou nome fora desse formato.
+const PHOTO_PATH = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\/[0-9a-z]{1,16}-[0-9a-z]{1,8}\.jpg$/;
+const MODERATION_TIMEOUT_MS = 30_000;
 
 function json(body: unknown, status = 200) {
   return new Response(JSON.stringify(body), { status, headers: { 'Content-Type': 'application/json' } });
@@ -29,6 +33,7 @@ async function allowed(photo: Uint8Array, text: string): Promise<boolean | null>
           { type: 'image_url', image_url: { url: `data:image/jpeg;base64,${toBase64(photo)}` } },
         ],
       }),
+      signal: AbortSignal.timeout(MODERATION_TIMEOUT_MS),
     });
     if (!response.ok) return null;
     const result = (await response.json()) as { results?: { flagged?: boolean }[] };
@@ -66,7 +71,7 @@ Deno.serve(async (request) => {
   const photo = typeof body.photo === 'string' ? body.photo : '';
   const task = typeof body.task === 'string' ? body.task.slice(0, 200) : '';
   const caption = typeof body.caption === 'string' ? body.caption.slice(0, 140) : '';
-  if (!photo.startsWith(`${userId}/`)) return json({ error: 'photo_missing' }, 400);
+  if (!photo.startsWith(`${userId}/`) || !PHOTO_PATH.test(photo)) return json({ error: 'photo_missing' }, 400);
 
   const admin = createClient(url, serviceKey, { auth: { persistSession: false, autoRefreshToken: false } });
   const { data: file, error: fileError } = await admin.storage.from('mural').download(photo);

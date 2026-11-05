@@ -17,7 +17,10 @@ const WEEKDAYS = new Set(['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday'
 const DATE = /^\d{4}-\d{2}-\d{2}$/;
 const TIME = /^([01]\d|2[0-3]):[0-5]\d$/;
 
-const anthropic = new Anthropic({ apiKey: Deno.env.get('ANTHROPIC_API_KEY') });
+// Tempo máximo por chamada externa: o app desiste aos 90 s, então transcrever (40 s) e organizar (40 s)
+// têm que caber antes disso. Sem repetição automática: se falhar, a cota é devolvida e a pessoa tenta de novo.
+const EXTERNAL_TIMEOUT_MS = 40_000;
+const anthropic = new Anthropic({ apiKey: Deno.env.get('ANTHROPIC_API_KEY'), timeout: EXTERNAL_TIMEOUT_MS, maxRetries: 0 });
 
 const SCHEMA = {
   type: 'object',
@@ -66,6 +69,7 @@ async function transcribe(audio: File, language: string): Promise<string> {
     method: 'POST',
     headers: { Authorization: `Bearer ${Deno.env.get('OPENAI_API_KEY')}` },
     body: form,
+    signal: AbortSignal.timeout(EXTERNAL_TIMEOUT_MS),
   });
   if (!response.ok) throw new Error(`transcription ${response.status}: ${await response.text()}`);
   const result = (await response.json()) as { text?: string };
@@ -110,6 +114,15 @@ async function organize(transcript: string, context: Record<string, string>): Pr
     .filter((task) => task.title.trim())
     .slice(0, 30)
     .map((task) => ({ ...task, title: task.title.trim().slice(0, 120), note: task.note.trim().slice(0, 200) }));
+}
+
+/** Devolve a organização gasta quando a OpenAI ou a Anthropic falham. Só a chave de serviço pode. */
+async function refundQuota(supabaseUrl: string, userId: string): Promise<void> {
+  const serviceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
+  if (!serviceKey) return;
+  const admin = createClient(supabaseUrl, serviceKey, { auth: { persistSession: false, autoRefreshToken: false } });
+  const { error } = await admin.rpc('refund_ai_quota_for', { p_user: userId });
+  if (error) console.error(`refund: ${error.message}`);
 }
 
 /** Lê o corpo do pedido parando no limite, para um envio gigante não ocupar a memória do servidor. */
@@ -200,14 +213,20 @@ Deno.serve(async (request) => {
     if (quotaError) throw quotaError;
     if (allowed !== true) return json({ error: 'quota' }, 429);
 
-    if (!transcript && audio instanceof File) {
-      transcript = await transcribe(audio, context.language);
-    }
-    if (transcript.length > MAX_TEXT_CHARS) return json({ error: 'text too long' }, 413);
-    if (!transcript) return json({ transcript: '', tasks: [] });
+    try {
+      if (!transcript && audio instanceof File) {
+        transcript = await transcribe(audio, context.language);
+      }
+      if (transcript.length > MAX_TEXT_CHARS) return json({ error: 'text too long' }, 413);
+      if (!transcript) return json({ transcript: '', tasks: [] });
 
-    const tasks = await organize(transcript, context);
-    return json({ transcript, tasks });
+      const tasks = await organize(transcript, context);
+      return json({ transcript, tasks });
+    } catch (error) {
+      // A IA falhou (erro ou tempo esgotado): devolve a organização do dia para a pessoa tentar de novo.
+      await refundQuota(supabaseUrl, who.user.id);
+      throw error;
+    }
   } catch (error) {
     // Só a mensagem: a resposta inteira de um erro pode trazer um trecho da transcrição da pessoa.
     console.error(error instanceof Error ? error.message : String(error));
