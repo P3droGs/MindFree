@@ -120,18 +120,20 @@ export default function EditTaskScreen() {
         </View>
       </View>
 
-      <View style={[styles.section, noReminder && styles.dim]}>
+      {/* As horas ficam sempre vivas: quem entrou por "Pôr horário" numa tarefa sem lembrete escolhe a hora
+          direto, e o lembrete liga sozinho. (Antes, os chips vinham desabilitados e o primeiro toque se perdia.) */}
+      <View style={styles.section}>
         <AppText variant="heading">{t('task.whatTime')}</AppText>
         <View style={styles.chips}>
           {TIMES.map((value) => {
-            const selected = !custom && value === minutes;
+            const selected = !noReminder && !custom && value === minutes;
             return (
               <Pressable
                 key={value}
                 accessibilityRole="radio"
-                accessibilityState={{ selected, disabled: noReminder }}
-                disabled={noReminder}
+                accessibilityState={{ selected }}
                 onPress={() => {
+                  setNoReminder(false);
                   setCustom(false);
                   setMinutes(value);
                 }}
@@ -144,11 +146,13 @@ export default function EditTaskScreen() {
           })}
           <Pressable
             accessibilityRole="radio"
-            accessibilityState={{ selected: custom, disabled: noReminder }}
-            disabled={noReminder}
-            onPress={() => setCustom(true)}
-            style={chip(custom)}>
-            <AppText variant="bodyStrong" style={{ color: custom ? theme.onAccent : theme.text }}>
+            accessibilityState={{ selected: custom && !noReminder }}
+            onPress={() => {
+              setNoReminder(false);
+              setCustom(true);
+            }}
+            style={chip(custom && !noReminder)}>
+            <AppText variant="bodyStrong" style={{ color: custom && !noReminder ? theme.onAccent : theme.text }}>
               {t('task.otherTime')}
             </AppText>
           </Pressable>
@@ -186,7 +190,6 @@ const styles = StyleSheet.create({
   intro: { gap: 6 },
   title: { fontFamily: fonts.extraBold, fontSize: 28, lineHeight: 34, padding: 0 },
   section: { gap: 10 },
-  dim: { opacity: 0.45 },
   chips: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
   chip: { minHeight: 44, paddingHorizontal: 14, borderRadius: 999, borderWidth: 1, alignItems: 'center', justifyContent: 'center' },
   switchRow: { flexDirection: 'row', alignItems: 'center', gap: 12, padding: 14, borderRadius: 18, borderWidth: 1 },

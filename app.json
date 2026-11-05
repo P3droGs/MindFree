@@ -188,6 +188,7 @@
       "expo-image",
       "expo-secure-store",
       "./plugins/android-release",
+      "./plugins/android-widget-placeholder",
       "expo-sharing"
     ],
     "experiments": {

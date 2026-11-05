@@ -95,7 +95,7 @@ src/
   i18n/         os 12 idiomas
   test/         o que os testes do app usam (armazenamento de mentira, tradução de mentira)
   legal/        política de privacidade e termos de uso
-plugins/        ajustes do build de release no Android (sem o GIF e o WebP do <Image>, que o app não usa)
+plugins/        ajustes do Android: build de release (sem o GIF e o WebP do <Image>, que o app não usa) e o visual inicial dos widgets
 supabase/
   functions/    as Edge Functions "organizar" (IA), "postar" (filtro do mural), "limpar-mural" e "avisar" (Deno)
   migrations/   o SQL do banco
