@@ -68,7 +68,7 @@ Questions: contato@mindfree.com.br
 ## Gráficos
 - **Ícone 512×512:** `store/graficos/icone-512.png` (sem transparência, como a loja pede).
 - **Gráfico de destaque 1024×500 (obrigatório):** `store/graficos/destaque-1024x500.png`.
-- **Prints do celular:** de 2 a 8, proporção 9:16, mínimo 320 px, máximo 3840 px. Lista sugerida, em pt-BR com o tema da noite: (1) tela inicial à noite com "Esvaziar a mente"; (2) gravando; (3) "Anotado!"; (4) tela inicial de manhã com o resumo do dia; (5) Seu céu com constelação; (6) Céu dos amigos; (7) Mural; (8) Ajustes › Privacidade. Os prints ficam em `store/prints/` quando forem tirados.
+- **Prints do celular (8, em `store/prints/`, 1080×1920, tirados em 2026-11-08 no emulador em pt-BR):** 01 tela inicial à noite, 02 gravando, 03 "Anotado!", 04 o dia organizado no calendário, 05 Seu céu, 06 escrever em vez de falar, 07 MindFree Plus (em breve), 08 Ajustes. A tela do celular está reduzida ao centro, com fundo noite, para caber no 9:16 que a loja exige. Céu dos amigos e Mural ficaram de fora por precisarem de conta com amigos; dá para acrescentar depois com a conta de revisão.
 
 ## Segurança de dados (formulário "Data safety")
 Base: a política de privacidade. Responder "Sim" para coleta e para compartilhamento. Todos os dados vão criptografados em trânsito (HTTPS). O usuário pode pedir a exclusão (Ajustes › Privacidade › Apagar todos os meus dados, ou por e-mail). Nenhum dado é usado para anúncios ou rastreamento.
