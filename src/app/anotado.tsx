@@ -32,15 +32,23 @@ export default function SavedScreen() {
   const router = useRouter();
   const theme = useAppTheme();
   const { t, language } = useI18n();
-  const { settings } = useSettings();
+  const { settings, update } = useSettings();
   const { change } = useJournal();
   const clock = useClock();
+  // O cartão do MindFree Plus: só para quem ainda não pediu o aviso, no máximo uma vez por semana.
+  const [showPlus] = useState(() => {
+    const shownAt = settings.plusCardAt;
+    return !settings.plusInterest && (shownAt === null || clock().getTime() - shownAt > 7 * 24 * 60 * 60 * 1000);
+  });
   // Só o que o próprio app gravou ou escreveu agora (nunca o que vem num link).
   const [input] = useState(peekCapture);
   const voice = input?.via === 'voz';
   const audioUri = input?.via === 'voz' ? input.audioUri : null;
   const text = input?.via === 'texto' ? input.text : '';
   const [outcome, setOutcome] = useState<Outcome>({ phase: 'working' });
+  useEffect(() => {
+    if (showPlus && outcome.phase === 'done') update({ plusCardAt: clock().getTime() });
+  }, [showPlus, outcome.phase, update, clock]);
   const started = useRef(false);
   // O momento da noite fica fixo, mesmo que organizar demore ou a pessoa tente de novo.
   const moment = useRef<Date | null>(null);
@@ -224,6 +232,19 @@ export default function SavedScreen() {
             {t('saved.aiNote')}
           </AppText>
         ) : null}
+        {showPlus ? (
+          <Pressable
+            accessibilityRole="button"
+            onPress={() => router.push('/plus')}
+            style={({ pressed }) => [styles.plus, { backgroundColor: theme.surface, borderColor: theme.border, opacity: pressed ? 0.75 : 1 }]}>
+            <AppText variant="caption" tone="secondary" style={styles.center}>
+              {t('saved.plusCard')}
+            </AppText>
+            <AppText variant="caption" tone="accent">
+              {t('saved.plusCardLink')}
+            </AppText>
+          </Pressable>
+        ) : null}
         <Pressable
           accessibilityRole="button"
           onPress={() => router.push('/ceu')}
@@ -251,6 +272,7 @@ const styles = StyleSheet.create({
   body: { alignItems: 'center', gap: 12 },
   badge: { width: 96, height: 96, borderRadius: 48, alignItems: 'center', justifyContent: 'center', marginBottom: 8 },
   center: { textAlign: 'center' },
+  plus: { alignItems: 'center', gap: 4, paddingHorizontal: 14, paddingVertical: 10, borderRadius: 14, borderWidth: 1 },
   star: {
     marginTop: 8,
     minHeight: 48,

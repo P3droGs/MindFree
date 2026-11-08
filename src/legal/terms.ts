@@ -9,7 +9,7 @@ import { CONTACT, CONTROLLER, type Policy } from '@/legal/privacy';
 export const MINIMUM_AGE = 13;
 
 const pt: Policy = {
-  updated: 'Atualizados em 4 de novembro de 2026',
+  updated: 'Atualizados em 8 de novembro de 2026',
   draft: 'Rascunho em revisão. Esta versão ainda pode mudar antes do lançamento.',
   sections: [
     {
@@ -61,6 +61,13 @@ const pt: Policy = {
       ],
     },
     {
+      title: 'Recursos pagos',
+      paragraphs: [
+        'O MindFree é gratuito. Pretendemos oferecer uma assinatura opcional, o MindFree Plus, com recursos a mais, como transcrição premium e histórico das noites com busca. Tudo o que o app faz hoje continua gratuito.',
+        'Nenhuma cobrança acontece sem o seu aceite expresso na loja de aplicativos (Google Play ou App Store), que também cuida do pagamento, da renovação, do cancelamento e do reembolso pelas regras dela. Preço, data e condições serão informados antes, no app e nestes termos.',
+      ],
+    },
+    {
       title: 'Disponibilidade e mudanças',
       paragraphs: [
         'Fazemos o possível para o app funcionar bem, mas não garantimos que ele estará sempre disponível, sem falhas ou sem interrupções. Recursos podem mudar, ser adicionados ou retirados. Se o serviço precisar ser encerrado, avisaremos com antecedência razoável; o que está no seu celular continua com você.',
@@ -98,7 +105,7 @@ const pt: Policy = {
 };
 
 const en: Policy = {
-  updated: 'Updated on November 4, 2026',
+  updated: 'Updated on November 8, 2026',
   draft: 'Draft under review. This version may still change before launch.',
   sections: [
     {
@@ -147,6 +154,13 @@ const en: Policy = {
       paragraphs: [
         'Organizing with AI is optional and only works after your consent. It transcribes the audio and suggests tasks, days and times, and it can be wrong: check what was written down, especially dates, times and names. Reminders depend on the phone, its permissions and battery saving, and may not ring.',
         'There is a daily limit of uses, to keep the service available for everyone. The AI providers may change; the Privacy Policy says who they are.',
+      ],
+    },
+    {
+      title: 'Paid features',
+      paragraphs: [
+        'MindFree is free. We intend to offer an optional subscription, MindFree Plus, with extra features such as premium transcription and night history with search. Everything the app does today stays free.',
+        'No charge happens without your express consent in the app store (Google Play or App Store), which also handles payment, renewal, cancellation and refunds under its own rules. Price, date and conditions will be announced beforehand, in the app and in these terms.',
       ],
     },
     {

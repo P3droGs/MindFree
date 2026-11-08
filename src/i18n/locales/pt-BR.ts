@@ -724,6 +724,23 @@ export const ptBR = {
   'post.failedBody': 'Confira a internet e tente de novo. A foto e o texto continuam aqui.',
   'post.tooMany': 'Você já postou bastante hoje. Amanhã dá para postar de novo.',
   'post.sending': 'Enviando…',
+
+  'settings.plus': 'MindFree Plus',
+  'settings.plusRow': 'Em breve: veja o que vem',
+  'plus.title': 'MindFree Plus',
+  'plus.soon': 'Em breve',
+  'plus.intro': 'O MindFree é e continua grátis. O Plus vai ser uma assinatura opcional, para quem quiser mais. É isto que estamos preparando:',
+  'plus.feature1Title': 'Transcrição premium',
+  'plus.feature1Body': 'Um modelo de voz maior, que entende melhor quem fala baixo, cansado ou com barulho em volta.',
+  'plus.feature2Title': 'Histórico das noites com busca',
+  'plus.feature2Body': 'Releia o que você disse em qualquer noite e encontre qualquer coisa por uma palavra.',
+  'plus.freeTitle': 'O que continua grátis para sempre',
+  'plus.freeBody': 'Tudo o que existe hoje: gravar, a organização com IA com o limite diário, os lembretes, o Seu céu, o Céu dos amigos, o Mural e os widgets. O Plus só acrescenta.',
+  'plus.noCharge': 'Nada é cobrado sem o seu aceite na loja. Preço e data ainda vão ser anunciados.',
+  'plus.notify': 'Quero ser avisado',
+  'plus.notified': 'Combinado: você vai saber quando chegar.',
+  'saved.plusCard': 'Em breve: MindFree Plus, com transcrição premium e histórico das noites.',
+  'saved.plusCardLink': 'Ver o que vem',
 };
 
 export type Messages = typeof ptBR;

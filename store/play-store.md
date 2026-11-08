@@ -8,7 +8,7 @@ Preparado em 2026-11-08 a partir do que o app faz hoje e da política de privaci
 - **Categoria:** Produtividade. **Tags:** produtividade, lista de tarefas, lembretes, diário.
 - **E-mail de contato:** contato@mindfree.com.br. **Site:** https://p3drogs.github.io/MindFree/
 - **Política de privacidade (obrigatória):** https://p3drogs.github.io/MindFree/privacidade/ · Termos: https://p3drogs.github.io/MindFree/termos/
-- **Anúncios:** não contém anúncios. **Compras no app:** não.
+- **Anúncios:** não contém anúncios. **Compras no app:** não por enquanto (o app só anuncia o Plus; quando a assinatura existir, marcar "sim" e declarar a faixa de preço).
 - **Idiomas da ficha:** português (Brasil) como padrão e inglês. O app tem 12 idiomas; os outros 10 podem receber ficha depois.
 
 ## Descrição curta (até 80 caracteres)
@@ -36,8 +36,8 @@ Escuro e lilás à noite, claro e cor de sol de manhã. Letras grandes, contrast
 SEUS DADOS
 Sem conta, tudo fica só no seu celular. A gravação só sai do aparelho se você ligar a organização com IA, e você decide isso na primeira vez, lendo o que acontece. O servidor não guarda o áudio nem o texto. Sem anúncios, sem rastreadores, sem venda de dados. Exporte ou apague tudo quando quiser, em Ajustes.
 
-GRÁTIS
-O MindFree é gratuito. A organização com IA tem um limite diário por pessoa.
+GRÁTIS, E EM BREVE O PLUS
+O MindFree é gratuito e continua gratuito: tudo o que existe hoje. A organização com IA tem um limite diário por pessoa. Em breve chega o MindFree Plus, uma assinatura opcional com transcrição premium e histórico das noites com busca. Veja o que vem em Ajustes › MindFree Plus e peça para ser avisado.
 
 Dúvidas: contato@mindfree.com.br
 
@@ -60,8 +60,8 @@ Dark and lilac at night, light and sunny in the morning. Large text, guaranteed 
 YOUR DATA
 Without an account, everything stays on your phone. A recording only leaves the device if you turn on AI organizing, and you decide that the first time, after reading what happens. The server keeps neither the audio nor the text. No ads, no trackers, no data sales. Export or delete everything whenever you want, in Settings.
 
-FREE
-MindFree is free. AI organizing has a daily limit per person.
+FREE, AND PLUS COMING SOON
+MindFree is free and stays free: everything that exists today. AI organizing has a daily limit per person. MindFree Plus is coming soon, an optional subscription with premium transcription and night history with search. See what's next in Settings › MindFree Plus and ask to be notified.
 
 Questions: contato@mindfree.com.br
 

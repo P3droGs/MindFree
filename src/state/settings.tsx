@@ -48,6 +48,10 @@ export type Settings = {
   aiConsentAt: number | null;
   /** Versão do texto que ela aceitou: se o texto mudar, o app pergunta de novo. */
   aiConsentVersion: number;
+  /** A pessoa pediu para saber quando o MindFree Plus chegar (vai para a conta, para contar a demanda). */
+  plusInterest: boolean;
+  /** Quando o cartão do Plus apareceu pela última vez na tela Anotado (no máximo uma vez por semana). */
+  plusCardAt: number | null;
 };
 
 export const DEFAULT_SETTINGS: Settings = {
@@ -75,6 +79,8 @@ export const DEFAULT_SETTINGS: Settings = {
   aiConsent: 'unknown',
   aiConsentAt: null,
   aiConsentVersion: 0,
+  plusInterest: false,
+  plusCardAt: null,
 };
 
 const STORAGE_KEY = 'mindfree.settings.v1';

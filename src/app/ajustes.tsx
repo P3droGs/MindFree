@@ -388,6 +388,21 @@ export default function SettingsScreen() {
         </Card>
       </Section>
 
+      <Section title={t('settings.plus')}>
+        <Card>
+          <Pressable
+            accessibilityRole="button"
+            onPress={() => router.push('/plus')}
+            style={({ pressed }) => [styles.languageRow, { opacity: pressed ? 0.7 : 1 }]}>
+            <Icon name="bell" size={20} color={theme.text} />
+            <AppText variant="bodyStrong" style={styles.languageLabel}>
+              {t('settings.plusRow')}
+            </AppText>
+            <Icon name="chevron-right" size={18} color={theme.textSecondary} strokeWidth={2.4} />
+          </Pressable>
+        </Card>
+      </Section>
+
       <Section title={t('settings.privacy')}>
         <Card>
           <View style={styles.aiRow}>

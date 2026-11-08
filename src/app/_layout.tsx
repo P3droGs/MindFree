@@ -106,6 +106,7 @@ function AppNavigator() {
             Ficam por último porque a primeira tela disponível da lista é a que abre o app. */}
         <Stack.Screen name="privacidade" options={{ animation: 'slide_from_right' }} />
         <Stack.Screen name="termos" options={{ animation: 'slide_from_right' }} />
+        <Stack.Screen name="plus" options={{ animation: 'slide_from_right' }} />
         <Stack.Screen name="entrar" options={{ animation: 'slide_from_right' }} />
         <Stack.Screen name="criar-conta" options={{ animation: 'slide_from_right' }} />
         <Stack.Screen name="codigo" options={{ animation: 'slide_from_right' }} />

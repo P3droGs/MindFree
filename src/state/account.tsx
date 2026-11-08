@@ -60,6 +60,7 @@ const CLOUD_SETTINGS = [
   'pushMural',
   'pushRequests',
   'constellationNames',
+  'plusInterest',
 ] as const satisfies readonly (keyof Settings)[];
 
 function cloudSettings(settings: Settings): Partial<Settings> {
