@@ -8,7 +8,7 @@ import { BackButton, LinkButton, PrimaryButton } from '@/components/buttons';
 import { Checkbox } from '@/components/checkbox';
 import { HeroSheet } from '@/components/hero-sheet';
 import { TextField } from '@/components/text-field';
-import { useT, type MessageKey } from '@/i18n';
+import { useI18n, useT, type MessageKey } from '@/i18n';
 import { AUTH_FAILURE_TEXT } from '@/lib/auth-messages';
 import { isValidEmail, passwordStrength } from '@/lib/validation';
 import { useAccount } from '@/state/account';
@@ -28,6 +28,7 @@ export default function SignUpScreen() {
   const navigation = useNavigation();
   const theme = useAppTheme();
   const t = useT();
+  const { language } = useI18n();
   const { height } = useWindowDimensions();
   const { settings, update } = useSettings();
   const { signUp, signInWithGoogle } = useAccount();
@@ -48,7 +49,7 @@ export default function SignUpScreen() {
     }
     setErrors({});
     setBusy(true);
-    const { failure, restored } = await signInWithGoogle();
+    const { failure, restored } = await signInWithGoogle(language.code);
     setBusy(false);
     if (failure === 'cancelled') return;
     if (failure) {
@@ -68,7 +69,7 @@ export default function SignUpScreen() {
     setErrors({ ...next, form: agreed ? undefined : t('signup.ageRequired') });
     if (next.email || next.password || !agreed) return;
     setBusy(true);
-    const failure = await signUp(email, password);
+    const failure = await signUp(email, password, language.code);
     setBusy(false);
     if (failure === 'confirm') {
       // A conta existe, mas só fica ativa com o código que foi para o e-mail.

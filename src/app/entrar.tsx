@@ -8,7 +8,7 @@ import { BackButton, LinkButton, OutlineButton, PrimaryButton } from '@/componen
 import { Checkbox } from '@/components/checkbox';
 import { HeroSheet } from '@/components/hero-sheet';
 import { TextField } from '@/components/text-field';
-import { useT } from '@/i18n';
+import { useI18n, useT } from '@/i18n';
 import { AUTH_FAILURE_TEXT } from '@/lib/auth-messages';
 import { isValidEmail } from '@/lib/validation';
 import { useAccount } from '@/state/account';
@@ -20,6 +20,7 @@ type Mode = 'entrar' | 'recuperar';
 export default function SignInScreen() {
   const router = useRouter();
   const t = useT();
+  const { language } = useI18n();
   const { height } = useWindowDimensions();
   const { settings, update } = useSettings();
   const { signIn, requestPasswordCode, signInWithGoogle } = useAccount();
@@ -68,7 +69,7 @@ export default function SignInScreen() {
   const withGoogle = async () => {
     setErrors({});
     setBusy(true);
-    const { failure, restored } = await signInWithGoogle();
+    const { failure, restored } = await signInWithGoogle(language.code);
     setBusy(false);
     if (failure === 'cancelled') return;
     if (failure) {

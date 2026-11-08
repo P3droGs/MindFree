@@ -26,9 +26,10 @@ type AccountValue = {
   /** O relógio do celular está mais de 5 minutos fora da hora do servidor (a sincronização fica confusa). */
   clockWrong: boolean;
   signIn: (email: string, password: string) => Promise<{ failure: AuthFailure | null; restored: boolean }>;
-  signUp: (email: string, password: string) => Promise<AuthFailure | null>;
+  /** `language` vai no cadastro (user_metadata.language): o e-mail de boas-vindas sai nesse idioma. */
+  signUp: (email: string, password: string, language: string) => Promise<AuthFailure | null>;
   /** Entrar (ou criar a conta) com o Google. `cancelled` quando a pessoa fechou a escolha de conta. */
-  signInWithGoogle: () => Promise<{ failure: AuthFailure | 'cancelled' | 'google' | null; restored: boolean }>;
+  signInWithGoogle: (language: string) => Promise<{ failure: AuthFailure | 'cancelled' | 'google' | null; restored: boolean }>;
   /** "unsynced": não deu para guardar as últimas mudanças; chame de novo com `force` para sair mesmo assim. */
   signOut: (force?: boolean) => Promise<'ok' | 'unsynced'>;
   /** Apaga a conta no servidor (com tudo o que está nela). Falso se não conseguiu. */
@@ -435,9 +436,9 @@ export function AccountProvider({ children }: { children: ReactNode }) {
     return { failure: null, restored };
   };
 
-  const signUp: AccountValue['signUp'] = async (email, password) => {
+  const signUp: AccountValue['signUp'] = async (email, password, language) => {
     if (!supabase) return 'unavailable';
-    const { data, error } = await supabase.auth.signUp({ email: email.trim(), password });
+    const { data, error } = await supabase.auth.signUp({ email: email.trim(), password, options: { data: { language } } });
     if (error) return failureOf(error);
     // Com a confirmação de e-mail ligada no Supabase, a conta nasce sem login.
     if (!data.session) return 'confirm';
@@ -447,7 +448,7 @@ export function AccountProvider({ children }: { children: ReactNode }) {
     return null;
   };
 
-  const signInWithGoogle: AccountValue['signInWithGoogle'] = async () => {
+  const signInWithGoogle: AccountValue['signInWithGoogle'] = async (language) => {
     if (!supabase) return { failure: 'unavailable', restored: false };
     const google = await googleIdToken();
     if (google.status !== 'ok') {
@@ -459,6 +460,8 @@ export function AccountProvider({ children }: { children: ReactNode }) {
     // Conta que já existia traz os ajustes dela; conta nova nasce com os deste celular (e o nome do Google).
     const restored = await restoreProfile().catch(() => false);
     if (!restored) {
+      // O idioma do cadastro: é ele que dispara (e escolhe) o e-mail de boas-vindas de quem entrou pelo Google.
+      await supabase.auth.updateUser({ data: { language } }).catch(() => undefined);
       if (!settingsRef.current.name.trim() && google.name) update({ name: google.name.trim().slice(0, 40) });
       await pushProfile().catch(() => undefined);
     }

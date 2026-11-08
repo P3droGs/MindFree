@@ -11,6 +11,7 @@ const { db, as } = await startDb([
   '20261102120000_avisos.sql',
   '20261104130000_seguranca.sql',
   '20261108130000_boas_vindas.sql',
+  '20261108140000_boas_vindas_idioma.sql',
 ]);
 check('migrações aplicam duas vezes sem erro', true);
 
@@ -26,18 +27,24 @@ const B = '22222222-2222-2222-2222-222222222222'; // nasce sem confirmar, confir
 const C = '33333333-3333-3333-3333-333333333333'; // invisível (anônima)
 const calls = async () => (await db.query(`select url, body from net.calls order by url`)).rows;
 
+// A: nasce confirmada (Google) e sem idioma: espera o app gravar o idioma.
 await db.exec(`insert into auth.users (id, email, email_confirmed_at, is_anonymous) values ('${A}', 'a@teste.dev', now(), false);`);
-check('conta confirmada ao nascer chama a função uma vez', (await calls()).length === 1 && (await calls())[0].url.endsWith('/functions/v1/boas-vindas'));
+check('conta do Google sem idioma ainda não chama', (await calls()).length === 0);
+await db.exec(`update auth.users set raw_user_meta_data = '{"language":"pt-BR"}'::jsonb where id = '${A}';`);
+check('quando o app grava o idioma, chama a função uma vez', (await calls()).length === 1 && (await calls())[0].url.endsWith('/functions/v1/boas-vindas'));
+await db.exec(`update auth.users set raw_user_meta_data = '{"language":"pt-BR","name":"Ana"}'::jsonb where id = '${A}';`);
+check('mudar outro dado do perfil não chama de novo', (await calls()).length === 1);
 check('a chamada leva o id da conta', JSON.stringify((await calls())[0].body).includes(A));
 
-await db.exec(`insert into auth.users (id, email, email_confirmed_at, is_anonymous) values ('${B}', 'b@teste.dev', null, false);`);
+// B: cadastro por e-mail, com o idioma desde o início; o e-mail sai na confirmação.
+await db.exec(`insert into auth.users (id, email, email_confirmed_at, is_anonymous, raw_user_meta_data) values ('${B}', 'b@teste.dev', null, false, '{"language":"en"}'::jsonb);`);
 check('conta sem confirmar não chama', (await calls()).length === 1);
 await db.exec(`update auth.users set email_confirmed_at = now() where id = '${B}';`);
 check('confirmar o e-mail chama', (await calls()).length === 2);
 await db.exec(`update auth.users set email_confirmed_at = now() where id = '${B}';`);
 check('confirmar de novo não chama outra vez', (await calls()).length === 2);
 
-await db.exec(`insert into auth.users (id, email, email_confirmed_at, is_anonymous) values ('${C}', null, now(), true);`);
+await db.exec(`insert into auth.users (id, email, email_confirmed_at, is_anonymous, raw_user_meta_data) values ('${C}', null, now(), true, '{"language":"es"}'::jsonb);`);
 check('conta invisível não chama', (await calls()).length === 2);
 
 await db.exec(`reset role; set role service_role;`);
