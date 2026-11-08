@@ -102,6 +102,7 @@ supabase/
   migrations/   o SQL do banco
   tests/        testes do SQL (PGlite)
   tests/modelos/ teste cego dos modelos da IA: custo, tempo e qualidade (node run.mjs, node avaliar.mjs)
+store/          ficha da Google Play (textos PT/EN, segurança de dados, classificação) e gráficos da loja
 ```
 
 ---
