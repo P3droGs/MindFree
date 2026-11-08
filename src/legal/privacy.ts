@@ -32,7 +32,7 @@ const pt: Policy = {
       title: 'Se você criar uma conta',
       paragraphs: [
         `Seu e-mail, sua senha (guardada de forma protegida pela Supabase, nunca em texto puro), seu nome, seus ajustes e suas tarefas e noites ficam guardados nos servidores da Supabase, na região ${REGION}, nos Estados Unidos, para você não perder nada e poder usar o app em outro celular. Ao criar a conta, você concorda com essa transferência internacional dos dados.`,
-        'Os e-mails do app (o código que confirma o cadastro e o de senha nova) são enviados pela Resend, nos Estados Unidos, que recebe só o seu endereço de e-mail e o conteúdo da mensagem.',
+        'Os e-mails do app (o código que confirma o cadastro, o de senha nova e o e-mail de boas-vindas) são enviados pela Resend, nos Estados Unidos, que recebe só o seu endereço de e-mail e o conteúdo da mensagem.',
         'As gravações de voz e o texto do que você falou continuam só no seu celular. O áudio de cada gravação é apagado do celular 7 dias depois de organizado; o texto e as tarefas ficam. As fotos do mural só saem dele quando você posta (veja "Se você entrar na rede").',
         'Ao sair da conta, as tarefas são apagadas deste celular e continuam na conta. Ao apagar a conta, tudo o que está nela é apagado do servidor.',
         'Todo dia o servidor guarda uma cópia de segurança do banco, só para recuperar os dados em caso de falha; ela fica por 14 dias, no mesmo servidor, sem as gravações e sem as fotos. Depois disso, o que você apagou some também da cópia.',
@@ -137,7 +137,7 @@ const en: Policy = {
       title: 'If you create an account',
       paragraphs: [
         `Your email, your password (stored securely by Supabase, never in plain text), your name, your settings and your tasks and nights are stored on Supabase servers in the ${REGION} region, in the United States, so you don’t lose anything and can use the app on another phone. By creating an account, you agree to this international transfer of data.`,
-        'The app’s emails (the code that confirms sign-up and the new-password code) are sent by Resend, in the United States, which receives only your email address and the message content.',
+        'The app’s emails (the code that confirms sign-up, the new-password code and the welcome email) are sent by Resend, in the United States, which receives only your email address and the message content.',
         'Voice recordings and the text of what you said stay only on your phone. The audio of each recording is deleted from the phone 7 days after it is organized; the text and the tasks remain. Wall photos leave it only when you post (see "If you join the network").',
         'When you sign out, tasks are deleted from this phone and remain in the account. When you delete the account, everything in it is deleted from the server.',
         'Every day the server keeps a backup copy of the database, only to recover data in case of failure; it is kept for 14 days, on the same server, without recordings or photos. After that, what you deleted is gone from the copy as well.',

@@ -21,3 +21,7 @@ verify_jwt = false
 # A cópia de segurança diária só grava o retrato do banco num bucket privado; o Cron chama com a chave de serviço.
 [functions.backup]
 verify_jwt = false
+
+# O e-mail de boas-vindas: o banco chama com a chave de serviço quando uma conta nasce confirmada.
+[functions.boas-vindas]
+verify_jwt = false

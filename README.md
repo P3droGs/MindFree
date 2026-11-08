@@ -64,6 +64,7 @@ O visual é calmo e fácil de entender: escuro e lilás à noite, claro e cor de
 - **Apagar todos os dados** (e a conta) é um botão nos Ajustes.
 - **A política de privacidade completa** está em https://p3drogs.github.io/MindFree/privacidade/ e **os termos de uso** em https://p3drogs.github.io/MindFree/termos/ (rascunhos em revisão). Os dois também abrem dentro do app, em Ajustes › Privacidade.
 - **Idade mínima de 13 anos** para criar conta e entrar na rede: o cadastro pede essa confirmação junto com o aceite dos termos e da política.
+- **E-mail de boas-vindas:** quando a conta nasce confirmada, por código ou pelo Google, a pessoa recebe um e-mail curto em português e inglês, do `nao-responda@`, com resposta para o `contato@`. Uma vez por conta.
 - **Entrar com o Google** (Android; no iPhone, a Apple vem junto com a versão iOS): o botão abre a escolha de conta do Google e o Supabase troca o token pelo login. Conta nova nasce com os ajustes do celular e o nome do Google; na tela Criar conta, a caixa de 13 anos e termos vale também para o Google.
 - **MindFree Plus, em breve** (Ajustes › MindFree Plus): a tela mostra o que a assinatura opcional vai trazer (transcrição premium e histórico das noites com busca), o que continua grátis para sempre (tudo o que existe hoje) e o botão "Quero ser avisado", que marca o interesse na conta. Sem preço nem compra por enquanto; os termos explicam.
 - **Cópia de segurança diária do banco** no próprio servidor, guardada por 14 dias (sem gravações nem fotos), só para recuperar dados em caso de falha.
