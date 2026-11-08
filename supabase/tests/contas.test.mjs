@@ -2,7 +2,7 @@
 // Uso: npm run test:sql (ou node supabase/tests/contas.test.mjs)
 import { check, errorOf, finish, startDb } from './local-supabase.mjs';
 
-const { db, as } = await startDb(['20261024120000_contas.sql', '20261104120000_cota_ia.sql', '20261105130000_auditoria.sql']);
+const { db, as } = await startDb(['20261024120000_contas.sql', '20261104120000_cota_ia.sql', '20261105130000_auditoria.sql', '20261108120000_cota_menor.sql']);
 check('migração aplica duas vezes sem erro', true);
 
 const A = '11111111-1111-1111-1111-111111111111'; // conta de verdade
@@ -67,43 +67,43 @@ await as(
   async () => {
     check('conta anônima não grava tarefas', await fails(() => insertTask('tarefa-c1')));
     const results = [];
-    for (let i = 0; i < 9; i += 1) results.push((await db.query(`select public.consume_ai_quota() as ok`)).rows[0].ok);
-    check('anônima: 8 organizações por dia e a 9ª é recusada', results.slice(0, 8).every(Boolean) && results[8] === false);
+    for (let i = 0; i < 4; i += 1) results.push((await db.query(`select public.consume_ai_quota() as ok`)).rows[0].ok);
+    check('anônima: 3 organizações por dia e a 4ª é recusada', results.slice(0, 3).every(Boolean) && results[3] === false);
   },
   true,
 );
 
 await as(A, async () => {
   const results = [];
-  for (let i = 0; i < 21; i += 1) results.push((await db.query(`select public.consume_ai_quota() as ok`)).rows[0].ok);
-  check('com conta: 20 por dia e a 21ª é recusada', results.slice(0, 20).every(Boolean) && results[20] === false);
+  for (let i = 0; i < 11; i += 1) results.push((await db.query(`select public.consume_ai_quota() as ok`)).rows[0].ok);
+  check('com conta: 10 por dia e a 11ª é recusada', results.slice(0, 10).every(Boolean) && results[10] === false);
 });
 
-// O teto do app só vale para as contas invisíveis: 150 por dia entre todas. Quem tem conta não é travado.
+// O teto das invisíveis: 20 por dia entre todas. Quem tem conta não é travado por elas.
 const D = '44444444-4444-4444-4444-444444444444'; // outra conta invisível, que abusou
 await db.exec(`insert into auth.users (id) values ('${D}');`);
-await db.exec(`insert into public.ai_usage (user_id, day, count, anonymous) values ('${D}', (now() at time zone 'utc')::date, 150 - 8, true);`);
+await db.exec(`insert into public.ai_usage (user_id, day, count, anonymous) values ('${D}', (now() at time zone 'utc')::date, 20 - 3, true);`);
 await as(C, async () => {
-  check('teto das invisíveis (150) barra outra invisível', (await db.query(`select public.consume_ai_quota() as ok`)).rows[0].ok === false);
+  check('teto das invisíveis (20) barra outra invisível', (await db.query(`select public.consume_ai_quota() as ok`)).rows[0].ok === false);
 }, true);
 await as(B, async () => {
   check('com o teto das invisíveis cheio, quem tem conta continua organizando', (await db.query(`select public.consume_ai_quota() as ok`)).rows[0].ok === true);
 });
-await db.exec(`insert into public.ai_usage (user_id, day, count, anonymous) values ('${A}', (now() at time zone 'utc')::date, 500, false) on conflict (user_id, day) do update set count = 500;`);
+await db.exec(`insert into public.ai_usage (user_id, day, count, anonymous) values ('${A}', (now() at time zone 'utc')::date, 60, false) on conflict (user_id, day) do update set count = 60;`);
 const anonymousUsed = (await db.query(`select coalesce(sum(count), 0)::int as n from public.ai_usage where anonymous`)).rows[0].n;
-// C registrou 9 (a tentativa recusada também conta) e D, 142: as 500 de A ficam de fora.
-check('uso das contas de verdade não conta no teto das invisíveis', anonymousUsed === 151);
+// C registrou 4 (a tentativa recusada pelo limite pessoal também conta) e D, 17: as 60 de A ficam de fora.
+check('uso das contas de verdade não conta no teto das invisíveis', anonymousUsed === 21);
 
-// O teto das contas com e-mail (500 por dia entre todas): A sozinha já gastou 500, então B não organiza mais.
+// O teto das contas com e-mail (60 por dia entre todas): A sozinha já gastou 60, então B não organiza mais.
 await as(B, async () => {
-  check('teto das contas com e-mail (500) barra quem tem conta', (await db.query(`select public.consume_ai_quota() as ok`)).rows[0].ok === false);
+  check('teto das contas com e-mail (60) barra quem tem conta', (await db.query(`select public.consume_ai_quota() as ok`)).rows[0].ok === false);
 });
 // A IA falhou para A: a função organizar devolve a organização com a chave de serviço, e o teto reabre.
 await db.exec(`reset role; set role service_role;`);
 await db.exec(`select public.refund_ai_quota_for('${A}'); select public.refund_ai_quota_for('${A}');`);
 await db.exec(`reset role;`);
 const refunded = (await db.query(`select count from public.ai_usage where user_id = '${A}' and day = (now() at time zone 'utc')::date`)).rows[0].count;
-check('devolver tira uma organização de quem usou', Number(refunded) === 498);
+check('devolver tira uma organização de quem usou', Number(refunded) === 58);
 await as(B, async () => {
   check('com a devolução, o teto das contas com e-mail reabre', (await db.query(`select public.consume_ai_quota() as ok`)).rows[0].ok === true);
   check('quem tem conta não devolve a própria cota', await fails(() => db.query(`select public.refund_ai_quota_for('${B}')`)));
