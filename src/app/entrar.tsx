@@ -22,7 +22,7 @@ export default function SignInScreen() {
   const t = useT();
   const { height } = useWindowDimensions();
   const { settings, update } = useSettings();
-  const { signIn, requestPasswordCode } = useAccount();
+  const { signIn, requestPasswordCode, signInWithGoogle } = useAccount();
   const [mode, setMode] = useState<Mode>('entrar');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -60,6 +60,21 @@ export default function SignInScreen() {
       return;
     }
     // Veio de Ajustes: volta para lá. No começo: se a conta trouxe os ajustes, já entra no app.
+    if (settings.onboarded) router.back();
+    else if (restored) router.replace('/');
+    else router.push('/horarios');
+  };
+
+  const withGoogle = async () => {
+    setErrors({});
+    setBusy(true);
+    const { failure, restored } = await signInWithGoogle();
+    setBusy(false);
+    if (failure === 'cancelled') return;
+    if (failure) {
+      setErrors({ form: t(failure === 'google' ? 'auth.googleFailed' : failure === 'unavailable' ? 'auth.googleUnavailable' : AUTH_FAILURE_TEXT[failure]) });
+      return;
+    }
     if (settings.onboarded) router.back();
     else if (restored) router.replace('/');
     else router.push('/horarios');
@@ -127,9 +142,8 @@ export default function SignInScreen() {
             </AppText>
           ) : null}
           <PrimaryButton label={busy ? t('auth.working') : t('signin.submit')} disabled={busy} onPress={() => void submit()} />
-          {/* Google e Apple ainda não funcionam: o "em breve" vem antes, e o texto embaixo diz que é com e-mail. */}
-          <AuthDivider label={t('auth.soonDivider')} />
-          <SocialRow caption={t('auth.emailOnlySignin')} />
+          <AuthDivider label={t('auth.orDivider')} />
+          <SocialRow caption={t('auth.googleTerms')} busy={busy} onGoogle={() => void withGoogle()} />
           <View style={styles.footer}>
             <AppText variant="small" tone="secondary">
               {t('signin.noAccount')}

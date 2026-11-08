@@ -714,4 +714,11 @@ export const ko: Messages = {
   'plus.notified': '좋아요: 출시되면 알려드릴게요.',
   'saved.plusCard': '곧 출시: 프리미엄 받아쓰기와 밤 기록이 있는 MindFree Plus.',
   'saved.plusCardLink': '무엇이 오는지 보기',
+
+  'auth.orDivider': '또는',
+  'auth.googleTerms': 'Google로 계속하면 만 13세 이상임을 확인하고 이용약관과 개인정보 처리방침에 동의하는 것입니다.',
+  'auth.googleFailed': 'Google로 로그인하지 못했어요. 다시 시도하거나 이메일과 비밀번호를 사용하세요.',
+  'auth.googleUnavailable': 'Google 로그인은 이 휴대폰에 Google Play 서비스가 필요해요. 이메일과 비밀번호를 사용하세요.',
+  'auth.soonBodyApple': 'Apple 로그인은 iPhone 버전에서 제공돼요. 지금은 Google이나 이메일과 비밀번호를 사용하세요.',
+  'auth.appleSoon': 'Apple · 곧 출시',
 };

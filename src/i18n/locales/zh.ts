@@ -714,4 +714,11 @@ export const zh: Messages = {
   'plus.notified': '好的：上线时会通知你。',
   'saved.plusCard': '即将推出：带高级转写和夜间记录的 MindFree Plus。',
   'saved.plusCardLink': '看看有什么',
+
+  'auth.orDivider': '或',
+  'auth.googleTerms': '继续使用 Google 即表示你确认已年满 13 岁，并接受《使用条款》和《隐私政策》。',
+  'auth.googleFailed': '无法使用 Google 登录。请重试，或使用邮箱和密码。',
+  'auth.googleUnavailable': '使用 Google 登录需要这部手机有 Google Play 服务。请使用邮箱和密码。',
+  'auth.soonBodyApple': 'Apple 登录将随 iPhone 版本推出。目前请使用 Google 或邮箱和密码。',
+  'auth.appleSoon': 'Apple · 即将推出',
 };

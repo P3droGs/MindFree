@@ -10,6 +10,7 @@ import { forget as forgetRemembered } from '@/lib/remembered';
 import { supabase, supabaseKey, supabaseUrl } from '@/lib/supabase';
 import { useJournal } from '@/state/journal-provider';
 import { changePosts } from '@/state/posts';
+import { googleForget, googleIdToken } from '@/lib/google';
 import { DEFAULT_SETTINGS, useSettings, type Settings } from '@/state/settings';
 
 /** A conta de agora: de verdade (e-mail e senha) ou a invisível, que só serve para o limite da IA. */
@@ -26,6 +27,8 @@ type AccountValue = {
   clockWrong: boolean;
   signIn: (email: string, password: string) => Promise<{ failure: AuthFailure | null; restored: boolean }>;
   signUp: (email: string, password: string) => Promise<AuthFailure | null>;
+  /** Entrar (ou criar a conta) com o Google. `cancelled` quando a pessoa fechou a escolha de conta. */
+  signInWithGoogle: () => Promise<{ failure: AuthFailure | 'cancelled' | 'google' | null; restored: boolean }>;
   /** "unsynced": não deu para guardar as últimas mudanças; chame de novo com `force` para sair mesmo assim. */
   signOut: (force?: boolean) => Promise<'ok' | 'unsynced'>;
   /** Apaga a conta no servidor (com tudo o que está nela). Falso se não conseguiu. */
@@ -444,6 +447,24 @@ export function AccountProvider({ children }: { children: ReactNode }) {
     return null;
   };
 
+  const signInWithGoogle: AccountValue['signInWithGoogle'] = async () => {
+    if (!supabase) return { failure: 'unavailable', restored: false };
+    const google = await googleIdToken();
+    if (google.status !== 'ok') {
+      return { failure: google.status === 'cancelled' ? 'cancelled' : google.status === 'unavailable' ? 'unavailable' : 'google', restored: false };
+    }
+    const { data, error } = await supabase.auth.signInWithIdToken({ provider: 'google', token: google.idToken });
+    if (error || !data.session) return { failure: error ? failureOf(error) : 'unknown', restored: false };
+    accountRef.current = toAccount(data.session.user);
+    // Conta que já existia traz os ajustes dela; conta nova nasce com os deste celular (e o nome do Google).
+    const restored = await restoreProfile().catch(() => false);
+    if (!restored) {
+      if (!settingsRef.current.name.trim() && google.name) update({ name: google.name.trim().slice(0, 40) });
+      await pushProfile().catch(() => undefined);
+    }
+    return { failure: null, restored };
+  };
+
   /** Limpa deste celular o que é da conta: tarefas, noites, gravações e fotos (os ajustes ficam). */
   const clearLocal = () => {
     suspended.current = true;
@@ -470,6 +491,7 @@ export function AccountProvider({ children }: { children: ReactNode }) {
     await forgetThisDevice();
     // Global: a sessão deixa de valer também no servidor (um celular perdido com o app aberto não continua logado).
     await supabase.auth.signOut({ scope: 'global' }).catch(() => undefined);
+    await googleForget();
     clearLocal();
     return 'ok';
   };
@@ -520,6 +542,7 @@ export function AccountProvider({ children }: { children: ReactNode }) {
       return false;
     }
     await supabase.auth.signOut({ scope: 'global' }).catch(() => undefined);
+    await googleForget();
     saveState(freshState(null));
     return true;
   };
@@ -532,6 +555,7 @@ export function AccountProvider({ children }: { children: ReactNode }) {
     clockWrong: !!accountKey && Math.abs(clockSkewMs) > CLOCK_SKEW_LIMIT_MS,
     signIn,
     signUp,
+    signInWithGoogle,
     signOut,
     deleteAccount,
     requestPasswordCode,

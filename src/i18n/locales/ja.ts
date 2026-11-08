@@ -715,4 +715,11 @@ export const ja: Messages = {
   'plus.notified': '了解：公開されたらお知らせします。',
   'saved.plusCard': '近日公開：プレミアム文字起こしと夜の履歴を備えたMindFree Plus。',
   'saved.plusCardLink': 'これからの機能を見る',
+
+  'auth.orDivider': 'または',
+  'auth.googleTerms': 'Googleで続行すると、13歳以上であることを確認し、利用規約とプライバシーポリシーに同意したものとみなされます。',
+  'auth.googleFailed': 'Googleでログインできませんでした。もう一度試すか、メールとパスワードをお使いください。',
+  'auth.googleUnavailable': 'GoogleでのログインにはこのスマホにGoogle Play開発者サービスが必要です。メールとパスワードをお使いください。',
+  'auth.soonBodyApple': 'Appleでのログインは iPhone 版で提供予定です。今はGoogleかメールとパスワードをお使いください。',
+  'auth.appleSoon': 'Apple · 近日公開',
 };

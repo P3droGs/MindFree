@@ -721,4 +721,11 @@ export const de: Messages = {
   'plus.notified': 'Abgemacht: du erfährst es, wenn es so weit ist.',
   'saved.plusCard': 'Bald: MindFree Plus mit Premium-Transkription und Nächte-Verlauf.',
   'saved.plusCardLink': 'Sehen, was kommt',
+
+  'auth.orDivider': 'oder',
+  'auth.googleTerms': 'Wenn du mit Google fortfährst, bestätigst du, dass du mindestens 13 Jahre alt bist, und akzeptierst die Nutzungsbedingungen und die Datenschutzerklärung.',
+  'auth.googleFailed': 'Anmeldung mit Google hat nicht geklappt. Versuch es noch einmal oder nutze E-Mail und Passwort.',
+  'auth.googleUnavailable': 'Die Anmeldung mit Google braucht Google Play-Dienste auf diesem Handy. Nutze E-Mail und Passwort.',
+  'auth.soonBodyApple': 'Anmelden mit Apple kommt mit der iPhone-Version. Nutze vorerst Google oder E-Mail und Passwort.',
+  'auth.appleSoon': 'Apple · bald',
 };

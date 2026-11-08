@@ -721,4 +721,11 @@ export const ptPT: Messages = {
   'plus.notified': 'Combinado: vai saber quando chegar.',
   'saved.plusCard': 'Em breve: MindFree Plus, com transcrição premium e histórico das noites.',
   'saved.plusCardLink': 'Ver o que aí vem',
+
+  'auth.orDivider': 'ou',
+  'auth.googleTerms': 'Ao continuar com o Google, declara ter 13 anos ou mais e aceita os Termos de Utilização e a Política de Privacidade.',
+  'auth.googleFailed': 'Não foi possível entrar com o Google. Tente de novo ou use e-mail e palavra-passe.',
+  'auth.googleUnavailable': 'Entrar com o Google precisa do Google Play Services neste telemóvel. Use e-mail e palavra-passe.',
+  'auth.soonBodyApple': 'Entrar com a Apple chega na versão para iPhone. Por agora, use o Google ou e-mail e palavra-passe.',
+  'auth.appleSoon': 'Apple · em breve',
 };

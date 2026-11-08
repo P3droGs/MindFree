@@ -721,4 +721,11 @@ export const fr: Messages = {
   'plus.notified': 'C\'est noté : vous saurez quand ce sera là.',
   'saved.plusCard': 'Bientôt : MindFree Plus, avec transcription premium et historique des nuits.',
   'saved.plusCardLink': 'Découvrir la suite',
+
+  'auth.orDivider': 'ou',
+  'auth.googleTerms': 'En continuant avec Google, tu confirmes avoir 13 ans ou plus et accepter les Conditions d\'utilisation et la Politique de confidentialité.',
+  'auth.googleFailed': 'Connexion avec Google impossible. Réessaie ou utilise e-mail et mot de passe.',
+  'auth.googleUnavailable': 'La connexion avec Google nécessite les services Google Play sur ce téléphone. Utilise e-mail et mot de passe.',
+  'auth.soonBodyApple': 'La connexion avec Apple arrive avec la version iPhone. Pour l\'instant, utilise Google ou e-mail et mot de passe.',
+  'auth.appleSoon': 'Apple · bientôt',
 };

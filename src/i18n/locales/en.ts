@@ -718,4 +718,11 @@ export const en: Messages = {
   'plus.notified': 'Done: you\'ll know when it arrives.',
   'saved.plusCard': 'Coming soon: MindFree Plus, with premium transcription and night history.',
   'saved.plusCardLink': 'See what\'s next',
+
+  'auth.orDivider': 'or',
+  'auth.googleTerms': 'By continuing with Google, you confirm you are 13 or older and accept the Terms of Use and the Privacy Policy.',
+  'auth.googleFailed': 'Couldn\'t sign in with Google. Try again or use email and password.',
+  'auth.googleUnavailable': 'Signing in with Google needs Google Play Services on this phone. Use email and password.',
+  'auth.soonBodyApple': 'Sign in with Apple arrives with the iPhone version. For now, use Google or email and password.',
+  'auth.appleSoon': 'Apple · soon',
 };

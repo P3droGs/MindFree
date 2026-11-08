@@ -30,7 +30,7 @@ export default function SignUpScreen() {
   const t = useT();
   const { height } = useWindowDimensions();
   const { settings, update } = useSettings();
-  const { signUp } = useAccount();
+  const { signUp, signInWithGoogle } = useAccount();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState<{ email?: string; password?: string; form?: string }>({});
@@ -39,6 +39,26 @@ export default function SignUpScreen() {
   const [busy, setBusy] = useState(false);
   const strength = passwordStrength(password);
   const barColors = ['', theme.danger, '#FFC857', '#7FDBB6'];
+
+  const withGoogle = async () => {
+    // A mesma declaração de idade e aceite dos termos vale para a conta criada com o Google.
+    if (!agreed) {
+      setErrors({ form: t('signup.ageRequired') });
+      return;
+    }
+    setErrors({});
+    setBusy(true);
+    const { failure, restored } = await signInWithGoogle();
+    setBusy(false);
+    if (failure === 'cancelled') return;
+    if (failure) {
+      setErrors({ form: t(failure === 'google' ? 'auth.googleFailed' : failure === 'unavailable' ? 'auth.googleUnavailable' : AUTH_FAILURE_TEXT[failure]) });
+      return;
+    }
+    if (settings.onboarded) router.back();
+    else if (restored) router.replace('/');
+    else router.push('/horarios');
+  };
 
   const createAccount = async () => {
     const next = {
@@ -130,8 +150,8 @@ export default function SignUpScreen() {
         </AppText>
       ) : null}
       <PrimaryButton label={busy ? t('auth.working') : t('signup.submit')} disabled={busy} onPress={() => void createAccount()} />
-      <AuthDivider label={t('auth.soonDivider')} />
-      <SocialRow caption={t('auth.emailOnlySignup')} />
+      <AuthDivider label={t('auth.orDivider')} />
+      <SocialRow caption={t('auth.googleTerms')} busy={busy} onGoogle={() => void withGoogle()} />
       <View style={styles.footer}>
         <View style={styles.footerRow}>
           <AppText variant="small" tone="secondary">

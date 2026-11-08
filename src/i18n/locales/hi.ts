@@ -715,4 +715,11 @@ export const hi: Messages = {
   'plus.notified': 'ठीक है: आने पर आपको पता चलेगा।',
   'saved.plusCard': 'जल्द आ रहा है: प्रीमियम ट्रांसक्रिप्शन और रातों के इतिहास के साथ MindFree Plus।',
   'saved.plusCardLink': 'देखें क्या आने वाला है',
+
+  'auth.orDivider': 'या',
+  'auth.googleTerms': 'Google से आगे बढ़कर आप पुष्टि करते हैं कि आपकी उम्र 13 या उससे अधिक है और आप उपयोग की शर्तें और गोपनीयता नीति स्वीकार करते हैं।',
+  'auth.googleFailed': 'Google से साइन इन नहीं हो सका। फिर कोशिश करें या ईमेल और पासवर्ड इस्तेमाल करें।',
+  'auth.googleUnavailable': 'Google से साइन इन के लिए इस फ़ोन में Google Play Services चाहिए। ईमेल और पासवर्ड इस्तेमाल करें।',
+  'auth.soonBodyApple': 'Apple से साइन इन iPhone संस्करण के साथ आएगा। अभी Google या ईमेल और पासवर्ड इस्तेमाल करें।',
+  'auth.appleSoon': 'Apple · जल्द',
 };

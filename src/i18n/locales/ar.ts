@@ -714,4 +714,11 @@ export const ar: Messages = {
   'plus.notified': 'تم: ستعرف عندما يصل.',
   'saved.plusCard': 'قريبًا: MindFree Plus مع تفريغ صوتي مميز وسجل الليالي.',
   'saved.plusCardLink': 'اطّلع على ما هو قادم',
+
+  'auth.orDivider': 'أو',
+  'auth.googleTerms': 'بالمتابعة عبر Google، تؤكد أن عمرك 13 عامًا أو أكثر وتوافق على شروط الاستخدام وسياسة الخصوصية.',
+  'auth.googleFailed': 'تعذّر تسجيل الدخول عبر Google. حاول مرة أخرى أو استخدم البريد الإلكتروني وكلمة المرور.',
+  'auth.googleUnavailable': 'يتطلب تسجيل الدخول عبر Google وجود خدمات Google Play على هذا الهاتف. استخدم البريد الإلكتروني وكلمة المرور.',
+  'auth.soonBodyApple': 'تسجيل الدخول عبر Apple سيصل مع نسخة iPhone. حاليًا استخدم Google أو البريد الإلكتروني وكلمة المرور.',
+  'auth.appleSoon': 'Apple · قريبًا',
 };

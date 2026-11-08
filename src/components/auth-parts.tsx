@@ -38,20 +38,24 @@ export function AuthDivider({ label }: { label: string }) {
  * Ainda "em breve": os dois precisam do app instalado de verdade (e a Apple, da conta de desenvolvedor).
  * `caption` diz, embaixo, que por enquanto é só com e-mail e senha.
  */
-export function SocialRow({ caption }: { caption: string }) {
+/** Entrar com o Google (funciona) e, no iPhone, a Apple ainda como "em breve". */
+export function SocialRow({ caption, onGoogle, busy }: { caption: string; onGoogle: () => void; busy?: boolean }) {
   const t = useT();
   const android = Platform.OS === 'android';
-  const soon = () => Alert.alert(t('auth.soonTitle'), t(android ? 'auth.soonBodyGoogle' : 'auth.soonBody'));
+  const soon = () => Alert.alert(t('auth.soonTitle'), t('auth.soonBodyApple'));
+  const google = () => {
+    if (!busy) onGoogle();
+  };
   return (
     <View style={styles.socialBlock}>
       {android ? (
         <View style={styles.social}>
-          <SocialButton provider="google" label={t('auth.withGoogle')} accessibilityLabel={t('auth.withGoogle')} onPress={soon} />
+          <SocialButton provider="google" label={t('auth.withGoogle')} accessibilityLabel={t('auth.withGoogle')} onPress={google} />
         </View>
       ) : (
         <View style={styles.social}>
-          <SocialButton provider="google" label="Google" accessibilityLabel={t('auth.withGoogle')} onPress={soon} />
-          <SocialButton provider="apple" label="Apple" accessibilityLabel={t('auth.withApple')} onPress={soon} />
+          <SocialButton provider="google" label="Google" accessibilityLabel={t('auth.withGoogle')} onPress={google} />
+          <SocialButton provider="apple" label={t('auth.appleSoon')} accessibilityLabel={t('auth.withApple')} onPress={soon} />
         </View>
       )}
       <AppText variant="caption" tone="secondary" style={styles.soon}>
