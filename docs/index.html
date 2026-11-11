@@ -6,30 +6,39 @@
 <title>MindFree</title>
 <link rel="icon" href="favicon.png">
 <style>
-  :root { --night: #0B0E24; --card: #141A42; --line: #262D63; --text: #EEF0FF; --soft: #B4B9DD; --lilac: #C7B8FF; --gold: #FFC857; color-scheme: dark; }
+  /* As cores e o acabamento do site (mindfree.com.br): a noite do app, o lilás, a estrela dourada e os fios finos. */
+  :root { --fundo: #10142E; --fundo-fundo: #0B0E24; --cartao: #1A1F45; --fio: #262C5A; --fio-forte: #6C73AC; --texto: #EEF0FF; --suave: #B4B9DD; --destaque: #B9A6FF; --ouro: #FFC857; color-scheme: dark; }
   * { box-sizing: border-box; }
-  body { margin: 0; background: var(--night); color: var(--text); font: 17px/1.6 'Nunito', ui-rounded, system-ui, -apple-system, 'Segoe UI', sans-serif; }
-  .wrap { max-width: 720px; margin: 0 auto; padding: 32px max(20px, env(safe-area-inset-left)) 64px max(20px, env(safe-area-inset-right)); }
-  header { display: flex; align-items: center; gap: 10px; margin-bottom: 28px; }
-  .mark { width: 40px; height: 40px; border-radius: 12px; display: flex; align-items: center; justify-content: center; background: radial-gradient(circle at 50% 72%, #262C6E 0%, #141A48 60%, #0B0E24 100%); border: 1px solid rgba(199, 184, 255, 0.35); }
-  header strong { font-size: 22px; }
-  nav { display: flex; gap: 8px; margin: 0 0 24px; }
-  nav a { color: var(--lilac); font-weight: 700; text-decoration: none; padding: 6px 14px; border: 1px solid var(--line); border-radius: 999px; }
-  nav a:hover, nav a:focus-visible { background: var(--card); }
-  h1 { font-size: clamp(28px, 6vw, 38px); line-height: 1.15; margin: 0 0 8px; text-wrap: balance; }
-  h2 { font-size: 26px; margin: 40px 0 4px; }
-  h3 { font-size: 19px; margin: 28px 0 6px; color: var(--lilac); }
-  p, li { color: var(--soft); max-width: 65ch; }
-  .meta { margin: 0; font-size: 15px; }
-  .draft { margin: 14px 0 0; padding: 12px 16px; border-radius: 14px; background: #2A2340; border: 1px solid #5B4A2A; color: var(--gold); font-weight: 700; }
-  section + section { margin-top: 56px; padding-top: 8px; border-top: 1px solid var(--line); }
-  a { color: var(--lilac); }
-  footer { margin-top: 56px; color: var(--soft); font-size: 14px; }
+  html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; scroll-padding-top: 5.5rem; }
+  body { margin: 0; background: var(--fundo); color: var(--texto); font: 600 1.0625rem/1.6 'Nunito', ui-rounded, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; -webkit-font-smoothing: antialiased; }
+  .topo { position: sticky; top: 0; z-index: 1; background: var(--fundo-fundo); border-bottom: 1px solid var(--fio); }
+  .topo div { display: flex; align-items: center; gap: 0.6rem; max-width: 46rem; min-height: 4.5rem; margin: 0 auto; padding: 0 max(1.25rem, env(safe-area-inset-right)) 0 max(1.25rem, env(safe-area-inset-left)); }
+  .mark { display: flex; align-items: center; justify-content: center; width: 2.25rem; height: 2.25rem; border-radius: 10px; background: var(--fundo); box-shadow: inset 0 0 0 1px rgba(185, 166, 255, 0.35); }
+  .topo strong { font-size: 1.3125rem; font-weight: 800; letter-spacing: -0.01em; }
+  .wrap { max-width: 46rem; margin: 0 auto; padding: clamp(2rem, 1.5rem + 3vw, 4rem) max(1.25rem, env(safe-area-inset-right)) 4rem max(1.25rem, env(safe-area-inset-left)); }
+  h1 { margin: 0 0 1.25rem; font-size: clamp(2rem, 1.4rem + 2.6vw, 3rem); font-weight: 800; line-height: 1.08; letter-spacing: -0.02em; text-wrap: balance; }
+  nav { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  nav a { display: inline-flex; align-items: center; min-height: 2.75rem; padding: 0 1.1rem; border-radius: 999px; box-shadow: inset 0 0 0 1px var(--fio-forte); font-weight: 800; text-decoration: none; }
+  nav a:hover { background: var(--cartao); }
+  section { margin-top: 2.5rem; padding-top: 2.5rem; border-top: 1px solid var(--fio); }
+  h2 { margin: 0 0 0.25rem; font-size: 1.75rem; font-weight: 800; line-height: 1.15; letter-spacing: -0.01em; }
+  h3 { margin: 2.25rem 0 0.5rem; color: var(--destaque); font-size: 1.25rem; font-weight: 800; line-height: 1.3; }
+  p, li { max-width: 65ch; color: var(--suave); }
+  p { margin: 0 0 0.9rem; text-wrap: pretty; }
+  ul { margin: 0 0 0.9rem; padding-left: 1.25rem; }
+  li { margin-bottom: 0.35rem; }
+  li::marker { color: var(--destaque); }
+  .meta { margin: 0; font-size: 0.9375rem; }
+  .draft { margin: 1rem 0 0; padding: 0.85rem 1rem; border-radius: 14px; background: #2A2340; box-shadow: inset 0 0 0 1px #5B4A2A; color: var(--ouro); font-weight: 800; }
+  a { color: var(--texto); text-decoration-color: var(--fio-forte); text-decoration-thickness: 1.5px; text-underline-offset: 0.22em; }
+  a:hover { text-decoration-color: currentColor; }
+  :focus-visible { outline: 3px solid var(--destaque); outline-offset: 3px; border-radius: 8px; }
+  footer { margin-top: 3.5rem; padding-top: 1.5rem; border-top: 1px solid var(--fio); color: var(--suave); font-size: 0.9375rem; }
 </style>
 </head>
 <body>
+<header class="topo"><div><span class="mark"><svg width="28" height="28" viewBox="170 198 727 610" aria-hidden="true"><circle cx="226" cy="584" r="46" fill="#D9CFFF"/><line x1="280" y1="630" x2="334" y2="680" stroke="#D9CFFF" stroke-width="40" stroke-linecap="round"/><circle cx="394" cy="740" r="58" fill="#D9CFFF"/><line x1="452" y1="676" x2="648" y2="454" stroke="#D9CFFF" stroke-width="40" stroke-linecap="round"/><path d="M 712 208 C 740 316.5, 778.5 355, 887 383 C 778.5 411, 740 449.5, 712 558 C 684 449.5, 645.5 411, 537 383 C 645.5 355, 684 316.5, 712 208 Z" fill="#FFC857"/></svg></span><strong>MindFree</strong></div></header>
 <div class="wrap">
-  <header><span class="mark"><svg width="28" height="28" viewBox="170 198 727 610" aria-hidden="true"><circle cx="226" cy="584" r="46" fill="#D9CFFF"/><line x1="280" y1="630" x2="334" y2="680" stroke="#D9CFFF" stroke-width="40" stroke-linecap="round"/><circle cx="394" cy="740" r="58" fill="#D9CFFF"/><line x1="452" y1="676" x2="648" y2="454" stroke="#D9CFFF" stroke-width="40" stroke-linecap="round"/><path d="M 712 208 C 740 316.5, 778.5 355, 887 383 C 778.5 411, 740 449.5, 712 558 C 684 449.5, 645.5 411, 537 383 C 645.5 355, 684 316.5, 712 208 Z" fill="#FFC857"/></svg></span><strong>MindFree</strong></header>
   <h1>Antes de dormir, fale o que está na sua cabeça. De manhã, está tudo organizado.</h1>
   <p>O MindFree é um app para iPhone e Android que transforma o que você fala à noite em tarefas com dia, horário e lembrete.</p>
   <p><a href="privacidade/">Política de privacidade</a> · <a href="termos/">Termos de uso</a></p>
