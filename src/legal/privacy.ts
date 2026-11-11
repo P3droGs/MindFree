@@ -12,7 +12,7 @@ export const CONTACT = 'contato@mindfree.com.br';
 const REGION = 'us-east-1';
 
 const pt: Policy = {
-  updated: 'Atualizada em 4 de novembro de 2026',
+  updated: 'Atualizada em 10 de novembro de 2026',
   draft: 'Rascunho em revisão. Esta versão ainda pode mudar antes do lançamento.',
   sections: [
     {
@@ -32,6 +32,7 @@ const pt: Policy = {
       title: 'Se você criar uma conta',
       paragraphs: [
         `Seu e-mail, sua senha (guardada de forma protegida pela Supabase, nunca em texto puro), seu nome, seus ajustes e suas tarefas e noites ficam guardados nos servidores da Supabase, na região ${REGION}, nos Estados Unidos, para você não perder nada e poder usar o app em outro celular. Ao criar a conta, você concorda com essa transferência internacional dos dados.`,
+        'Se você entrar com o Google, recebemos do Google o seu nome, o seu e-mail e a foto do seu perfil, para criar a conta. A sua senha do Google não chega até nós.',
         'Os e-mails do app (o código que confirma o cadastro, o de senha nova e o e-mail de boas-vindas) são enviados pela Resend, nos Estados Unidos, que recebe só o seu endereço de e-mail e o conteúdo da mensagem.',
         'As gravações de voz e o texto do que você falou continuam só no seu celular. O áudio de cada gravação é apagado do celular 7 dias depois de organizado; o texto e as tarefas ficam. As fotos do mural só saem dele quando você posta (veja "Se você entrar na rede").',
         'Ao sair da conta, as tarefas são apagadas deste celular e continuam na conta. Ao apagar a conta, tudo o que está nela é apagado do servidor.',
@@ -69,10 +70,19 @@ const pt: Policy = {
       ],
     },
     {
+      title: 'Site e lista de espera',
+      paragraphs: [
+        'O site mindfree.com.br é hospedado pela Cloudflare, nos Estados Unidos. Para entregar as páginas e proteger o site, a Cloudflare trata dados técnicos do acesso, como o endereço IP. O site não usa cookies próprios, anúncios nem ferramentas de análise de visitas; a Cloudflare pode usar cookies estritamente técnicos, de segurança.',
+        'Se você entrar na lista de espera, guardamos o seu e-mail, o idioma da página e a data em que você concordou, só para avisar quando o MindFree chegar às lojas e quando o MindFree Plus for lançado. A base legal é o seu consentimento, e os dados ficam num banco de dados da Cloudflare.',
+        'Para evitar abusos do formulário, calculamos um código a partir do seu endereço IP, que não permite recuperar o endereço, e o guardamos por até 2 dias.',
+        `Você sai da lista quando quiser, pelo link que vai em cada e-mail ou escrevendo para ${CONTACT}. A lista inteira é apagada em até 30 dias depois do aviso de lançamento do MindFree Plus.`,
+      ],
+    },
+    {
       title: 'Quem nos ajuda a operar o app',
       paragraphs: [
         'Estas empresas tratam dados em nosso nome (são os operadores), cada uma só para prestar o seu serviço ao MindFree:',
-        '• Supabase (Estados Unidos): servidor, banco de dados, login e as fotos do mural;\n• OpenAI (Estados Unidos): transforma a fala em texto;\n• Anthropic (Estados Unidos): organiza o texto em tarefas;\n• Resend (Estados Unidos): envia os e-mails de confirmação e de senha nova;\n• Expo (Estados Unidos): entrega os avisos dos amigos (push) ao Google e à Apple, usando o identificador de notificações do seu celular.',
+        '• Supabase (Estados Unidos): servidor, banco de dados, login e as fotos do mural;\n• OpenAI (Estados Unidos): transforma a fala em texto;\n• Anthropic (Estados Unidos): organiza o texto em tarefas;\n• Resend (Estados Unidos): envia os e-mails de confirmação e de senha nova;\n• Cloudflare (Estados Unidos): hospeda o site mindfree.com.br e guarda a lista de espera;\n• Expo (Estados Unidos): entrega os avisos dos amigos (push) ao Google e à Apple, usando o identificador de notificações do seu celular.',
         `Se você escrever para ${CONTACT}, a mensagem passa pela Cloudflare e chega à nossa caixa de e-mail no Google.`,
       ],
     },
@@ -117,7 +127,7 @@ const pt: Policy = {
 };
 
 const en: Policy = {
-  updated: 'Updated on November 4, 2026',
+  updated: 'Updated on November 10, 2026',
   draft: 'Draft under review. This version may still change before launch.',
   sections: [
     {
@@ -137,6 +147,7 @@ const en: Policy = {
       title: 'If you create an account',
       paragraphs: [
         `Your email, your password (stored securely by Supabase, never in plain text), your name, your settings and your tasks and nights are stored on Supabase servers in the ${REGION} region, in the United States, so you don’t lose anything and can use the app on another phone. By creating an account, you agree to this international transfer of data.`,
+        'If you sign in with Google, we receive your name, email and profile picture from Google to create the account. Your Google password never reaches us.',
         'The app’s emails (the code that confirms sign-up, the new-password code and the welcome email) are sent by Resend, in the United States, which receives only your email address and the message content.',
         'Voice recordings and the text of what you said stay only on your phone. The audio of each recording is deleted from the phone 7 days after it is organized; the text and the tasks remain. Wall photos leave it only when you post (see "If you join the network").',
         'When you sign out, tasks are deleted from this phone and remain in the account. When you delete the account, everything in it is deleted from the server.',
@@ -174,10 +185,19 @@ const en: Policy = {
       ],
     },
     {
+      title: 'Website and waitlist',
+      paragraphs: [
+        'The website mindfree.com.br is hosted by Cloudflare, in the United States. To deliver the pages and protect the site, Cloudflare processes technical access data, such as the IP address. The site does not use its own cookies, ads or visitor analytics tools; Cloudflare may use strictly technical security cookies.',
+        'If you join the waitlist, we keep your email, the page language and the date you agreed, only to let you know when MindFree reaches the stores and when MindFree Plus launches. The legal basis is your consent, and the data is kept in a Cloudflare database.',
+        'To prevent abuse of the form, we compute a code from your IP address, which does not allow the address to be recovered, and keep it for up to 2 days.',
+        `You can leave the list whenever you want, through the link in every email or by writing to ${CONTACT}. The whole list is deleted within 30 days after the MindFree Plus launch notice.`,
+      ],
+    },
+    {
       title: 'Who helps us run the app',
       paragraphs: [
         'These companies process data on our behalf (they are our processors), each one only to provide its service to MindFree:',
-        '• Supabase (United States): server, database, sign-in and the wall photos;\n• OpenAI (United States): turns speech into text;\n• Anthropic (United States): organizes the text into tasks;\n• Resend (United States): sends the confirmation and new-password emails;\n• Expo (United States): delivers friends’ notifications (push) to Google and Apple, using your phone’s notification identifier.',
+        '• Supabase (United States): server, database, sign-in and the wall photos;\n• OpenAI (United States): turns speech into text;\n• Anthropic (United States): organizes the text into tasks;\n• Resend (United States): sends the confirmation and new-password emails;\n• Cloudflare (United States): hosts the website mindfree.com.br and stores the waitlist;\n• Expo (United States): delivers friends’ notifications (push) to Google and Apple, using your phone’s notification identifier.',
         `If you write to ${CONTACT}, the message goes through Cloudflare and reaches our mailbox at Google.`,
       ],
     },
