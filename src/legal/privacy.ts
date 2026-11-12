@@ -12,7 +12,7 @@ export const CONTACT = 'contato@mindfree.com.br';
 const REGION = 'us-east-1';
 
 const pt: Policy = {
-  updated: 'Atualizada em 10 de novembro de 2026',
+  updated: 'Atualizada em 12 de novembro de 2026',
   draft: 'Rascunho em revisão. Esta versão ainda pode mudar antes do lançamento.',
   sections: [
     {
@@ -73,7 +73,7 @@ const pt: Policy = {
       title: 'Site e lista de espera',
       paragraphs: [
         'O site mindfree.com.br é hospedado pela Cloudflare, nos Estados Unidos. Para entregar as páginas e proteger o site, a Cloudflare trata dados técnicos do acesso, como o endereço IP. O site não usa cookies próprios, anúncios nem ferramentas de análise de visitas; a Cloudflare pode usar cookies estritamente técnicos, de segurança.',
-        'Se você entrar na lista de espera, guardamos o seu e-mail, o idioma da página e a data em que você concordou, só para avisar quando o MindFree chegar às lojas e quando o MindFree Plus for lançado. A base legal é o seu consentimento, e os dados ficam num banco de dados da Cloudflare.',
+        'Se você entrar na lista de espera, guardamos o seu e-mail, o idioma da página, a data em que você concordou e a versão do texto com que você concordou, além de um código aleatório que identifica o seu link de saída. Usamos esses dados só para avisar quando o MindFree chegar às lojas e quando o MindFree Plus for lançado. A base legal é o seu consentimento, e os dados ficam num banco de dados da Cloudflare.',
         'Para evitar abusos do formulário, calculamos um código a partir do seu endereço IP, que não permite recuperar o endereço, e o guardamos por até 2 dias.',
         `Você sai da lista quando quiser, pelo link que vai em cada e-mail ou escrevendo para ${CONTACT}. A lista inteira é apagada em até 30 dias depois do aviso de lançamento do MindFree Plus.`,
       ],
@@ -127,7 +127,7 @@ const pt: Policy = {
 };
 
 const en: Policy = {
-  updated: 'Updated on November 10, 2026',
+  updated: 'Updated on November 12, 2026',
   draft: 'Draft under review. This version may still change before launch.',
   sections: [
     {
@@ -188,7 +188,7 @@ const en: Policy = {
       title: 'Website and waitlist',
       paragraphs: [
         'The website mindfree.com.br is hosted by Cloudflare, in the United States. To deliver the pages and protect the site, Cloudflare processes technical access data, such as the IP address. The site does not use its own cookies, ads or visitor analytics tools; Cloudflare may use strictly technical security cookies.',
-        'If you join the waitlist, we keep your email, the page language and the date you agreed, only to let you know when MindFree reaches the stores and when MindFree Plus launches. The legal basis is your consent, and the data is kept in a Cloudflare database.',
+        'If you join the waitlist, we keep your email, the page language, the date you agreed and the version of the text you agreed to, plus a random code that identifies your unsubscribe link. We use this data only to let you know when MindFree reaches the stores and when MindFree Plus launches. The legal basis is your consent, and the data is kept in a Cloudflare database.',
         'To prevent abuse of the form, we compute a code from your IP address, which does not allow the address to be recovered, and keep it for up to 2 days.',
         `You can leave the list whenever you want, through the link in every email or by writing to ${CONTACT}. The whole list is deleted within 30 days after the MindFree Plus launch notice.`,
       ],

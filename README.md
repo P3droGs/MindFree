@@ -62,7 +62,7 @@ O visual é calmo e fácil de entender: escuro e lilás à noite, claro e cor de
 - **Os avisos dos amigos levam o mínimo:** o nome de quem mandou e, no Mural, a tarefa do post. Para saber quando silenciar, o servidor guarda só os horários da noite e da manhã e o fuso.
 - **Bloqueios e denúncias são confidenciais:** quem foi bloqueado ou denunciado não fica sabendo, e as denúncias não aparecem no app para ninguém.
 - **Apagar todos os dados** (e a conta) é um botão nos Ajustes.
-- **A política de privacidade completa** está em https://p3drogs.github.io/MindFree/privacidade/ e **os termos de uso** em https://p3drogs.github.io/MindFree/termos/ (rascunhos em revisão). Os dois também abrem dentro do app, em Ajustes › Privacidade.
+- **A política de privacidade completa** está em https://mindfree.com.br/privacidade/ e **os termos de uso** em https://mindfree.com.br/termos/ (rascunhos em revisão). Os dois também abrem dentro do app, em Ajustes › Privacidade.
 - **Idade mínima de 13 anos** para criar conta e entrar na rede: o cadastro pede essa confirmação junto com o aceite dos termos e da política.
 - **E-mail de boas-vindas:** quando a conta nasce confirmada, por código ou pelo Google, a pessoa recebe um e-mail curto no idioma em que criou a conta (12 idiomas), do `nao-responda@`, com resposta para o `contato@`. Uma vez por conta.
 - **Entrar com o Google** (Android; no iPhone, a Apple vem junto com a versão iOS): o botão abre a escolha de conta do Google e o Supabase troca o token pelo login. Conta nova nasce com os ajustes do celular e o nome do Google; na tela Criar conta, a caixa de 13 anos e termos vale também para o Google.

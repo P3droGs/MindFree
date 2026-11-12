@@ -19,7 +19,7 @@ export const hi: Messages = {
   'lang.restart': 'फिर से शुरू करें',
 
   'welcome.title1': 'मन खाली करें।',
-  'welcome.title2': 'चैन से सोएँ।',
+  'welcome.title2': 'हल्की सुबह।',
   'welcome.sub':
     'सोने से पहले 1 मिनट तक वह सब बोलें जो आपके मन में है। सुबह आपको सब कुछ व्यवस्थित मिलेगा, सही समय पर रिमाइंडर के साथ।',
   'welcome.how': 'यह कैसे काम करता है',
@@ -213,7 +213,7 @@ export const hi: Messages = {
   'post.flaggedTitle': 'यह पोस्ट प्रकाशित नहीं हो सकती',
   'post.flaggedBody': 'फ़ोटो या टेक्स्ट MindFree के नियमों के ख़िलाफ़ लगता है (जैसे नग्नता, हिंसा या नफ़रत)। कोई दूसरी फ़ोटो चुनें या टेक्स्ट बदलें।',
   'notif.nightTitle': 'मन खाली करने का समय',
-  'notif.nightBody': '1 मिनट तक वह सब बोलें जो मन में है और हल्के मन से सोएँ।',
+  'notif.nightBody': '1 मिनट तक वह सब बोलें जो मन में है।',
   'notif.morningTitle': 'सुप्रभात!',
   'notif.morningBody': 'टैप करके देखें कि आपने आज के लिए क्या व्यवस्थित किया है।',
   'notif.morningTasksMore': '{list} · और {n}',

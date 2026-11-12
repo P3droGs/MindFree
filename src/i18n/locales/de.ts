@@ -19,7 +19,7 @@ export const de: Messages = {
   'lang.restart': 'Neu starten',
 
   'welcome.title1': 'Kopf frei machen.',
-  'welcome.title2': 'Leicht einschlafen.',
+  'welcome.title2': 'Leichter Morgen.',
   'welcome.sub':
     'Sprich vor dem Schlafen 1 Minute lang über alles, was dir durch den Kopf geht. Am Morgen bekommst du alles geordnet, mit Erinnerungen zur richtigen Zeit.',
   'welcome.how': "So funktioniert's",
@@ -215,7 +215,7 @@ export const de: Messages = {
   'post.flaggedTitle': 'Dieser Beitrag kann nicht geteilt werden',
   'post.flaggedBody': 'Das Foto oder der Text scheint gegen die Regeln von MindFree zu verstoßen (etwa Nacktheit, Gewalt oder Hass). Wähle ein anderes Foto oder ändere den Text.',
   'notif.nightTitle': 'Zeit, den Kopf frei zu machen',
-  'notif.nightBody': 'Sprich 1 Minute lang über alles, was dir durch den Kopf geht, und schlaf leichter.',
+  'notif.nightBody': 'Sprich 1 Minute lang über alles, was dir durch den Kopf geht.',
   'notif.morningTitle': 'Guten Morgen!',
   'notif.morningBody': 'Tippe, um zu sehen, was du für heute geordnet hast.',
   'notif.morningTasksMore': '{list} · und {n} weitere',

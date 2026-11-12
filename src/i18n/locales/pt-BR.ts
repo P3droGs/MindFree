@@ -18,7 +18,7 @@ export const ptBR = {
   'lang.restart': 'Reiniciar',
 
   'welcome.title1': 'Esvazie a mente.',
-  'welcome.title2': 'Durma leve.',
+  'welcome.title2': 'Manhã leve.',
   'welcome.sub':
     'Antes de dormir, fale por 1 minuto tudo o que está na cabeça. De manhã, você recebe tudo organizado, com lembretes na hora certa.',
   'welcome.how': 'Como funciona',
@@ -214,7 +214,7 @@ export const ptBR = {
   'post.flaggedTitle': 'Este post não pode ser publicado',
   'post.flaggedBody': 'A foto ou o texto parece ir contra as regras do MindFree (como nudez, violência ou ódio). Escolha outra foto ou mude o texto.',
   'notif.nightTitle': 'Hora de esvaziar a mente',
-  'notif.nightBody': 'Fale por 1 minuto tudo o que está na sua cabeça e durma mais leve.',
+  'notif.nightBody': 'Fale por 1 minuto tudo o que está na sua cabeça.',
   'notif.morningTitle': 'Bom dia!',
   'notif.morningBody': 'Toque para ver o que você deixou organizado para hoje.',
   'notif.morningTasksMore': '{list} · e mais {n}',

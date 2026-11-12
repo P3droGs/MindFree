@@ -8,7 +8,7 @@ import { createClient } from 'npm:@supabase/supabase-js@2.118.0';
 
 const FROM = 'MindFree <nao-responda@mindfree.com.br>';
 const REPLY_TO = 'contato@mindfree.com.br';
-const SITE = 'https://p3drogs.github.io/MindFree/';
+const SITE = 'https://mindfree.com.br/';
 const RESEND_TIMEOUT_MS = 20_000;
 
 type Copy = {

@@ -19,7 +19,7 @@ export const it: Messages = {
   'lang.restart': 'Riavvia',
 
   'welcome.title1': 'Svuota la mente.',
-  'welcome.title2': 'Dormi leggero.',
+  'welcome.title2': 'Mattina leggera.',
   'welcome.sub':
     "Prima di dormire, parla per 1 minuto di tutto quello che hai in testa. Al mattino ricevi tutto organizzato, con promemoria all'ora giusta.",
   'welcome.how': 'Come funziona',
@@ -215,7 +215,7 @@ export const it: Messages = {
   'post.flaggedTitle': 'Questo post non può essere pubblicato',
   'post.flaggedBody': 'La foto o il testo sembra violare le regole di MindFree (come nudità, violenza o odio). Scegli un’altra foto o cambia il testo.',
   'notif.nightTitle': 'È ora di svuotare la mente',
-  'notif.nightBody': 'Parla per 1 minuto di tutto quello che hai in testa e dormi più leggero.',
+  'notif.nightBody': 'Parla per 1 minuto di tutto quello che hai in testa.',
   'notif.morningTitle': 'Buongiorno!',
   'notif.morningBody': 'Tocca per vedere cosa hai organizzato per oggi.',
   'notif.morningTasksMore': '{list} · e altre {n}',

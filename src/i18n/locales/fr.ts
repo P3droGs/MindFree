@@ -19,7 +19,7 @@ export const fr: Messages = {
   'lang.restart': 'Redémarrer',
 
   'welcome.title1': 'Videz votre esprit.',
-  'welcome.title2': 'Dormez léger.',
+  'welcome.title2': 'Matin serein.',
   'welcome.sub':
     'Avant de dormir, dites pendant 1 minute tout ce qui vous passe par la tête. Le matin, vous recevez tout organisé, avec des rappels au bon moment.',
   'welcome.how': 'Comment ça marche',
@@ -215,7 +215,7 @@ export const fr: Messages = {
   'post.flaggedTitle': 'Cette publication ne peut pas être publiée',
   'post.flaggedBody': 'La photo ou le texte semble enfreindre les règles de MindFree (nudité, violence ou haine, par exemple). Choisis une autre photo ou modifie le texte.',
   'notif.nightTitle': "C'est l'heure de vider votre esprit",
-  'notif.nightBody': 'Dites pendant 1 minute tout ce qui vous passe par la tête et dormez plus léger.',
+  'notif.nightBody': 'Dites pendant 1 minute tout ce qui vous passe par la tête.',
   'notif.morningTitle': 'Bonjour !',
   'notif.morningBody': "Touchez pour voir ce que vous avez organisé pour aujourd'hui.",
   'notif.morningTasksMore': '{list} · et {n} de plus',

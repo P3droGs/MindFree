@@ -4,10 +4,10 @@ Preparado em 2026-11-08 a partir do que o app faz hoje e da política de privaci
 
 ## Dados básicos
 - **Nome do app (até 30):** MindFree
-- **Pacote:** `com.mindfree.app` · **Build:** AAB de produção do EAS, versão 1.0.0, versionCode 2 (baixe na página do build, no expo.dev, e envie na faixa de teste interno primeiro).
+- **Pacote:** `com.mindfree.app` · **Build:** o AAB de produção mais recente do EAS, versão 1.0.0. O versionCode sobe sozinho a cada build: confira o número na página do build, no expo.dev, baixe de lá e envie na faixa de teste interno primeiro.
 - **Categoria:** Produtividade. **Tags:** produtividade, lista de tarefas, lembretes, diário.
-- **E-mail de contato:** contato@mindfree.com.br. **Site:** https://p3drogs.github.io/MindFree/
-- **Política de privacidade (obrigatória):** https://p3drogs.github.io/MindFree/privacidade/ · Termos: https://p3drogs.github.io/MindFree/termos/
+- **E-mail de contato:** contato@mindfree.com.br. **Site:** https://mindfree.com.br
+- **Política de privacidade (obrigatória):** https://mindfree.com.br/privacidade/ · Termos: https://mindfree.com.br/termos/ (em inglês: https://mindfree.com.br/en/privacy/ e https://mindfree.com.br/en/terms/)
 - **Anúncios:** não contém anúncios. **Compras no app:** não por enquanto (o app só anuncia o Plus; quando a assinatura existir, marcar "sim" e declarar a faixa de preço).
 - **Idiomas da ficha:** português (Brasil) como padrão e inglês. O app tem 12 idiomas; os outros 10 podem receber ficha depois.
 
@@ -18,7 +18,7 @@ Preparado em 2026-11-08 a partir do que o app faz hoje e da política de privaci
 ## Descrição completa (até 4.000 caracteres)
 
 ### PT-BR
-Antes de dormir, a cabeça enche: pagar o boleto, ligar pro dentista, comprar o presente. O MindFree é o lugar para soltar tudo isso e dormir tranquilo.
+Antes de dormir, a cabeça enche: pagar o boleto, ligar pro dentista, comprar o presente. O MindFree é o lugar para soltar tudo isso antes de dormir e acordar com o dia organizado.
 
 À noite, no horário que você escolher, o app te chama. Você fala por cerca de um minuto, do seu jeito, com pausas e repetições. A inteligência artificial transforma o que você disse em tarefas com dia, horário e lembrete. "Amanhã às 3" vira amanhã às 15:00. "Sexta" vira sexta. Se preferir, escreva em vez de falar.
 
@@ -42,7 +42,7 @@ O MindFree é gratuito e continua gratuito: tudo o que existe hoje. A organizaç
 Dúvidas: contato@mindfree.com.br
 
 ### EN
-Before bed, your head fills up: pay the bill, call the dentist, buy the gift. MindFree is where you let all of it out and sleep in peace.
+Before bed, your head fills up: pay the bill, call the dentist, buy the gift. MindFree is where you let all of it out before bed and wake up to an organized day.
 
 At night, at the time you choose, the app calls you. You talk for about a minute, your way, with pauses and repetitions. AI turns what you said into tasks with a day, a time and a reminder. "Tomorrow at 3" becomes tomorrow at 15:00. "Friday" becomes Friday. If you prefer, write instead of talking.
 

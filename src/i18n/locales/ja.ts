@@ -19,7 +19,7 @@ export const ja: Messages = {
   'lang.restart': '再起動',
 
   'welcome.title1': '頭を空っぽに。',
-  'welcome.title2': 'ぐっすり眠ろう。',
+  'welcome.title2': '軽やかな朝。',
   'welcome.sub':
     '寝る前に1分間、頭の中にあることを全部話してください。朝には、ちょうどいい時間のリマインダー付きで整理してお届けします。',
   'welcome.how': '使い方',
@@ -213,7 +213,7 @@ export const ja: Messages = {
   'post.flaggedTitle': 'この投稿は公開できません',
   'post.flaggedBody': '写真または文章が MindFree のルールに反するようです（ヌード、暴力、ヘイトなど）。別の写真を選ぶか、文章を変えてください。',
   'notif.nightTitle': '頭を空っぽにする時間です',
-  'notif.nightBody': '頭の中にあることを1分間話して、軽い気持ちで眠りましょう。',
+  'notif.nightBody': '頭の中にあることを1分間話しましょう。',
   'notif.morningTitle': 'おはようございます！',
   'notif.morningBody': 'タップして、今日のために整理したことを確認しましょう。',
   'notif.morningTasksMore': '{list} · 他 {n} 件',

@@ -19,7 +19,7 @@ export const ar: Messages = {
   'lang.restart': 'إعادة التشغيل',
 
   'welcome.title1': 'أفرغ ذهنك.',
-  'welcome.title2': 'ونم بهدوء.',
+  'welcome.title2': 'صباح خفيف.',
   'welcome.sub': 'قبل النوم، تحدّث لمدة دقيقة واحدة عن كل ما يدور في رأسك. في الصباح، تصلك الأمور كلها منظّمة، مع تذكيرات في الوقت المناسب.',
   'welcome.how': 'كيف يعمل',
   'welcome.step1': 'أنت تتحدث',
@@ -212,7 +212,7 @@ export const ar: Messages = {
   'post.flaggedTitle': 'لا يمكن نشر هذا المنشور',
   'post.flaggedBody': 'يبدو أن الصورة أو النص يخالف قواعد MindFree (مثل العري أو العنف أو الكراهية). اختر صورة أخرى أو غيّر النص.',
   'notif.nightTitle': 'حان وقت إفراغ الذهن',
-  'notif.nightBody': 'تحدّث لمدة دقيقة عن كل ما يدور في رأسك ونم بخفة أكبر.',
+  'notif.nightBody': 'تحدّث لمدة دقيقة عن كل ما يدور في رأسك.',
   'notif.morningTitle': 'صباح الخير!',
   'notif.morningBody': 'اضغط لترى ما نظّمته لليوم.',
   'notif.morningTasksMore': '{list} · و{n} أخرى',

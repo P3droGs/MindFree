@@ -19,7 +19,7 @@ export const zh: Messages = {
   'lang.restart': '重启',
 
   'welcome.title1': '清空大脑，',
-  'welcome.title2': '安心入睡。',
+  'welcome.title2': '轻松早晨。',
   'welcome.sub': '睡前花 1 分钟，把脑子里的事都说出来。早上，你会收到整理好的清单，并在合适的时间收到提醒。',
   'welcome.how': '使用方法',
   'welcome.step1': '你来说',
@@ -212,7 +212,7 @@ export const zh: Messages = {
   'post.flaggedTitle': '这条帖子无法发布',
   'post.flaggedBody': '照片或文字似乎违反了 MindFree 的规则（例如裸露、暴力或仇恨）。请换一张照片或修改文字。',
   'notif.nightTitle': '该清空大脑了',
-  'notif.nightBody': '花 1 分钟说出脑子里的一切，睡得更轻松。',
+  'notif.nightBody': '花 1 分钟说出脑子里的一切。',
   'notif.morningTitle': '早上好！',
   'notif.morningBody': '点按查看你为今天整理好的内容。',
   'notif.morningTasksMore': '{list} · 还有 {n} 项',

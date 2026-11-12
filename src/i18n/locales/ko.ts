@@ -19,7 +19,7 @@ export const ko: Messages = {
   'lang.restart': '다시 시작',
 
   'welcome.title1': '머리를 비우고,',
-  'welcome.title2': '편히 자요.',
+  'welcome.title2': '가벼운 아침.',
   'welcome.sub': '자기 전에 1분 동안 머릿속에 있는 모든 것을 말해 보세요. 아침에는 알맞은 시간의 알림과 함께 정리해서 드려요.',
   'welcome.how': '사용 방법',
   'welcome.step1': '말하기',
@@ -212,7 +212,7 @@ export const ko: Messages = {
   'post.flaggedTitle': '이 게시물은 올릴 수 없어요',
   'post.flaggedBody': '사진이나 글이 MindFree 규칙(노출, 폭력, 혐오 등)에 어긋나는 것 같아요. 다른 사진을 고르거나 글을 바꿔 주세요.',
   'notif.nightTitle': '머리를 비울 시간이에요',
-  'notif.nightBody': '1분 동안 머릿속에 있는 모든 것을 말하고 가볍게 잠드세요.',
+  'notif.nightBody': '1분 동안 머릿속에 있는 모든 것을 말해 보세요.',
   'notif.morningTitle': '좋은 아침이에요!',
   'notif.morningBody': '눌러서 오늘을 위해 정리한 내용을 확인하세요.',
   'notif.morningTasksMore': '{list} · 외 {n}개',

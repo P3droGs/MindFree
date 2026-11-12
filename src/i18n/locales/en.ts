@@ -19,7 +19,7 @@ export const en: Messages = {
   'lang.restart': 'Restart',
 
   'welcome.title1': 'Clear your mind.',
-  'welcome.title2': 'Sleep easy.',
+  'welcome.title2': 'Easy morning.',
   'welcome.sub':
     'Before bed, spend 1 minute saying everything on your mind. In the morning, you get it all organized, with reminders at the right time.',
   'welcome.how': 'How it works',
@@ -213,7 +213,7 @@ export const en: Messages = {
   'post.flaggedTitle': 'This post can’t be published',
   'post.flaggedBody': 'The photo or the text seems to break MindFree’s rules (such as nudity, violence or hate). Choose another photo or change the text.',
   'notif.nightTitle': 'Time to clear your mind',
-  'notif.nightBody': "Spend 1 minute saying everything that's on your mind and sleep lighter.",
+  'notif.nightBody': "Spend 1 minute saying everything that's on your mind.",
   'notif.morningTitle': 'Good morning!',
   'notif.morningBody': 'Tap to see what you left organized for today.',
   'notif.morningTasksMore': '{list} · and {n} more',
