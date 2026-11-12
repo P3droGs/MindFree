@@ -4,7 +4,7 @@ Preparado em 2026-11-08 a partir do que o app faz hoje e da política de privaci
 
 ## Dados básicos
 - **Nome do app (até 30):** MindFree
-- **Pacote:** `com.mindfree.app` · **Build:** o AAB de produção mais recente do EAS, versão 1.0.0. O versionCode sobe sozinho a cada build: confira o número na página do build, no expo.dev, baixe de lá e envie na faixa de teste interno primeiro.
+- **Pacote:** `br.com.mindfree.app` · **Build:** o AAB de produção mais recente do EAS, versão 1.0.0. O versionCode sobe sozinho a cada build: confira o número na página do build, no expo.dev, baixe de lá e envie na faixa de teste interno primeiro.
 - **Categoria:** Produtividade. **Tags:** produtividade, lista de tarefas, lembretes, diário.
 - **E-mail de contato:** contato@mindfree.com.br. **Site:** https://mindfree.com.br
 - **Política de privacidade (obrigatória):** https://mindfree.com.br/privacidade/ · Termos: https://mindfree.com.br/termos/ (em inglês: https://mindfree.com.br/en/privacy/ e https://mindfree.com.br/en/terms/)

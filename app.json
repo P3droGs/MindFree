@@ -10,7 +10,7 @@
     "userInterfaceStyle": "automatic",
     "ios": {
       "icon": "./assets/images/icon.png",
-      "bundleIdentifier": "com.mindfree.app",
+      "bundleIdentifier": "br.com.mindfree.app",
       "infoPlist": {
         "CFBundleLocalizations": [
           "pt-BR",
@@ -29,7 +29,7 @@
       }
     },
     "android": {
-      "package": "com.mindfree.app",
+      "package": "br.com.mindfree.app",
       "allowBackup": false,
       "adaptiveIcon": {
         "backgroundColor": "#10142E",
@@ -209,10 +209,10 @@
               "appExtensions": [
                 {
                   "targetName": "ExpoWidgetsTarget",
-                  "bundleIdentifier": "com.mindfree.app.ExpoWidgetsTarget",
+                  "bundleIdentifier": "br.com.mindfree.app.ExpoWidgetsTarget",
                   "entitlements": {
                     "com.apple.security.application-groups": [
-                      "group.com.mindfree.app"
+                      "group.br.com.mindfree.app"
                     ]
                   }
                 }
