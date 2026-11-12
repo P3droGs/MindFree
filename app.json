@@ -189,6 +189,7 @@
       "expo-secure-store",
       "./plugins/android-release",
       "./plugins/android-widget-placeholder",
+      "./plugins/android-debug-keystore",
       "expo-sharing",
       "@react-native-google-signin/google-signin"
     ],
